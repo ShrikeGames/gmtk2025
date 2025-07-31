@@ -72,6 +72,7 @@ func _on_ready() -> void:
 
 func init_loop():
 	loop += 1
+	# TODO keep the last reward you got for killing the boss if it was a boss fight
 	rewards = []
 	fighting_boss = false
 	has_flippers = false

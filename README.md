@@ -20,30 +20,41 @@ Day 2 (Plan):
 - Add combat
  - random encounters
  - boss fight itself (when we run out of steps)
- - TODO add random modifiers to the bosses
 - Items can be perma or just for the loop
 - Items need rarities
 - "Though, there has to be some way to tell the player that there is more to discover." If we number each item and show the total for that rarity people will know how much to expect. Like you might see on trading cards.
 - Need a way to process inventory of items in order to apply to combat
 - Add reset loop logic for when losing or beating boss
-- Add ability to carry over some equipment
-- Add ability to see equipment and what they do
+- You get one legendary or unique reward (which you should be able to carry over to the next run...)
+- Add ability to see equipment
 - For stats
  - HP is obvious
  - Armor is damage reduction (flat) but doesn't restore normally
  - Speed: If you outspeed the enemy enough you get extra attacks (like FE)
- - Build: Weapon loot should require certain "Build" stat or others as requirements. Build allows you to use larger weapons. If you do not meet the requirements for build you can use it but it subtracts from your speed. And enemies could end up getting extra attacks on you instead.
- Rename Build to Strength
+ - Strength: Half of it applies to damage
  - Damage self expanitory
  - Vision also self expanitory
 - If you can't move with your remaining steps it needs to be treated as 0, or click a button to give up
 
 Day3 (Plan):
 - Make menus (including options)
+- Step counter: Make it a visual graphic of a clock or something with a dramatic boss face
+- Splash screen for the loop progressing
+- Intro cutscene
+- Tutorial???
+- Add random modifiers to the bosses
 - Give additional attacks due to increased speed AFTER the other character gets their turn (like in old FE)
 - Keep adding new items, enemies, loot, etc
 - Mouse controls for game
 - Make art for the actual game part
+- Upload to itch as an unlisted game (people watching the stream can play)
+- keep the last reward you got for killing the boss if it was a boss fight
+- Some way to see what your current items do after you have them in your rewards inventory
+- Have some other benefit to Strength because Speed is so good in comparison
+
+Item ideas:
+- Weapon that scales off of HP
+- 
 
 
  Day 4(Plan):
