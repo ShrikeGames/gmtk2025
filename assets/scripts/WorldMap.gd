@@ -1,40 +1,46 @@
 extends Node2D
 
+class_name WorldMap
+
 @export var reward_choice_screen:RewardChoiceScreen
+@export var combat_screen:CombatScreen
 @export var tiles_node:Node2D
 @export var player_image:Sprite2D
 
 # map settings
 # TODO allow user to enter one of their own
 @export var rng_seed:String = "GMTK2025"
-@export var map_width:int = 21
-@export var map_height:int = 18
+@export var map_width:int = 32
+@export var map_height:int = 14
 @export var tile_width:int = 50
 @export var tile_height:int = 50
 var spread_range:int = 2
-var number_of_random_seed_points:int = 20
+var number_of_random_seed_points:int = 40
 # stats
 @export var side_bar:SideBar
-@export var hp:int = 10
-@export var armor:int = 10
-@export var speed:int = 10
-@export var build:int = 10
-@export var damage:int = 10
-@export var sight_radius:int = 5
+@export var hp:int = 12
+@export var armor:int = 0
+@export var speed:int = 3
+@export var strength:int = 1
+@export var damage:int = 1
+@export var sight_radius:int = 4
 @export var max_steps:float = 99
 @export var steps:float = 99
 
 @export var has_flippers:bool = false
 @export var has_climbing_gear:bool = false
 
+@export var number_of_enemies:int = 10
+var rewards:Array[Dictionary]
 
 var map_tiles:Array[Array]
 var map_tile_resource:Resource = preload("res://assets/scenes/MapTile.tscn")
+var inventory_item_resource:Resource = preload("res://assets/scenes/InventoryItem.tscn")
 var player_position:Vector2i
 
+var fighting_boss:bool = false
 
 var HAS_ITEM_CHANCE:float = 0.05
-var POSSIBLE_ITEMS:Array = ["Item Chest"]
 
 var DIRECTION_NONE:int = 0
 var DIRECTION_UP:int = 1
@@ -55,7 +61,19 @@ var TILE_PLAYER:int = 9
 var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_HILLS]
 
 func _on_ready() -> void:
+	init_loop()
+	pass
+
+func init_loop():
 	seed(rng_seed.hash())
+	rewards = []
+	fighting_boss = false
+	has_flippers = false
+	has_climbing_gear = false
+	for tile in tiles_node.get_children():
+		tile.queue_free()
+	for inventory_item in side_bar.inventory_items_node.get_children():
+		inventory_item.queue_free()
 	# Create 2d array of tiles
 	# use rules to generate the different types of tiles
 	map_tiles = generate_map(tiles_node, map_width, map_height, tile_width, tile_height)
@@ -64,9 +82,11 @@ func _on_ready() -> void:
 	var starting_x:int = 2#randi_range(1, map_width-2)
 	var starting_y:int = 2#randi_range(1, map_height-2)
 	player_position = Vector2i(starting_x, starting_y)
+	hp = 12
+	max_steps = 99
+	steps = 99
 	# draw the tiles to the screen around the player
 	update_screen(player_position, sight_radius)
-	pass
 
 func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int) -> Array[Array]:
 	var new_map_tiles:Array[Array] = []
@@ -94,7 +114,7 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		var new_tile:MapTile = generate_tile(new_map_tiles[random_seed_point.y][random_seed_point.x], random_seed_point.x, random_seed_point.y, p_tile_width, p_tile_height, type, item_id)
 		random_seed_points.append(new_tile)
 	
-	random_spread(new_map_tiles, random_seed_points,  p_tiles_node, p_map_width, p_map_height, p_tile_width, p_tile_height)
+	random_spread(new_map_tiles, random_seed_points, p_tile_width, p_tile_height)
 	
 	# a winding road around the permeter of the map
 	var road_x:int = 2
@@ -105,33 +125,64 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		if road_tile_count > 1 and road_tile_count%4 == 0:
 			road_y += randi_range(-1, 1)
 			road_x -= 1
-		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_x += 1
 	while road_y < map_height-4:
 		if road_tile_count%4 == 0:
 			road_x += randi_range(-1, 1)
 			road_y -= 1
-		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_y += 1
 	while road_x > 3:
 		if road_tile_count > 1 and road_tile_count%4 == 0:
 			road_y += randi_range(-1, 1)
 			road_x += 1
-		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_x -= 1
-	while road_y > 3:
+	while road_y > 2:
 		if road_tile_count%4 == 0:
 			road_x += randi_range(-1, 1)
 			road_y += 1
-		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_y -= 1
-	return new_map_tiles
+		
+	# add random enemies to the map
+	for enemy_id in range(0, number_of_enemies):
+		# select a random tile to put the enemy on
+		var random_x:int = randi_range(0, map_width-1)
+		var random_y:int = randi_range(0, map_height-1)
+		var existing_tile:MapTile = new_map_tiles[random_y][random_x]
+		existing_tile.item_id = 1
+		# generate a random enemy
+		var base_enemy_stats:Dictionary = {
+			"hp": 5,
+			"armor": 0,
+			"speed": 3,
+			"damage": 1,
+			"strength": 1
+		}
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10)
+		
+		existing_tile.enemy_stats = enemy_stats
+		existing_tile.update_texture()
 	
-func random_spread(new_map_tiles:Array[Array], random_seed_points:Array[MapTile], p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int):
+	return new_map_tiles
+
+func generate_enemy_stats(enemy_stats:Dictionary, points_to_spend:int=10) -> Dictionary:
+	while points_to_spend > 0:
+		# pick random stat
+		var random_stat_name: String = enemy_stats.keys()[randi_range(0, enemy_stats.size()-1)]
+		# pick a random amount of points to spend
+		var investment_points: int = randi_range(1, points_to_spend)
+		enemy_stats[random_stat_name] += investment_points
+		points_to_spend -= investment_points
+	return enemy_stats
+
+func random_spread(new_map_tiles:Array[Array], random_seed_points:Array[MapTile], p_tile_width:int, p_tile_height:int):
 	for random_seed_point in random_seed_points:
 		var type:int = random_seed_point.type
 		for x in range(-spread_range, spread_range+1):
@@ -143,7 +194,7 @@ func random_spread(new_map_tiles:Array[Array], random_seed_points:Array[MapTile]
 					if randf() < 0.05:
 						item_id = 0
 					var new_position:Vector2i = validate_position(Vector2i(random_seed_point.x+x, random_seed_point.y+y))
-					var new_tile:MapTile = generate_tile(new_map_tiles[new_position.y][new_position.x], new_position.x, new_position.y, p_tile_width, p_tile_height, type, item_id)
+					generate_tile(new_map_tiles[new_position.y][new_position.x], new_position.x, new_position.y, p_tile_width, p_tile_height, type, item_id)
 					
 	
 func generate_tile(new_tile:MapTile, x:int, y:int, p_tile_width:int, p_tile_height:int, type:int = TILE_EMPTY, item_id:int = -1) -> MapTile:
@@ -186,7 +237,8 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 			var map_position:Vector2i = Vector2i(x, y)
 			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
 	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
-	side_bar.update_stats(steps, max_steps, hp, armor, speed, build, damage, sight_radius)
+	
+	side_bar.update_stats(rewards, steps, max_steps, hp, armor, speed, strength, damage, sight_radius)
 
 func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
@@ -197,10 +249,6 @@ func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_p
 		return true
 	if distance <= 1:
 		return true
-	var distance_vector:Vector2i = p_player_position - p_tile_position
-	var x_distance:int = distance_vector.x
-	var y_distance:int = distance_vector.y
-	
 	var is_within_distance:bool = distance <= p_sight_radius
 	var is_tile_visible:bool = true
 	# https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -240,6 +288,28 @@ func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_p
 	return is_within_distance and is_tile_visible
 
 func _process(delta: float) -> void:
+	
+	if combat_screen.visible:
+		if combat_screen.is_combat_lost():
+			# TODO lost combat so restart the loop
+			print("restart loop")
+			combat_screen.visible = false
+			init_loop()
+			return
+		elif combat_screen.is_combat_won():
+			show_reward_choice_screen()
+			combat_screen.visible = false
+			if fighting_boss:
+				print("Beat the boss")
+				init_loop()
+			return
+		else:
+			if Input.is_action_just_pressed("Interact"):
+				combat_screen.next_turn(delta)
+			return
+	if hp <= 0:
+		# TODO restart loop if not already
+		return
 	if not reward_choice_screen.visible and steps > 0:
 		if Input.is_action_pressed("MoveUp"):
 			move_direction = DIRECTION_UP
@@ -281,7 +351,7 @@ func _process(delta: float) -> void:
 				if current_map_tile.item_id >= 0:
 					interact_with_item(current_map_tile)
 				
-				if steps <= 0:
+				if steps <= 0 or no_valid_movements():
 					trigger_boss_fight()
 				update_screen(player_position, sight_radius)
 			
@@ -298,15 +368,55 @@ func _process(delta: float) -> void:
 		elif Input.is_action_just_pressed("Option3"):
 			give_reward(2)
 
+func no_valid_movements():
+	if steps <= 0:
+		return true
+	
+	if steps > 0:
+		# check all tiles around the player if the movement cost would be too much or not
+		var has_valid_movement_option:bool = false
+		for y in range(-1,2):
+			for x in range(-1,2):
+				if x == y:
+					continue
+				var map_tile:MapTile = map_tiles[y][x]
+				# it is a valid place to move
+				if map_tile.step_cost >= steps:
+					if map_tile.walkable:
+						return true
+					else:
+						if map_tile.type == TILE_WATER and has_flippers:
+							return true
+						elif map_tile.type == TILE_WALL and has_climbing_gear:
+							return true
+						
+	
+	return false
+
 func trigger_boss_fight():
+	fighting_boss = true
 	# TODO implement
-	pass
+	var base_enemy_stats:Dictionary = {
+		"hp": 25,
+		"armor": 0,
+		"speed": 3,
+		"damage": 1,
+		"strength": 4
+	}
+	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30)
+	combat_screen.start_combat(enemy_stats)
+	combat_screen.visible = true
+	var rarities:Array[String] = ["legendary", "legendary", "unique"]
+	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
+	reward_choice_screen.generate_reward_options(rarity)
+
 
 func give_reward(reward_id:int):
 	var reward_card:RewardCard = reward_choice_screen.reward_cards[reward_id]
 	#
 	var reward_config:Dictionary =  reward_card.reward_config
-	var stats_affected:Array = reward_config.get("stats", [])
+	# check if it's an item or a one time boost
+	var reward_type:String = reward_config.get("type", "consumable")
 	var special:String = reward_config.get("special", "")
 	if special == "flippers":
 		has_flippers = true
@@ -314,57 +424,65 @@ func give_reward(reward_id:int):
 	elif special == "climbing_gear":
 		has_climbing_gear = true
 		reward_choice_screen.reward_options.erase("climbing_gear")
+	if reward_type == "consumable":
+		var stats_affected:Array = reward_config.get("stats", [])
+		for stat_affected:Dictionary in stats_affected:
+			var min_amount:int = stat_affected.get("min_amount", 0)
+			var max_amount:int = stat_affected.get("max_amount", 0)
+			
+			var amount:int = randi_range(min_amount, max_amount)
+			var stat_name:String =  stat_affected.get("name", "")
+			var type:String =  stat_affected.get("type", "modify")
+			
+			if stat_name != "":
+				if type == "modify":
+					if stat_name == "vision":
+						sight_radius += amount
+					elif stat_name == "hp":
+						hp += amount
+					elif stat_name == "armor":
+						armor += amount
+					elif stat_name == "speed":
+						speed += amount
+					elif stat_name == "strength":
+						strength += amount
+					elif stat_name == "damage":
+						damage += amount
+					elif stat_name == "steps":
+						steps += amount
+					elif stat_name == "max_steps":
+						max_steps += amount
+				elif type == "set":
+					if stat_name == "vision":
+						sight_radius = amount
+					elif stat_name == "hp":
+						hp = amount
+					elif stat_name == "armor":
+						armor = amount
+					elif stat_name == "speed":
+						speed = amount
+					elif stat_name == "strength":
+						strength = amount
+					elif stat_name == "damage":
+						damage = amount
+					elif stat_name == "steps":
+						steps = amount
+					elif stat_name == "max_steps":
+						max_steps = amount
+	else:
+		var inventory_item:InventoryItem = inventory_item_resource.instantiate()
+		var item_name:String = reward_config.get("title", "No Title Found")
+		var icon_path:String = reward_config.get("icon_path", "res://assets/images/sprite_sheets/Placeholder.png")
+		inventory_item.update(icon_path, item_name)
+		side_bar.add_inventory_item(inventory_item)
 	
-	for stat_affected:Dictionary in stats_affected:
-		var min_amount:int = stat_affected.get("min_amount", 0)
-		var max_amount:int = stat_affected.get("max_amount", 0)
-		
-		var amount:int = randi_range(min_amount, max_amount)
-		var stat_name:String =  stat_affected.get("name", "")
-		var type:String =  stat_affected.get("type", "modify")
-		
-		if stat_name != "":
-			if type == "modify":
-				if stat_name == "vision":
-					sight_radius += amount
-				elif stat_name == "hp":
-					hp += amount
-				elif stat_name == "armor":
-					armor += amount
-				elif stat_name == "speed":
-					speed += amount
-				elif stat_name == "build":
-					build += amount
-				elif stat_name == "damage":
-					damage += amount
-				elif stat_name == "steps":
-					steps += amount
-				elif stat_name == "max_steps":
-					max_steps += amount
-			elif type == "set":
-				if stat_name == "vision":
-					sight_radius = amount
-				elif stat_name == "hp":
-					hp = amount
-				elif stat_name == "armor":
-					armor = amount
-				elif stat_name == "speed":
-					speed = amount
-				elif stat_name == "build":
-					build = amount
-				elif stat_name == "damage":
-					damage = amount
-				elif stat_name == "steps":
-					steps = amount
-				elif stat_name == "max_steps":
-					max_steps = amount
+	rewards.append(reward_config)
 	
 	reward_choice_screen.visible = false
 	update_screen(player_position, sight_radius)
 
 
 func interact_with_item(current_map_tile:MapTile):
-	print(current_map_tile.item_id)
 	if current_map_tile.item_id == 0:
 		# chest
 		# populate and show the options for items to get
@@ -375,7 +493,19 @@ func interact_with_item(current_map_tile:MapTile):
 		current_map_tile.item_id = -1
 		current_map_tile.item_texture_path = ""
 		current_map_tile.item_sprite.visible = false
+	elif current_map_tile.item_id == 1:
+		start_random_combat(current_map_tile)
+		reward_choice_screen.generate_reward_options()
+
+func start_random_combat(current_map_tile:MapTile):
+	# show the combat screen
+	var enemy_stats:Dictionary = current_map_tile.enemy_stats
+	combat_screen.start_combat(enemy_stats)
+	current_map_tile.item_id = -1
+	current_map_tile.update_texture()
+	combat_screen.visible = true
 	
+
 func show_reward_choice_screen():
 	reward_choice_screen.visible = true
 

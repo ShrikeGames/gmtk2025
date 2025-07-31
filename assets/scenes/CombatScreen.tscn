@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwu53lei24rcc"]
+
+[ext_resource type="Script" uid="uid://cr3daolm7owls" path="res://assets/scripts/CombatScreen.gd" id="1_hyrab"]
+[ext_resource type="Texture2D" uid="uid://w86580n0nh7d" path="res://assets/images/sprite_sheets/CombatScreen.png" id="1_sgd6i"]
+[ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
+[ext_resource type="Texture2D" uid="uid://dksbjev2smivx" path="res://assets/images/sprite_sheets/Enemy.png" id="4_srylc"]
+
+[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text")]
+script = ExtResource("1_hyrab")
+enemy_stats_text = NodePath("EnemyStatsText")
+
+[node name="CombatScreen" type="Sprite2D" parent="."]
+position = Vector2(800, 450)
+texture = ExtResource("1_sgd6i")
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(481, 393)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_bogmt")
+
+[node name="Enemy" type="Sprite2D" parent="."]
+position = Vector2(1188, 408)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_srylc")
+
+[node name="EnemyStatsText" type="RichTextLabel" parent="."]
+offset_left = 1304.0
+offset_top = 260.0
+offset_right = 1576.0
+offset_bottom = 483.0
+bbcode_enabled = true
+text = "[color=#992211]HP: 999[/color] 
+[color=#000099]Armor: 999[/color] 
+[color=#119911]Speed: 999[/color] 
+[color=#994411]Strength: 999[/color]
+[color=#991177]Damage: 999[/color]"

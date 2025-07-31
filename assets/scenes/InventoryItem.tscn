@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://13vrkh5cje81"]
+
+[ext_resource type="Script" uid="uid://dlwbl5fscxd43" path="res://assets/scripts/InventoryItem.gd" id="1_fyl2v"]
+[ext_resource type="Texture2D" uid="uid://b8hybin0su2in" path="res://assets/images/sprite_sheets/Placeholder.png" id="2_ljxqt"]
+
+[node name="InventoryItem" type="Node2D" node_paths=PackedStringArray("icon", "title")]
+script = ExtResource("1_fyl2v")
+icon = NodePath("Icon")
+title = NodePath("Title")
+
+[node name="Icon" type="Sprite2D" parent="."]
+texture = ExtResource("2_ljxqt")
+
+[node name="Title" type="RichTextLabel" parent="."]
+offset_left = -78.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 86.0
+bbcode_enabled = true
+text = "[center]Item Name dsgsdghs[/center]"
