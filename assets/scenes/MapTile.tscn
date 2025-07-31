@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwgsybdqjr2cb"]
+
+[ext_resource type="Script" uid="uid://byfti3y803gd8" path="res://assets/scripts/MapTile.gd" id="1_eduyu"]
+
+[node name="MapTile" type="Sprite2D" node_paths=PackedStringArray("item_sprite")]
+script = ExtResource("1_eduyu")
+item_sprite = NodePath("Item")
+
+[node name="Item" type="Sprite2D" parent="."]

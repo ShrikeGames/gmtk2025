@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4ntvwt70klqe"]
+
+[ext_resource type="Script" uid="uid://dpvb3g6ub0jr6" path="res://assets/scripts/WorldMap.gd" id="1_eciam"]
+[ext_resource type="Texture2D" uid="uid://cejwbyri268kl" path="res://assets/images/sprite_sheets/MapTile9.png" id="2_th6by"]
+[ext_resource type="PackedScene" uid="uid://1bnlxp25oahm" path="res://assets/scenes/SideBar.tscn" id="3_th6by"]
+
+[node name="WorldMap" type="Node2D" node_paths=PackedStringArray("tiles_node", "player_image", "side_bar")]
+script = ExtResource("1_eciam")
+tiles_node = NodePath("Tiles")
+player_image = NodePath("Player")
+side_bar = NodePath("SideBar")
+
+[node name="Tiles" type="Node2D" parent="."]
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(608, 455)
+texture = ExtResource("2_th6by")
+
+[node name="SideBar" parent="." instance=ExtResource("3_th6by")]
+
+[connection signal="ready" from="." to="." method="_on_ready"]

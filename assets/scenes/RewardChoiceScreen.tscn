@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://s1d3gge1l4g8"]
+
+[ext_resource type="Script" uid="uid://ol8jwr23u2j2" path="res://assets/scripts/RewardChoiceScreen.gd" id="1_ig3qk"]
+[ext_resource type="PackedScene" uid="uid://ceykm0ecr1b4t" path="res://assets/scenes/RewardCard.tscn" id="2_tosvh"]
+
+[node name="RewardChoiceScreen" type="Node2D" node_paths=PackedStringArray("reward_cards")]
+script = ExtResource("1_ig3qk")
+reward_cards = [NodePath("RewardCard"), NodePath("RewardCard2"), NodePath("RewardCard3")]
+
+[node name="RewardCard" parent="." instance=ExtResource("2_tosvh")]
+position = Vector2(100, 150)
+
+[node name="RewardCard2" parent="." instance=ExtResource("2_tosvh")]
+position = Vector2(550, 150)
+
+[node name="RewardCard3" parent="." instance=ExtResource("2_tosvh")]
+position = Vector2(1000, 150)

@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceykm0ecr1b4t"]
+
+[ext_resource type="Texture2D" uid="uid://bt04in5klrbw3" path="res://assets/images/sprite_sheets/RewardCardBackground.png" id="1_c82u3"]
+[ext_resource type="Script" uid="uid://bwc3b4pdslbaa" path="res://assets/scripts/RewardCard.gd" id="1_p7q50"]
+
+[node name="RewardCard" type="Node2D" node_paths=PackedStringArray("title_text", "description_text")]
+script = ExtResource("1_p7q50")
+title_text = NodePath("TitleText")
+description_text = NodePath("DescriptionText")
+
+[node name="RewardCardBackground" type="Sprite2D" parent="."]
+position = Vector2(200, 300)
+texture = ExtResource("1_c82u3")
+
+[node name="TitleText" type="RichTextLabel" parent="."]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 395.0
+offset_bottom = 200.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[center]THIS IS A LONG TITLE[/center]"
+
+[node name="DescriptionText" type="RichTextLabel" parent="."]
+offset_left = 7.0
+offset_top = 174.0
+offset_right = 393.0
+offset_bottom = 526.0
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "this is a long description this is a long description this is a long description this is a long"

@@ -1,0 +1,362 @@
+extends Node2D
+
+@export var reward_choice_screen:RewardChoiceScreen
+@export var tiles_node:Node2D
+@export var player_image:Sprite2D
+
+# map settings
+# TODO allow user to enter one of their own
+@export var rng_seed:String = "GMTK2025"
+@export var map_width:int = 21
+@export var map_height:int = 18
+@export var tile_width:int = 50
+@export var tile_height:int = 50
+@export var min_number_of_rooms:int = 4
+@export var max_number_of_rooms:int = 10
+@export var min_room_size:int = 2
+@export var max_room_size:int = 4
+@export var min_number_of_doors:int = 1
+@export var max_number_of_doors:int = 4
+
+# stats
+@export var side_bar:SideBar
+@export var hp:int = 10
+@export var armor:int = 0
+@export var speed:int = 1
+@export var build:int = 1
+@export var damage:int = 1
+@export var sight_radius:int = 5
+@export var max_steps:int = 99
+@export var steps:int = 99
+
+var map_tiles:Array[Array]
+var map_tile_resource:Resource = preload("res://assets/scenes/MapTile.tscn")
+var player_position:Vector2i
+
+
+var HAS_ITEM_CHANCE:float = 0.05
+var POSSIBLE_ITEMS:Array = ["Item Chest"]
+
+var DIRECTION_NONE:int = 0
+var DIRECTION_UP:int = 1
+var DIRECTION_RIGHT:int = 2
+var DIRECTION_DOWN:int = 3
+var DIRECTION_LEFT:int = 4
+var move_direction:int = DIRECTION_NONE
+var time_since_last_moved:float
+var movement_delay_time_sec:float = 0.1
+
+var TILE_EMPTY:int = 0
+var TILE_WALL:int = 1
+var TILE_WATER:int = 2
+var TILE_HILLS:int = 3
+var TILE_FOREST:int = 4
+var TILE_PLAYER:int = 9
+var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_HILLS]
+
+func _on_ready() -> void:
+	seed(rng_seed.hash())
+	# Create 2d array of tiles
+	# use rules to generate the different types of tiles
+	map_tiles = generate_map(tiles_node, map_width, map_height, tile_width, tile_height)
+	time_since_last_moved = 0
+	# set the player starting location
+	var starting_x:int = randi_range(1, map_width-2)
+	var starting_y:int = randi_range(1, map_height-2)
+	player_position = Vector2i(starting_x, starting_y)
+	# draw the tiles to the screen around the player
+	update_screen(player_position, sight_radius)
+	pass
+
+func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int) -> Array[Array]:
+	var new_map_tiles:Array[Array] = []
+	# populate the map array with tiles
+	for y in range(0, p_map_height):
+		new_map_tiles.append([])
+		for x in range(0, p_map_width):
+			var new_tile:MapTile = generate_tile(map_tile_resource.instantiate(), x, y, p_tile_width, p_tile_height)
+			new_tile.visible = false
+			# add to the array
+			new_map_tiles[y].append(new_tile)
+			# add to the stage
+			p_tiles_node.add_child(new_tile)
+	
+	for room_id in range(0, randi_range(min_number_of_rooms, max_number_of_rooms)):
+		
+		var room_size_width:int = randi_range(min_room_size, max_room_size)
+		var room_size_height:int = randi_range(min_room_size, max_room_size)
+		var padding_x:int = int(room_size_width * 0.5)
+		var padding_y:int = int(room_size_height * 0.5)
+		
+		var random_position:Vector2i = Vector2i(randi_range(padding_x, map_width-1-padding_x), randi_range(padding_y, map_height-1-padding_y))
+		var room_x:int = random_position.x
+		var room_y:int = random_position.y
+		
+		for y in [-int(room_size_height*0.5), int(room_size_height*0.5)]:
+			for x in range(-int(room_size_width*0.5), int(room_size_width*0.5)+1):
+				var type:int = ROOM_WALL_TILE_TYPES[randi_range(0, ROOM_WALL_TILE_TYPES.size()-1)]
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, type, -1)
+				wall_new_tile.visible = false
+		for y in range(-int(room_size_height*0.5), int(room_size_height*0.5)+1):
+			for x in [-int(room_size_width*0.5), int(room_size_width*0.5)]:
+				var type:int = ROOM_WALL_TILE_TYPES[randi_range(0, ROOM_WALL_TILE_TYPES.size()-1)]
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, type, -1)
+				wall_new_tile.visible = false
+		var wall_with_door_id:int = randi_range(0, 3)
+		# random wall to have a door
+		for door_id in range(0, randi_range(min_number_of_doors, max_number_of_doors)):
+			if wall_with_door_id == 0:
+				var x:int = randi_range(-int(room_size_width*0.5)+1, int(room_size_width*0.5))
+				var y:int = -int(room_size_height*0.5)
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
+				wall_new_tile.visible = false
+			elif wall_with_door_id == 1:
+				var x:int = randi_range(-int(room_size_width*0.5)+1, int(room_size_width*0.5))
+				var y:int = int(room_size_height*0.5)
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
+				wall_new_tile.visible = false
+			elif wall_with_door_id == 2:
+				var x:int = int(room_size_width*0.5)
+				var y:int = randi_range(-int(room_size_height*0.5)+1, int(room_size_height*0.5))
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
+				wall_new_tile.visible = false
+			elif wall_with_door_id == 3:
+				var x:int = -int(room_size_width*0.5)
+				var y:int = randi_range(-int(room_size_height*0.5)+1, int(room_size_height*0.5))
+				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
+				wall_new_tile.visible = false
+			
+			wall_with_door_id += 1
+			if wall_with_door_id > 3:
+				wall_with_door_id = 0
+			
+	
+	return new_map_tiles
+	
+func generate_tile(new_tile:MapTile, x:int, y:int, p_tile_width:int, p_tile_height:int, type:int = TILE_EMPTY, item_id:int = -1) -> MapTile:
+	var walkable:bool = true
+	var blocks_vision:bool = false
+	var step_cost:int = 1
+	
+	if type == TILE_WALL:
+		walkable = false
+		blocks_vision = true
+	elif type == TILE_WATER:
+		walkable = false
+		blocks_vision = false
+	elif type == TILE_HILLS:
+		walkable = true
+		blocks_vision = false
+		step_cost = 2
+	elif type == TILE_FOREST:
+		walkable = true
+		blocks_vision = true
+		step_cost = 2
+	
+	var tile_position:Vector2 = Vector2((p_tile_width*0.5) + x * p_tile_width, (p_tile_height*0.5) + y * p_tile_height)
+	new_tile.init(x, y, tile_position, type, item_id, walkable, blocks_vision, step_cost)
+	
+	return new_tile
+
+func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
+	for y:int in range(0, map_height):
+		for x:int in range(0, map_width):
+			var map_tile:MapTile = map_tiles[y][x]
+			# if the map tile is within sight of the player position then show it
+			# otherwise hide it
+			var map_position:Vector2i = Vector2i(x, y)
+			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
+	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
+	side_bar.update_stats(steps, max_steps, hp, armor, speed, build, damage, sight_radius)
+
+func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
+	var distance:float = p_player_position.distance_to(p_tile_position)
+	if distance <= 1:
+		return true
+	var distance_vector:Vector2i = p_player_position - p_tile_position
+	var x_distance:int = distance_vector.x
+	var y_distance:int = distance_vector.y
+	
+	var is_within_distance:bool = distance <= p_sight_radius
+	var is_tile_visible:bool = true
+	# https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+	var x0:int = p_tile_position.x
+	var x1:int = p_player_position.x
+	var y0:int = p_tile_position.y
+	var y1:int = p_player_position.y
+	var dx:int = abs(x1 - x0)
+	var sx:int = -1
+	if x0 < x1:
+		sx = 1
+		
+	var dy:int = -abs(y1 - y0)
+	var sy:int = -1
+	if y0 < y1:
+		sy = 1
+	var error:int = dx + dy
+	
+	while true:
+		var e2:int = 2 * error
+		if e2 >= dy:
+			if x0 == x1:
+				break
+			error = error + dy
+			x0 = x0 + sx
+		if e2 <= dx:
+			if y0 == y1:
+				break
+			error = error + dx
+			y0 = y0 + sy
+		
+		var candidate_map_tile:MapTile = map_tiles[y0][x0]
+		if candidate_map_tile.blocks_sight:
+			is_tile_visible = false
+			break
+	
+	return is_within_distance and is_tile_visible
+
+func _process(delta: float) -> void:
+	if not reward_choice_screen.visible and steps > 0:
+		if Input.is_action_pressed("MoveUp"):
+			move_direction = DIRECTION_UP
+		elif Input.is_action_pressed("MoveRight"):
+			move_direction = DIRECTION_RIGHT
+		elif Input.is_action_pressed("MoveDown"):
+			move_direction = DIRECTION_DOWN
+		elif Input.is_action_pressed("MoveLeft"):
+			move_direction = DIRECTION_LEFT
+		else:
+			move_direction = DIRECTION_NONE
+		if time_since_last_moved >= movement_delay_time_sec:
+			var moved:bool = false
+			var target_position:Vector2i = Vector2i(player_position.x, player_position.y)
+			if move_direction == DIRECTION_UP:
+				time_since_last_moved = 0
+				target_position.y -= 1
+				moved = true
+			elif move_direction == DIRECTION_RIGHT:
+				time_since_last_moved = 0
+				target_position.x += 1
+				moved = true
+			elif move_direction == DIRECTION_DOWN:
+				time_since_last_moved = 0
+				target_position.y += 1
+				moved = true
+			elif move_direction == DIRECTION_LEFT:
+				time_since_last_moved = 0
+				target_position.x -= 1
+				moved = true
+			
+			var validated_target_position:Vector2i = validate_position(target_position)
+			var current_map_tile:MapTile = map_tiles[validated_target_position.y][validated_target_position.x]
+			if moved and steps >= current_map_tile.step_cost and is_walkable(validated_target_position):
+				steps -= current_map_tile.step_cost
+				player_position = validated_target_position
+				# check the tile we walked onto
+				# if it has an item, remove the item and gain effect based on the item
+				if current_map_tile.item_id >= 0:
+					interact_with_item(current_map_tile)
+				
+				if steps <= 0:
+					trigger_boss_fight()
+				update_screen(player_position, sight_radius)
+			
+	time_since_last_moved += delta
+	
+	if Input.is_action_just_pressed("Undo"):
+		reward_choice_screen.visible = false
+		
+	if reward_choice_screen.visible:
+		if Input.is_action_just_pressed("Option1"):
+			give_reward(0)
+		elif Input.is_action_just_pressed("Option2"):
+			give_reward(1)
+		elif Input.is_action_just_pressed("Option3"):
+			give_reward(2)
+
+func trigger_boss_fight():
+	# TODO implement
+	pass
+
+func give_reward(reward_id:int):
+	var reward_card:RewardCard = reward_choice_screen.reward_cards[reward_id]
+	#
+	var reward_config:Dictionary =  reward_card.reward_config
+	var stats_affected:Array = reward_config.get("stats", [])
+	for stat_affected:Dictionary in stats_affected:
+		var min_amount:int = stat_affected.get("min_amount", 0)
+		var max_amount:int = stat_affected.get("max_amount", 0)
+		
+		var amount:int = randi_range(min_amount, max_amount)
+		var stat_name:String =  stat_affected.get("name", "")
+		var type:String =  stat_affected.get("type", "modify")
+		if stat_name != "":
+			if type == "modify":
+				if stat_name == "vision":
+					sight_radius += amount
+				elif stat_name == "hp":
+					hp += amount
+				elif stat_name == "armor":
+					armor += amount
+				elif stat_name == "speed":
+					speed += amount
+				elif stat_name == "build":
+					build += amount
+				elif stat_name == "damage":
+					damage += amount
+				elif stat_name == "steps":
+					steps += amount
+				elif stat_name == "max_steps":
+					max_steps += amount
+			elif type == "set":
+				if stat_name == "vision":
+					sight_radius = amount
+				elif stat_name == "hp":
+					hp = amount
+				elif stat_name == "armor":
+					armor = amount
+				elif stat_name == "speed":
+					speed = amount
+				elif stat_name == "build":
+					build = amount
+				elif stat_name == "damage":
+					damage = amount
+				elif stat_name == "steps":
+					steps = amount
+				elif stat_name == "max_steps":
+					max_steps = amount
+	
+	reward_choice_screen.visible = false
+	update_screen(player_position, sight_radius)
+
+
+func interact_with_item(current_map_tile:MapTile):
+	if current_map_tile.item_id == 0:
+		# chest
+		# populate and show the options for items to get
+		reward_choice_screen.generate_reward_options()
+		show_reward_choice_screen()
+		
+		#sight_radius += 1
+		current_map_tile.item_id = -1
+		current_map_tile.item_texture_path = ""
+		current_map_tile.item_sprite.visible = false
+	
+func show_reward_choice_screen():
+	reward_choice_screen.visible = true
+
+func is_walkable(validated_target_position:Vector2i) -> bool:
+	var map_tile:MapTile = map_tiles[validated_target_position.y][validated_target_position.x]
+	return map_tile.walkable 
+
+func validate_position(target_position:Vector2i) -> Vector2i:
+	if target_position.x < 0:
+		target_position.x = 0
+	elif target_position.x > map_width-1:
+		target_position.x = map_width-1
+	if target_position.y < 0:
+		target_position.y = 0
+	elif target_position.y > map_height-1:
+		target_position.y = map_height-1
+	
+	return target_position
