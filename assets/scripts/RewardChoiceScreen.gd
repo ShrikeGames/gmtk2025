@@ -434,7 +434,12 @@ var reward_options:Dictionary = {
 			"description": "Increase your [color=#119911]Speed[/color] by 6 and deal bonus damage equal to your speed.",
 			"type": "item",
 			"color": "997700",
-			"stats": [],
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 6,
+				"max_amount": 6
+			}],
 			"combat_effects": [
 				{
 					"damage": {
@@ -444,12 +449,6 @@ var reward_options:Dictionary = {
 							"use_other_stat": "speed",
 							"min_amount": 0,
 							"max_amount": 0
-						},
-						{
-							"name": "damage",
-							"type": "modify",
-							"min_amount": 6,
-							"max_amount": 6
 						}]
 					}
 				}
@@ -541,7 +540,7 @@ var reward_options:Dictionary = {
 			"type": "consumable",
 			"color": "000099",
 			"stats": [{
-				"name": "health",
+				"name": "hp",
 				"type": "modify",
 				"min_amount": 25,
 				"max_amount": 25
@@ -557,7 +556,7 @@ func generate_reward_options(rarity:String=""):
 	if rarity == "":
 		randomly_select_rarity = true
 	var rarities:Array[String] = ["common", "uncommon", "rare", "legendary", "unique"]
-	var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 0.5]
+	var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 1]
 	for reward_card in reward_cards:
 		if randomly_select_rarity:
 			var i:int = 0

@@ -19,7 +19,7 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 	var displayed_strength:int = strength
 	var displayed_damage:int = damage
 	var displayed_vision:int = vision
-	var displayed_max_steps:int = max_steps
+	var displayed_max_steps:float = max_steps
 	for reward_config in rewards:
 		var reward_type:String = reward_config.get("type", "consumable")
 		if reward_type != "item":
@@ -36,42 +36,42 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 			if stat_name != "":
 				if type == "modify":
 					if stat_name == "vision":
-						displayed_vision += amount
+						displayed_vision = max(0, displayed_vision+amount)
 					elif stat_name == "hp":
-						displayed_hp += amount
+						displayed_hp = max(1, displayed_hp+amount)
 					elif stat_name == "armor":
-						displayed_armor += amount
+						displayed_armor = max(0, displayed_armor+amount)
 					elif stat_name == "armor_regen":
-						displayed_armor_regen += amount
+						displayed_armor_regen = max(0, displayed_armor_regen+amount)
 					elif stat_name == "speed":
-						displayed_speed += amount
+						displayed_speed = max(0, displayed_speed+amount)
 					elif stat_name == "strength":
-						displayed_strength += amount
+						displayed_strength = max(0, displayed_strength+amount)
 					elif stat_name == "damage":
-						displayed_damage += amount
+						displayed_damage = max(0, displayed_damage+amount)
 					elif stat_name == "steps":
-						steps += amount
+						steps = max(0, steps+amount)
 					elif stat_name == "max_steps":
-						displayed_max_steps += amount
+						displayed_max_steps = max(0, displayed_max_steps+amount)
 				elif type == "set":
 					if stat_name == "vision":
-						displayed_vision = amount
+						displayed_vision = max(0, amount)
 					elif stat_name == "hp":
-						displayed_hp = amount
+						displayed_hp = max(1, amount)
 					elif stat_name == "armor":
-						displayed_armor = amount
+						displayed_armor = max(0, amount)
 					elif stat_name == "armor_regen":
-						displayed_armor_regen = amount
+						displayed_armor_regen = max(0, amount)
 					elif stat_name == "speed":
-						displayed_speed = amount
+						displayed_speed = max(0, amount)
 					elif stat_name == "strength":
-						displayed_strength = amount
+						displayed_strength = max(0, amount)
 					elif stat_name == "damage":
-						displayed_damage = amount
+						displayed_damage = max(0, amount)
 					elif stat_name == "steps":
-						steps = amount
+						steps = max(0, amount)
 					elif stat_name == "max_steps":
-						displayed_max_steps = amount
+						displayed_max_steps = max(0, amount)
 	
 	var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(steps), int(displayed_max_steps)]
 	var hp_rich_text:String = "[color=#992211]HP: %d[/color]"%[displayed_hp]

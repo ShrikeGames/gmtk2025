@@ -40,15 +40,18 @@ Day 2 (Plan):
 
 Day3 (Plan):
 - Make menus (including options)
+- Give additional attacks due to increased speed AFTER the other character gets their turn (like in old FE)
+- Keep adding new items, enemies, loot, etc
 - Mouse controls for game
 - Make art for the actual game part
-- Keep adding new items, enemies, loot, etc
 
-Day 4(Plan):
+
+ Day 4(Plan):
 - Music
 - Sound effects
 - keep adding new items, enemies, loot, etc
 - Polish and test
+ - Partical effects, animations, etc
 
 Day 5(Plan):
 - Test and fix issues
@@ -59,3 +62,7 @@ Stretch goals:
 - Fights with multiple enemies
 - Possibly day/night cycle
 - Make combat have random dice rolls, items can affect how many dice you get
+- Add additional modifiers to the game for each boss you defeat
+	EG: Enemies are invisible, you cannot see them so have to memorize their locations when you learn of them
+- Have items that can perma change the terrain or other effects
+- Dynamic enemy art by mashing together body part images based on their stats

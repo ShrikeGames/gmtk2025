@@ -104,7 +104,7 @@ func next_turn(_delta:float) -> bool:
 		var base_damage:int = enemy_stats["damage"]
 		var strength:int = enemy_stats["strength"]
 		# for now don't give enemies a strength modifier
-		var enemy_strength_damage_modifier:float = 0
+		var enemy_strength_damage_modifier:float = 0.5
 		
 		var total_damage:int = base_damage + int(strength*enemy_strength_damage_modifier)
 		# deal the damage first to armor

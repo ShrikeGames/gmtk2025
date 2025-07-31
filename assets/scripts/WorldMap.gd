@@ -28,6 +28,7 @@ var number_of_random_seed_points:int = 40
 @export var max_steps:float = 99
 @export var steps:float = 99
 @export var loop:float = 0
+@export var boss_kills:float = 0
 
 @export var has_flippers:bool = false
 @export var has_climbing_gear:bool = false
@@ -70,7 +71,7 @@ func _on_ready() -> void:
 	init_loop()
 
 func init_loop():
-	loop +=1
+	loop += 1
 	rewards = []
 	fighting_boss = false
 	has_flippers = false
@@ -91,6 +92,9 @@ func init_loop():
 		hp = 12
 	max_steps = 99
 	steps = 99
+	reward_choice_screen.visible = false
+	combat_screen.visible = false
+	combat_screen.combat_results_screen.visible = false
 	# draw the tiles to the screen around the player
 	update_screen(player_position, sight_radius)
 
@@ -131,13 +135,18 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		if road_tile_count > 1 and road_tile_count%4 == 0:
 			road_y += randi_range(-1, 1)
 			road_x -= 1
+		road_x = wrapi(road_x, 0, map_width)
+		road_y = wrapi(road_y, 0, map_height)
 		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_x += 1
+		
 	while road_y < map_height-4:
 		if road_tile_count%4 == 0:
 			road_x += randi_range(-1, 1)
 			road_y -= 1
+		road_x = wrapi(road_x, 0, map_width)
+		road_y = wrapi(road_y, 0, map_height)
 		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_y += 1
@@ -145,6 +154,8 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		if road_tile_count > 1 and road_tile_count%4 == 0:
 			road_y += randi_range(-1, 1)
 			road_x += 1
+		road_x = wrapi(road_x, 0, map_width)
+		road_y = wrapi(road_y, 0, map_height)
 		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_x -= 1
@@ -152,6 +163,8 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		if road_tile_count%4 == 0:
 			road_x += randi_range(-1, 1)
 			road_y += 1
+		road_x = wrapi(road_x, 0, map_width)
+		road_y = wrapi(road_y, 0, map_height)
 		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_y -= 1
@@ -165,13 +178,13 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		existing_tile.item_id = 1
 		# generate a random enemy
 		var base_enemy_stats:Dictionary = {
-			"hp": 5,
+			"hp": 1,
 			"armor": 0,
-			"speed": 3,
+			"speed": 1,
 			"damage": 1,
 			"strength": 1
 		}
-		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30)
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10*pow(boss_kills+1,2))
 		
 		existing_tile.enemy_stats = enemy_stats
 		existing_tile.update_texture()
@@ -247,7 +260,7 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 	
 	side_bar.update_stats(rewards, steps, max_steps, hp, armor, armor_regen, speed, strength, damage, sight_radius, loop)
 
-func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
+func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
 	var players_tile:MapTile = map_tiles[p_player_position.y][p_player_position.x]
 	if distance <2 and players_tile.type == TILE_FOREST:
@@ -295,6 +308,17 @@ func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_p
 	return is_within_distance and is_tile_visible
 
 func _process(delta: float) -> void:
+	if combat_screen.visible:
+		if combat_screen.is_combat_lost():
+			combat_screen.combat_results_screen.results_test.text="[center]Defeat!\nYou were defeated in battle.\nPress the Interact key to restart the loop and try again.[/center]"
+			combat_screen.combat_results_screen.visible=true
+			combat_screen.combat_results_screen.combat_type = "Defeat"
+			
+		elif combat_screen.is_combat_won():
+			combat_screen.combat_results_screen.results_test.text="[center]Victory!\nYou were victorious in battle.\nPress the Interact key to claim your reward.[/center]"
+			combat_screen.combat_results_screen.visible=true
+			combat_screen.combat_results_screen.combat_type = "Victory"
+			
 	if hp <= 0:
 		if combat_screen.visible and combat_screen.combat_results_screen.visible and combat_screen.is_combat_lost():
 			if Input.is_action_just_pressed("Interact"):
@@ -321,14 +345,12 @@ func _process(delta: float) -> void:
 				seed(rng_seed.hash())
 				init_loop()
 			elif combat_screen.is_combat_won():
-				show_reward_choice_screen()
-				combat_screen.combat_results_screen.visible = false
-				combat_screen.visible = false
 				if fighting_boss:
 					print("Beat the boss")
-					randomize()
-					seed(randf()*9999999)
-					init_loop()
+					boss_kills+=1
+				combat_screen.combat_results_screen.visible = false
+				combat_screen.visible = false
+				show_reward_choice_screen()
 		return
 	if not reward_choice_screen.visible and steps > 0:
 		if Input.is_action_pressed("MoveUp"):
@@ -381,12 +403,26 @@ func _process(delta: float) -> void:
 		reward_choice_screen.visible = false
 		
 	if reward_choice_screen.visible:
+		print(fighting_boss)
 		if Input.is_action_just_pressed("Option1"):
 			give_reward(0)
+			if fighting_boss:
+				randomize()
+				seed(randi())
+				init_loop()
 		elif Input.is_action_just_pressed("Option2"):
 			give_reward(1)
+			if fighting_boss:
+				randomize()
+				seed(randi())
+				init_loop()
 		elif Input.is_action_just_pressed("Option3"):
 			give_reward(2)
+			if fighting_boss:
+				randomize()
+				seed(randi())
+				init_loop()
+		
 
 func has_valid_movements():
 	if steps <= 0:
@@ -394,21 +430,18 @@ func has_valid_movements():
 	
 	if steps > 0:
 		# check all tiles around the player if the movement cost would be too much or not
-		var has_valid_movement_option:bool = false
-		for y in range(-1,2):
-			for x in range(-1,2):
-				if x == y:
-					continue
-				var map_tile:MapTile = map_tiles[y][x]
-				# it is a valid place to move
-				if map_tile.step_cost <= steps:
-					if map_tile.walkable:
+		for coords in [[-1,0],[1,0],[0,1],[0,-1]]:
+			var map_tile:MapTile = map_tiles[player_position.y+coords[1]][player_position.x+coords[0]]
+			# it is a valid place to move
+			if map_tile.step_cost <= steps:
+				if map_tile.walkable:
+					return true
+				else:
+					print(map_tile, " is walkable")
+					if map_tile.type == TILE_WATER and has_flippers:
 						return true
-					else:
-						if map_tile.type == TILE_WATER and has_flippers:
-							return true
-						elif map_tile.type == TILE_WALL and has_climbing_gear:
-							return true
+					elif map_tile.type == TILE_WALL and has_climbing_gear:
+						return true
 						
 	
 	return false
@@ -419,12 +452,12 @@ func trigger_boss_fight():
 	# TODO implement
 	var base_enemy_stats:Dictionary = {
 		"hp": 50,
-		"armor": 10,
+		"armor": 5,
 		"speed": 5,
 		"damage": 5,
 		"strength": 4
 	}
-	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 100)
+	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 50*(boss_kills+1))
 	combat_screen.start_combat(enemy_stats)
 	combat_screen.visible = true
 	var rarities:Array[String] = ["legendary", "legendary", "unique"]
@@ -458,7 +491,7 @@ func give_reward(reward_id:int):
 			if stat_name != "":
 				if type == "modify":
 					if stat_name == "vision":
-						sight_radius += amount
+						sight_radius = max(1, sight_radius+amount)
 					elif stat_name == "hp":
 						hp = max(1, hp+amount)
 					elif stat_name == "armor":
@@ -504,7 +537,7 @@ func give_reward(reward_id:int):
 	rewards.append(reward_config)
 	
 	reward_choice_screen.visible = false
-	update_screen(player_position, sight_radius)
+	update_screen(player_position, side_bar.calculated_stats["vision"])
 
 
 func interact_with_item(current_map_tile:MapTile):
