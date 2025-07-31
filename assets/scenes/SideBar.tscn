@@ -19,7 +19,7 @@ offset_right = 1581.0
 offset_bottom = 111.0
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
-text = "[color=#222222]Steps: 25/50[/color]
+text = "Loop 1: [color=#222222]Steps: 25/50[/color]
 [color=#992211]HP: 999[/color]  - [color=#000099]Armor: 999[/color]  - [color=#119911]Speed: 999[/color]  - [color=#994411]Strength: 999[/color]  - [color=#991177]Damage: 999[/color]  - [color=#997700]Vision: 999[/color]"
 
 [node name="InventoryItems" type="Node2D" parent="."]

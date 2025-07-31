@@ -5,6 +5,7 @@ class_name CombatScreen
 @export var side_bar:SideBar
 @export var world_map:WorldMap
 @export var enemy_stats_text:RichTextLabel
+@export var combat_log_text:RichTextLabel
 
 var turn:int
 var enemy_stats:Dictionary
@@ -15,6 +16,7 @@ func start_combat(p_enemy_stats:Dictionary):
 	self.enemy_stats = p_enemy_stats
 	self.player_speed = side_bar.calculated_stats["speed"]
 	self.enemy_speed = enemy_stats["speed"]
+	combat_log_text.text = ""
 	update_enemy_stats_text()
 	
 func next_turn(_delta:float) -> bool:
@@ -24,7 +26,6 @@ func next_turn(_delta:float) -> bool:
 	# determine who is faster
 	var strength_damage_modifier:float = 0.5
 	
-	print(enemy_stats)
 	if player_speed >= enemy_speed:
 		enemy_speed = enemy_stats["speed"]
 		# player goes
@@ -70,11 +71,13 @@ func next_turn(_delta:float) -> bool:
 									player_hp += side_bar.calculated_stats["damage"]
 							else:
 								player_hp += randi_range(stat_modifier["min_amount"], stat_modifier["max_amount"])
-								world_map.hp = player_hp
+							world_map.hp = player_hp
+							combat_log_text.text += "The player healed!\n"
 		var total_damage:int = 	base_damage + int(strength*strength_damage_modifier) + bonus_damage
 		# deal the damage first to armor
 		var enemy_armor: int = enemy_stats["armor"]
 		if enemy_armor > 0:
+			combat_log_text.text += "The enemy armor blocks some damage!\n"
 			var armor_before:int = enemy_armor
 			enemy_armor = max(0, enemy_armor-total_damage)
 			total_damage = max(0, total_damage-armor_before)
@@ -82,10 +85,10 @@ func next_turn(_delta:float) -> bool:
 		
 		# deal remainder of damage to hp
 		if total_damage > 0:
-			print("Player deals %d damage to the enemy"%[total_damage])
+			combat_log_text.text += "Player deals %d damage!\n"%[total_damage]
 			enemy_hp -= total_damage
 		else:
-			print("Player did no damage")
+			combat_log_text.text += "Player did no damage!\n"
 		enemy_stats["hp"] = enemy_hp
 		enemy_stats["armor"] = enemy_armor
 		# reduce their speed
@@ -110,15 +113,15 @@ func next_turn(_delta:float) -> bool:
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			player_hp -= total_damage
-			print("Enemy deals %d damage to the player"%[total_damage])
+			combat_log_text.text += "Enemy deals %d damage!\n"%[total_damage]
 		else:
-			print("Enemy did no damage")
+			combat_log_text.text += "Enemy did no damage!\n"
 		world_map.hp = player_hp
 		
 		# reduce their speed
 		enemy_speed -= player_speed
 	
-	side_bar.update_stats(world_map.rewards, world_map.steps, world_map.max_steps, world_map.hp, world_map.armor, world_map.speed, world_map.strength, world_map.damage, world_map.sight_radius)
+	side_bar.update_stats(world_map.rewards, world_map.steps, world_map.max_steps, world_map.hp, world_map.armor, world_map.speed, world_map.strength, world_map.damage, world_map.sight_radius, world_map.loop)
 	update_enemy_stats_text()
 	if is_combat_won() or is_combat_lost():
 		return true

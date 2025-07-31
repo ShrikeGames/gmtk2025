@@ -11,7 +11,7 @@ func add_inventory_item(inventory_item:InventoryItem):
 	inventory_item.position = Vector2(x,y)
 	inventory_items_node.add_child(inventory_item)
 
-func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:int, armor:int, speed:int, strength:int, damage:int, vision:int):
+func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:int, armor:int, speed:int, strength:int, damage:int, vision:int, loop:int):
 	var displayed_hp:int = hp
 	var displayed_armor:int = armor
 	var displayed_speed:int = speed
@@ -75,7 +75,7 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 	var strength_rich_text:String = "[color=#994411]Strength: %d[/color]"%[displayed_strength]
 	var damage_rich_text:String = "[color=#991177]Damage: %d[/color]"%[displayed_damage]
 	var vision_rich_text:String = "[color=#997700]Vision: %d[/color]"%[displayed_vision]
-	var rich_text:String = "%s\n%s - %s - %s - %s - %s - %s"%[steps_rich_text, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
+	var rich_text:String = "Loop: %s - %s\n%s - %s - %s - %s - %s - %s"%[loop, steps_rich_text, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
 	
 	calculated_stats["hp"] = displayed_hp
 	calculated_stats["armor"] = displayed_armor

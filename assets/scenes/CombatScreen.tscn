@@ -5,9 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
 [ext_resource type="Texture2D" uid="uid://dksbjev2smivx" path="res://assets/images/sprite_sheets/Enemy.png" id="4_srylc"]
 
-[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text")]
+[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text")]
 script = ExtResource("1_hyrab")
 enemy_stats_text = NodePath("EnemyStatsText")
+combat_log_text = NodePath("CombatLogText")
 
 [node name="CombatScreen" type="Sprite2D" parent="."]
 position = Vector2(800, 450)
@@ -34,3 +35,21 @@ text = "[color=#992211]HP: 999[/color]
 [color=#119911]Speed: 999[/color] 
 [color=#994411]Strength: 999[/color]
 [color=#991177]Damage: 999[/color]"
+
+[node name="CombatLogText" type="RichTextLabel" parent="."]
+offset_left = 378.0
+offset_top = 565.0
+offset_right = 1286.0
+offset_bottom = 800.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Player did
+Enemy did
+dsg
+fsdhgdfs
+h
+dsgs
+sdgs
+"
+scroll_following = true

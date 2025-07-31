@@ -22,7 +22,7 @@ Day 2 (Plan):
  - boss fight itself (when we run out of steps)
  - TODO add random modifiers to the bosses
 - Items can be perma or just for the loop
-- Items need rarities and tags
+- Items need rarities
 - "Though, there has to be some way to tell the player that there is more to discover." If we number each item and show the total for that rarity people will know how much to expect. Like you might see on trading cards.
 - Need a way to process inventory of items in order to apply to combat
 - Add reset loop logic for when losing or beating boss

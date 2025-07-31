@@ -48,6 +48,45 @@ var reward_options:Dictionary = {
 				"max_amount": -1
 			}]
 		},
+		"perma_stat_increase_speed": {
+			"title": "[color=119911]Speed[/color] +1",
+			"description": "Increase your [color=119911]Speed[/color] by 1",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "[color=994411]Strength[/color] +1",
+			"description": "Increase your [color=994411]Strength[/color] by 1",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_armor": {
+			"title": "[color=000099]Armor[/color] +1",
+			"description": "Increase your [color=000099]Armor[/color] by 1",
+			"type": "consumable",
+			"color": "000099",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			}],
+			"special": ""
+		},
 	},
 	"uncommon": {
 		"perma_stat_increase_speed": {
@@ -144,6 +183,45 @@ var reward_options:Dictionary = {
 				}
 			] 
 		},
+		"perma_stat_increase_speed": {
+			"title": "[color=119911]Speed[/color] +1d4",
+			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 4, forever!",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 4
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "[color=994411]Strength[/color] +1d4",
+			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 4, forever!",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 4
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_armor": {
+			"title": "[color=000099]Armor[/color] +1d3",
+			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 4, forever!",
+			"type": "consumable",
+			"color": "000099",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 4
+			}],
+			"special": ""
+		},
 	},
 	"legendary": {
 		"lole_random": {
@@ -181,7 +259,46 @@ var reward_options:Dictionary = {
 				"min_amount": 3,
 				"max_amount": 18
 			}]
-		}
+		},
+		"perma_stat_increase_speed": {
+			"title": "[color=119911]Speed[/color] +1d6",
+			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 6, forever!",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 6
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "[color=994411]Strength[/color] +1d6",
+			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 6, forever!",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 6
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_armor": {
+			"title": "[color=000099]Armor[/color] +1d6",
+			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 6, forever!",
+			"type": "consumable",
+			"color": "000099",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 6
+			}],
+			"special": ""
+		},
 	},
 	"unique": {
 		"flippers": {
@@ -199,14 +316,56 @@ var reward_options:Dictionary = {
 			"color": "705f1c",
 			"stats": [],
 			"special": "climbing_gear"
-		}
+		},
+		"perma_stat_increase_speed": {
+			"title": "[color=119911]Speed[/color] +1d8",
+			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 8, forever!",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 8
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "[color=994411]Strength[/color] +1d8",
+			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 8, forever!",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 8
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_armor": {
+			"title": "[color=000099]Armor[/color] +1d8",
+			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 8, forever!",
+			"type": "consumable",
+			"color": "000099",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 8
+			}],
+			"special": ""
+		},
 	}
 }
 
 func generate_reward_options(rarity:String=""):
 	var temp_reward_options:Dictionary = reward_options.duplicate(true)
+	var randomly_select_rarity:bool = false
 	if rarity == "":
-		var rarities:Array[String] = ["common", "common", "common", "common", "common", "uncommon", "uncommon", "uncommon", "uncommon", "rare", "rare", "rare", "legendary", "legendary", "unique"]
-		rarity = rarities[randi_range(0, rarities.size()-1)]
+		randomly_select_rarity = true
 	for reward_card in reward_cards:
-		temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity))
+		if randomly_select_rarity:
+			var rarities:Array[String] = ["common", "common", "common", "common", "common", "uncommon", "uncommon", "uncommon", "uncommon", "rare", "rare", "rare", "legendary", "legendary", "unique"]
+			rarity = rarities[randi_range(0, rarities.size()-1)]
+		temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity), rarity, reward_options.get(rarity).size())

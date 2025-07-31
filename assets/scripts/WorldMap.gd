@@ -26,6 +26,7 @@ var number_of_random_seed_points:int = 40
 @export var sight_radius:int = 4
 @export var max_steps:float = 99
 @export var steps:float = 99
+@export var loop:float = 0
 
 @export var has_flippers:bool = false
 @export var has_climbing_gear:bool = false
@@ -60,12 +61,15 @@ var TILE_ROAD:int = 5
 var TILE_PLAYER:int = 9
 var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_HILLS]
 
+var combat_timer:float
+var combat_auto_timer:float = 1
+
 func _on_ready() -> void:
+	seed(rng_seed.hash())
 	init_loop()
-	pass
 
 func init_loop():
-	seed(rng_seed.hash())
+	loop +=1
 	rewards = []
 	fighting_boss = false
 	has_flippers = false
@@ -165,7 +169,7 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 			"damage": 1,
 			"strength": 1
 		}
-		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10)
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10 * loop)
 		
 		existing_tile.enemy_stats = enemy_stats
 		existing_tile.update_texture()
@@ -238,7 +242,7 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
 	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
 	
-	side_bar.update_stats(rewards, steps, max_steps, hp, armor, speed, strength, damage, sight_radius)
+	side_bar.update_stats(rewards, steps, max_steps, hp, armor, speed, strength, damage, sight_radius, loop)
 
 func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
@@ -301,12 +305,17 @@ func _process(delta: float) -> void:
 			combat_screen.visible = false
 			if fighting_boss:
 				print("Beat the boss")
+				randomize()
+				seed(randf()*9999999)
 				init_loop()
 			return
 		else:
-			if Input.is_action_just_pressed("Interact"):
+			if Input.is_action_just_pressed("Interact") or combat_timer >= combat_auto_timer:
 				combat_screen.next_turn(delta)
-			return
+				combat_timer = 0
+		combat_timer += delta
+		return
+	
 	if hp <= 0:
 		# TODO restart loop if not already
 		return
@@ -395,15 +404,16 @@ func no_valid_movements():
 
 func trigger_boss_fight():
 	fighting_boss = true
+	combat_timer = 0
 	# TODO implement
 	var base_enemy_stats:Dictionary = {
-		"hp": 25,
-		"armor": 0,
-		"speed": 3,
-		"damage": 1,
+		"hp": 50,
+		"armor": 10,
+		"speed": 5,
+		"damage": 5,
 		"strength": 4
 	}
-	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30)
+	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30 * loop)
 	combat_screen.start_combat(enemy_stats)
 	combat_screen.visible = true
 	var rarities:Array[String] = ["legendary", "legendary", "unique"]
@@ -499,6 +509,7 @@ func interact_with_item(current_map_tile:MapTile):
 
 func start_random_combat(current_map_tile:MapTile):
 	# show the combat screen
+	combat_timer = 0
 	var enemy_stats:Dictionary = current_map_tile.enemy_stats
 	combat_screen.start_combat(enemy_stats)
 	current_map_tile.item_id = -1

@@ -3,10 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://bt04in5klrbw3" path="res://assets/images/sprite_sheets/RewardCardBackground.png" id="1_c82u3"]
 [ext_resource type="Script" uid="uid://bwc3b4pdslbaa" path="res://assets/scripts/RewardCard.gd" id="1_p7q50"]
 
-[node name="RewardCard" type="Node2D" node_paths=PackedStringArray("title_text", "description_text")]
+[node name="RewardCard" type="Node2D" node_paths=PackedStringArray("title_text", "description_text", "rarity_text")]
 script = ExtResource("1_p7q50")
 title_text = NodePath("TitleText")
 description_text = NodePath("DescriptionText")
+rarity_text = NodePath("RarityText")
 
 [node name="RewardCardBackground" type="Sprite2D" parent="."]
 position = Vector2(200, 300)
@@ -32,3 +33,13 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true
 text = "this is a long description this is a long description this is a long description this is a long"
+
+[node name="RarityText" type="RichTextLabel" parent="."]
+offset_left = 11.0
+offset_top = 549.0
+offset_right = 395.0
+offset_bottom = 600.0
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "Uncommon 99/99"
