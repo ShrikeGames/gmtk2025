@@ -1,6 +1,3 @@
-# GMTK 2025 Game Jam
-GMTK 2025 Game Jam entry.
-
 Day 1:
 - Random map generation
 - player character can move around the map

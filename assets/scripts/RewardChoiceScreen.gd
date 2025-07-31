@@ -5,6 +5,20 @@ class_name RewardChoiceScreen
 @export var reward_cards:Array[RewardCard] = []
 
 var reward_options:Dictionary = {
+	"flippers": {
+		"title": "Flippers",
+		"description": "This lets you travel through water. (TODO make more interesting)",
+		"color": "000099",
+		"stats": [],
+		"special": "flippers"
+	},
+	"climbing_gear": {
+		"title": "Climbing Gear",
+		"description": "This lets you travel across mountains. (TODO make more interesting)",
+		"color": "705f1c",
+		"stats": [],
+		"special": "climbing_gear"
+	},
 	"spy_glass": {
 		"title": "Spy Glass",
 		"description": "This spy glass blah blah. Increases your [color=997700]Vision[/color] by 1. (TODO make more interesting)",
@@ -57,7 +71,7 @@ var reward_options:Dictionary = {
 	},
 	"lole_random": {
 		"title": "Randomize all stats",
-		"description": "Randomize all of your stats to be between 3 and 18. (TODO make more interesting)",
+		"description": "Randomize all of your core stats to be between 3 and 18. (TODO make more interesting)",
 		"color": "ffffff",
 		"stats": [{
 			"name": "damage",
@@ -85,12 +99,6 @@ var reward_options:Dictionary = {
 		},
 		{
 			"name": "build",
-			"type": "set",
-			"min_amount": 3,
-			"max_amount": 18
-		},
-		{
-			"name": "vision",
 			"type": "set",
 			"min_amount": 3,
 			"max_amount": 18

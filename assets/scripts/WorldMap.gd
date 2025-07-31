@@ -11,23 +11,22 @@ extends Node2D
 @export var map_height:int = 18
 @export var tile_width:int = 50
 @export var tile_height:int = 50
-@export var min_number_of_rooms:int = 4
-@export var max_number_of_rooms:int = 10
-@export var min_room_size:int = 2
-@export var max_room_size:int = 4
-@export var min_number_of_doors:int = 1
-@export var max_number_of_doors:int = 4
-
+var spread_range:int = 2
+var number_of_random_seed_points:int = 20
 # stats
 @export var side_bar:SideBar
 @export var hp:int = 10
-@export var armor:int = 0
-@export var speed:int = 1
-@export var build:int = 1
-@export var damage:int = 1
+@export var armor:int = 10
+@export var speed:int = 10
+@export var build:int = 10
+@export var damage:int = 10
 @export var sight_radius:int = 5
-@export var max_steps:int = 99
-@export var steps:int = 99
+@export var max_steps:float = 99
+@export var steps:float = 99
+
+@export var has_flippers:bool = false
+@export var has_climbing_gear:bool = false
+
 
 var map_tiles:Array[Array]
 var map_tile_resource:Resource = preload("res://assets/scenes/MapTile.tscn")
@@ -51,6 +50,7 @@ var TILE_WALL:int = 1
 var TILE_WATER:int = 2
 var TILE_HILLS:int = 3
 var TILE_FOREST:int = 4
+var TILE_ROAD:int = 5
 var TILE_PLAYER:int = 9
 var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_HILLS]
 
@@ -61,8 +61,8 @@ func _on_ready() -> void:
 	map_tiles = generate_map(tiles_node, map_width, map_height, tile_width, tile_height)
 	time_since_last_moved = 0
 	# set the player starting location
-	var starting_x:int = randi_range(1, map_width-2)
-	var starting_y:int = randi_range(1, map_height-2)
+	var starting_x:int = 2#randi_range(1, map_width-2)
+	var starting_y:int = 2#randi_range(1, map_height-2)
 	player_position = Vector2i(starting_x, starting_y)
 	# draw the tiles to the screen around the player
 	update_screen(player_position, sight_radius)
@@ -75,75 +75,90 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		new_map_tiles.append([])
 		for x in range(0, p_map_width):
 			var new_tile:MapTile = generate_tile(map_tile_resource.instantiate(), x, y, p_tile_width, p_tile_height)
-			new_tile.visible = false
 			# add to the array
 			new_map_tiles[y].append(new_tile)
 			# add to the stage
 			p_tiles_node.add_child(new_tile)
 	
-	for room_id in range(0, randi_range(min_number_of_rooms, max_number_of_rooms)):
-		
-		var room_size_width:int = randi_range(min_room_size, max_room_size)
-		var room_size_height:int = randi_range(min_room_size, max_room_size)
-		var padding_x:int = int(room_size_width * 0.5)
-		var padding_y:int = int(room_size_height * 0.5)
-		
-		var random_position:Vector2i = Vector2i(randi_range(padding_x, map_width-1-padding_x), randi_range(padding_y, map_height-1-padding_y))
-		var room_x:int = random_position.x
-		var room_y:int = random_position.y
-		
-		for y in [-int(room_size_height*0.5), int(room_size_height*0.5)]:
-			for x in range(-int(room_size_width*0.5), int(room_size_width*0.5)+1):
-				var type:int = ROOM_WALL_TILE_TYPES[randi_range(0, ROOM_WALL_TILE_TYPES.size()-1)]
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, type, -1)
-				wall_new_tile.visible = false
-		for y in range(-int(room_size_height*0.5), int(room_size_height*0.5)+1):
-			for x in [-int(room_size_width*0.5), int(room_size_width*0.5)]:
-				var type:int = ROOM_WALL_TILE_TYPES[randi_range(0, ROOM_WALL_TILE_TYPES.size()-1)]
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, type, -1)
-				wall_new_tile.visible = false
-		var wall_with_door_id:int = randi_range(0, 3)
-		# random wall to have a door
-		for door_id in range(0, randi_range(min_number_of_doors, max_number_of_doors)):
-			if wall_with_door_id == 0:
-				var x:int = randi_range(-int(room_size_width*0.5)+1, int(room_size_width*0.5))
-				var y:int = -int(room_size_height*0.5)
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
-				wall_new_tile.visible = false
-			elif wall_with_door_id == 1:
-				var x:int = randi_range(-int(room_size_width*0.5)+1, int(room_size_width*0.5))
-				var y:int = int(room_size_height*0.5)
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
-				wall_new_tile.visible = false
-			elif wall_with_door_id == 2:
-				var x:int = int(room_size_width*0.5)
-				var y:int = randi_range(-int(room_size_height*0.5)+1, int(room_size_height*0.5))
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
-				wall_new_tile.visible = false
-			elif wall_with_door_id == 3:
-				var x:int = -int(room_size_width*0.5)
-				var y:int = randi_range(-int(room_size_height*0.5)+1, int(room_size_height*0.5))
-				var wall_new_tile:MapTile = generate_tile(new_map_tiles[room_y+y][room_x+x], room_x+x, room_y+y, p_tile_width, p_tile_height, TILE_EMPTY, 0)
-				wall_new_tile.visible = false
-			
-			wall_with_door_id += 1
-			if wall_with_door_id > 3:
-				wall_with_door_id = 0
-			
+	# put random tiles ofrandom types in random spots
+	# keep track of those spots in a list
+	# gothrough that list and recursssively check nearby tiles and have a % chance
+	# to convert them to the same tile type if they are TILE_EMPTY
+	var random_seed_points:Array[MapTile] = []
+	for i in range(0, number_of_random_seed_points):
+		var random_seed_point:Vector2i = Vector2i(randi_range(0, map_width-1), randi_range(0, map_height-1))
+		var type:int = ROOM_WALL_TILE_TYPES[randi_range(0, ROOM_WALL_TILE_TYPES.size()-1)]
+		var item_id:int = -1
+		if randf() < 0.5:
+			item_id = 0
+		var new_tile:MapTile = generate_tile(new_map_tiles[random_seed_point.y][random_seed_point.x], random_seed_point.x, random_seed_point.y, p_tile_width, p_tile_height, type, item_id)
+		random_seed_points.append(new_tile)
 	
+	random_spread(new_map_tiles, random_seed_points,  p_tiles_node, p_map_width, p_map_height, p_tile_width, p_tile_height)
+	
+	# a winding road around the permeter of the map
+	var road_x:int = 2
+	var road_y:int = 2
+	var road_tile_count:int = 0
+	
+	while road_x < map_width-4:
+		if road_tile_count > 1 and road_tile_count%4 == 0:
+			road_y += randi_range(-1, 1)
+			road_x -= 1
+		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		road_tile_count += 1
+		road_x += 1
+	while road_y < map_height-4:
+		if road_tile_count%4 == 0:
+			road_x += randi_range(-1, 1)
+			road_y -= 1
+		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		road_tile_count += 1
+		road_y += 1
+	while road_x > 3:
+		if road_tile_count > 1 and road_tile_count%4 == 0:
+			road_y += randi_range(-1, 1)
+			road_x += 1
+		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		road_tile_count += 1
+		road_x -= 1
+	while road_y > 3:
+		if road_tile_count%4 == 0:
+			road_x += randi_range(-1, 1)
+			road_y += 1
+		var new_tile:MapTile = generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		road_tile_count += 1
+		road_y -= 1
 	return new_map_tiles
+	
+func random_spread(new_map_tiles:Array[Array], random_seed_points:Array[MapTile], p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int):
+	for random_seed_point in random_seed_points:
+		var type:int = random_seed_point.type
+		for x in range(-spread_range, spread_range+1):
+			for y in range(-spread_range, spread_range+1):
+				if x == 0 and y ==0:
+					continue
+				if randf() < 0.5:
+					var item_id:int = -1
+					if randf() < 0.05:
+						item_id = 0
+					var new_position:Vector2i = validate_position(Vector2i(random_seed_point.x+x, random_seed_point.y+y))
+					var new_tile:MapTile = generate_tile(new_map_tiles[new_position.y][new_position.x], new_position.x, new_position.y, p_tile_width, p_tile_height, type, item_id)
+					
 	
 func generate_tile(new_tile:MapTile, x:int, y:int, p_tile_width:int, p_tile_height:int, type:int = TILE_EMPTY, item_id:int = -1) -> MapTile:
 	var walkable:bool = true
 	var blocks_vision:bool = false
-	var step_cost:int = 1
+	var step_cost:float = 1
 	
 	if type == TILE_WALL:
 		walkable = false
 		blocks_vision = true
+		step_cost = 3
 	elif type == TILE_WATER:
 		walkable = false
 		blocks_vision = false
+		step_cost = 2
 	elif type == TILE_HILLS:
 		walkable = true
 		blocks_vision = false
@@ -152,10 +167,14 @@ func generate_tile(new_tile:MapTile, x:int, y:int, p_tile_width:int, p_tile_heig
 		walkable = true
 		blocks_vision = true
 		step_cost = 2
+	elif type == TILE_ROAD:
+		walkable = true
+		blocks_vision = false
+		step_cost = 0.5
 	
 	var tile_position:Vector2 = Vector2((p_tile_width*0.5) + x * p_tile_width, (p_tile_height*0.5) + y * p_tile_height)
 	new_tile.init(x, y, tile_position, type, item_id, walkable, blocks_vision, step_cost)
-	
+	new_tile.visible = false
 	return new_tile
 
 func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
@@ -171,6 +190,11 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 
 func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
+	var players_tile:MapTile = map_tiles[p_player_position.y][p_player_position.x]
+	if distance <2 and players_tile.type == TILE_FOREST:
+		return true
+	if distance <= sight_radius+2 and players_tile.type == TILE_WALL:
+		return true
 	if distance <= 1:
 		return true
 	var distance_vector:Vector2i = p_player_position - p_tile_position
@@ -283,6 +307,14 @@ func give_reward(reward_id:int):
 	#
 	var reward_config:Dictionary =  reward_card.reward_config
 	var stats_affected:Array = reward_config.get("stats", [])
+	var special:String = reward_config.get("special", "")
+	if special == "flippers":
+		has_flippers = true
+		reward_choice_screen.reward_options.erase("flippers")
+	elif special == "climbing_gear":
+		has_climbing_gear = true
+		reward_choice_screen.reward_options.erase("climbing_gear")
+	
 	for stat_affected:Dictionary in stats_affected:
 		var min_amount:int = stat_affected.get("min_amount", 0)
 		var max_amount:int = stat_affected.get("max_amount", 0)
@@ -290,6 +322,7 @@ func give_reward(reward_id:int):
 		var amount:int = randi_range(min_amount, max_amount)
 		var stat_name:String =  stat_affected.get("name", "")
 		var type:String =  stat_affected.get("type", "modify")
+		
 		if stat_name != "":
 			if type == "modify":
 				if stat_name == "vision":
@@ -331,6 +364,7 @@ func give_reward(reward_id:int):
 
 
 func interact_with_item(current_map_tile:MapTile):
+	print(current_map_tile.item_id)
 	if current_map_tile.item_id == 0:
 		# chest
 		# populate and show the options for items to get
@@ -347,6 +381,10 @@ func show_reward_choice_screen():
 
 func is_walkable(validated_target_position:Vector2i) -> bool:
 	var map_tile:MapTile = map_tiles[validated_target_position.y][validated_target_position.x]
+	if map_tile.type == TILE_WATER and has_flippers:
+		return true
+	if map_tile.type == TILE_WALL and has_climbing_gear:
+		return true
 	return map_tile.walkable 
 
 func validate_position(target_position:Vector2i) -> Vector2i:

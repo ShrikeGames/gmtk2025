@@ -3,8 +3,8 @@ class_name SideBar
 
 @export var stats_text:RichTextLabel
 
-func update_stats(steps:int, max_steps:int, hp:int, armor:int, speed:int, build:int, damage:int, vision:int):
-	var steps_rich_text:String = "[color=#992211]Steps: %d/%d[/color]"%[steps, max_steps]
+func update_stats(steps:float, max_steps:float, hp:int, armor:int, speed:int, build:int, damage:int, vision:int):
+	var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(steps), int(max_steps)]
 	var hp_rich_text:String = "[color=#992211]HP: %d[/color]"%[hp]
 	var armor_rich_text:String = "[color=#000099]Armor: %d[/color]"%[armor]
 	var speed_rich_text:String = "[color=#119911]Speed: %d[/color]"%[speed]
