@@ -20,6 +20,7 @@ var number_of_random_seed_points:int = 40
 @export var side_bar:SideBar
 @export var hp:int = 12
 @export var armor:int = 0
+@export var armor_regen:int = 0
 @export var speed:int = 3
 @export var strength:int = 1
 @export var damage:int = 1
@@ -86,7 +87,8 @@ func init_loop():
 	var starting_x:int = 2#randi_range(1, map_width-2)
 	var starting_y:int = 2#randi_range(1, map_height-2)
 	player_position = Vector2i(starting_x, starting_y)
-	hp = 12
+	if hp < 12:
+		hp = 12
 	max_steps = 99
 	steps = 99
 	# draw the tiles to the screen around the player
@@ -169,7 +171,7 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 			"damage": 1,
 			"strength": 1
 		}
-		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10 * loop)
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30)
 		
 		existing_tile.enemy_stats = enemy_stats
 		existing_tile.update_texture()
@@ -177,11 +179,12 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 	return new_map_tiles
 
 func generate_enemy_stats(enemy_stats:Dictionary, points_to_spend:int=10) -> Dictionary:
+	var max_points_to_spend:int = points_to_spend
 	while points_to_spend > 0:
 		# pick random stat
 		var random_stat_name: String = enemy_stats.keys()[randi_range(0, enemy_stats.size()-1)]
 		# pick a random amount of points to spend
-		var investment_points: int = randi_range(1, points_to_spend)
+		var investment_points: int = randi_range(1, min(max_points_to_spend*0.25, points_to_spend))
 		enemy_stats[random_stat_name] += investment_points
 		points_to_spend -= investment_points
 	return enemy_stats
@@ -242,7 +245,7 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
 	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
 	
-	side_bar.update_stats(rewards, steps, max_steps, hp, armor, speed, strength, damage, sight_radius, loop)
+	side_bar.update_stats(rewards, steps, max_steps, hp, armor, armor_regen, speed, strength, damage, sight_radius, loop)
 
 func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
@@ -292,32 +295,40 @@ func is_visible_to_player(map_tile:MapTile, p_tile_position:Vector2i, p_player_p
 	return is_within_distance and is_tile_visible
 
 func _process(delta: float) -> void:
-	
-	if combat_screen.visible:
-		if combat_screen.is_combat_lost():
-			# TODO lost combat so restart the loop
-			print("restart loop")
-			combat_screen.visible = false
-			init_loop()
-			return
-		elif combat_screen.is_combat_won():
-			show_reward_choice_screen()
-			combat_screen.visible = false
-			if fighting_boss:
-				print("Beat the boss")
-				randomize()
-				seed(randf()*9999999)
+	if hp <= 0:
+		if combat_screen.visible and combat_screen.combat_results_screen.visible and combat_screen.is_combat_lost():
+			if Input.is_action_just_pressed("Interact"):
+				# TODO lost combat so restart the loop
+				print("restart loop")
+				combat_screen.visible = false
+				seed(rng_seed.hash())
 				init_loop()
-			return
-		else:
-			if Input.is_action_just_pressed("Interact") or combat_timer >= combat_auto_timer:
-				combat_screen.next_turn(delta)
-				combat_timer = 0
+		return
+	
+	if combat_screen.visible and not combat_screen.combat_results_screen.visible:
+		if Input.is_action_just_pressed("Interact") or combat_timer >= combat_auto_timer:
+			combat_screen.next_turn(delta)
+			combat_timer = 0
 		combat_timer += delta
 		return
 	
-	if hp <= 0:
-		# TODO restart loop if not already
+	if combat_screen.visible and combat_screen.combat_results_screen.visible:
+		if Input.is_action_just_pressed("Interact"):
+			if combat_screen.is_combat_lost():
+				# TODO lost combat so restart the loop
+				print("restart loop")
+				combat_screen.visible = false
+				seed(rng_seed.hash())
+				init_loop()
+			elif combat_screen.is_combat_won():
+				show_reward_choice_screen()
+				combat_screen.combat_results_screen.visible = false
+				combat_screen.visible = false
+				if fighting_boss:
+					print("Beat the boss")
+					randomize()
+					seed(randf()*9999999)
+					init_loop()
 		return
 	if not reward_choice_screen.visible and steps > 0:
 		if Input.is_action_pressed("MoveUp"):
@@ -360,7 +371,7 @@ func _process(delta: float) -> void:
 				if current_map_tile.item_id >= 0:
 					interact_with_item(current_map_tile)
 				
-				if steps <= 0 or no_valid_movements():
+				if steps <= 0 or not has_valid_movements():
 					trigger_boss_fight()
 				update_screen(player_position, sight_radius)
 			
@@ -377,9 +388,9 @@ func _process(delta: float) -> void:
 		elif Input.is_action_just_pressed("Option3"):
 			give_reward(2)
 
-func no_valid_movements():
+func has_valid_movements():
 	if steps <= 0:
-		return true
+		return false
 	
 	if steps > 0:
 		# check all tiles around the player if the movement cost would be too much or not
@@ -390,7 +401,7 @@ func no_valid_movements():
 					continue
 				var map_tile:MapTile = map_tiles[y][x]
 				# it is a valid place to move
-				if map_tile.step_cost >= steps:
+				if map_tile.step_cost <= steps:
 					if map_tile.walkable:
 						return true
 					else:
@@ -413,7 +424,7 @@ func trigger_boss_fight():
 		"damage": 5,
 		"strength": 4
 	}
-	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 30 * loop)
+	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 100)
 	combat_screen.start_combat(enemy_stats)
 	combat_screen.visible = true
 	var rarities:Array[String] = ["legendary", "legendary", "unique"]
@@ -449,19 +460,21 @@ func give_reward(reward_id:int):
 					if stat_name == "vision":
 						sight_radius += amount
 					elif stat_name == "hp":
-						hp += amount
+						hp = max(1, hp+amount)
 					elif stat_name == "armor":
-						armor += amount
+						armor = max(0, armor+amount)
+					elif stat_name == "armor_regen":
+						armor_regen = max(0, armor_regen+amount)
 					elif stat_name == "speed":
-						speed += amount
+						speed = max(0, speed+amount)
 					elif stat_name == "strength":
-						strength += amount
+						strength = max(0, strength+amount)
 					elif stat_name == "damage":
-						damage += amount
+						damage = max(0, damage+amount)
 					elif stat_name == "steps":
-						steps += amount
+						steps = max(0, steps+amount)
 					elif stat_name == "max_steps":
-						max_steps += amount
+						max_steps = max(0, max_steps+amount)
 				elif type == "set":
 					if stat_name == "vision":
 						sight_radius = amount
@@ -469,6 +482,8 @@ func give_reward(reward_id:int):
 						hp = amount
 					elif stat_name == "armor":
 						armor = amount
+					elif stat_name == "armor_regen":
+						armor_regen = amount
 					elif stat_name == "speed":
 						speed = amount
 					elif stat_name == "strength":

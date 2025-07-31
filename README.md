@@ -58,3 +58,4 @@ Stretch goals:
 - Trapped items
 - Fights with multiple enemies
 - Possibly day/night cycle
+- Make combat have random dice rolls, items can affect how many dice you get

@@ -6,169 +6,17 @@ class_name RewardChoiceScreen
 
 var reward_options:Dictionary = {
 	"common": {
-		"spy_glass": {
-			"title": "Spy Glass",
-			"description": "This spy glass blah blah. Increases your [color=997700]Vision[/color] by 1. (TODO make more interesting)",
+		"wooden_sword": {
+			"title": "Wooden Sword",
+			"description": "A simple wooden sword used for training. Increases your [color=991177]Damage[/color] by 1 and heals for 1 [color=#992211]hp[/color] per attack.",
 			"type": "item",
-			"color": "997700",
-			"stats": [{
-				"name": "vision",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 1
-			}]
-		},
-		"running_shoes": {
-			"title": "Running Shoes",
-			"description": "Gotta go fast. Increases your [color=119911]Speed[/color] by 3. (TODO make more interesting)",
-			"type": "item",
-			"color": "119911",
-			"stats": [{
-				"name": "speed",
-				"type": "modify",
-				"min_amount": 3,
-				"max_amount": 3
-			}]
-		},
-		"big_stick": {
-			"title": "Big Stick",
-			"type": "item",
-			"description": "Increases damage by 3 but lower speed by 1. (TODO make more interesting)",
 			"color": "991177",
 			"stats": [{
 				"name": "damage",
 				"type": "modify",
-				"min_amount": 3,
-				"max_amount": 3
-			},
-			{
-				"name": "speed",
-				"type": "modify",
-				"min_amount": -1,
-				"max_amount": -1
-			}]
-		},
-		"perma_stat_increase_speed": {
-			"title": "[color=119911]Speed[/color] +1",
-			"description": "Increase your [color=119911]Speed[/color] by 1",
-			"type": "consumable",
-			"color": "19911",
-			"stats": [{
-				"name": "speed",
-				"type": "modify",
 				"min_amount": 1,
 				"max_amount": 1
 			}],
-			"special": ""
-		},
-		"perma_stat_increase_strength": {
-			"title": "[color=994411]Strength[/color] +1",
-			"description": "Increase your [color=994411]Strength[/color] by 1",
-			"type": "consumable",
-			"color": "994411",
-			"stats": [{
-				"name": "strength",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 1
-			}],
-			"special": ""
-		},
-		"perma_stat_increase_armor": {
-			"title": "[color=000099]Armor[/color] +1",
-			"description": "Increase your [color=000099]Armor[/color] by 1",
-			"type": "consumable",
-			"color": "000099",
-			"stats": [{
-				"name": "armor",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 1
-			}],
-			"special": ""
-		},
-	},
-	"uncommon": {
-		"perma_stat_increase_speed": {
-			"title": "[color=119911]Speed[/color] +1d3",
-			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 3, forever!",
-			"type": "consumable",
-			"color": "19911",
-			"stats": [{
-				"name": "speed",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 3
-			}],
-			"special": ""
-		},
-		"perma_stat_increase_strength": {
-			"title": "[color=994411]Strength[/color] +1d3",
-			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 3, forever!",
-			"type": "consumable",
-			"color": "994411",
-			"stats": [{
-				"name": "strength",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 3
-			}],
-			"special": ""
-		},
-		"perma_stat_increase_armor": {
-			"title": "[color=000099]Armor[/color] +1d3",
-			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 3, forever!",
-			"type": "consumable",
-			"color": "000099",
-			"stats": [{
-				"name": "armor",
-				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 3
-			}],
-			"special": ""
-		},
-	},
-	"rare": {
-		"ambush_dagger": {
-			"title": "Ambush Dagger",
-			"description": "This dagger deals damage equal to your speed. (TODO make more interesting)",
-			"type": "item",
-			"color": "997700",
-			"stats": [],
-			"combat_effects": [
-				{
-					"damage": {
-						"stats": [{
-							"name": "damage",
-							"type": "modify",
-							"use_other_stat": "speed",
-							"min_amount": 0,
-							"max_amount": 0
-						}]
-					}
-					
-				}
-			] 
-		},
-		"muleback_cords": {
-			"title": "Muleback Cords",
-			"description": "Increases your [color=994411]Strength[/color] by 8 allowing you to carry larger weapons. (TODO make more interesting)",
-			"type": "item",
-			"color": "994411",
-			"stats": [{
-				"name": "strength",
-				"type": "modify",
-				"min_amount": 8,
-				"max_amount": 8
-			}]
-		},
-		"healthy_mace": {
-			"title": "Healthy Mace",
-			"description": "This mace heals you 1 hp per hit. (TODO make more interesting)",
-			"type": "item",
-			"color": "FF0000",
-			"stats": [],
 			"combat_effects": [
 				{
 					"damage": {
@@ -181,49 +29,296 @@ var reward_options:Dictionary = {
 					}
 					
 				}
+			]
+		},
+		"wooden_shield": {
+			"title": "Wooden Shield",
+			"description": "A simple wooden shield used for training. Increases your [color=991177]Armor[/color] by 1 and provides [color=991177]Armor Regen[/color] 1.",
+			"type": "item",
+			"color": "997700",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			},
+			{
+				"name": "armor_regen",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			}]
+		},
+		"spy_glass": {
+			"title": "Spy Glass",
+			"description": "Eye spy with my little eye. Increases your [color=997700]Vision[/color] by 2.",
+			"type": "item",
+			"color": "997700",
+			"stats": [{
+				"name": "vision",
+				"type": "modify",
+				"min_amount": 2,
+				"max_amount": 2
+			}]
+		},
+		"running_shoes": {
+			"title": "Running Shoes",
+			"description": "Gotta go fast. Increases your [color=119911]Speed[/color] by 2.",
+			"type": "item",
+			"color": "119911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 2,
+				"max_amount": 2
+			}]
+		},
+		"big_stick": {
+			"title": "Big Stick",
+			"type": "item",
+			"description": "Increases damage by 6 but lower speed by 2.",
+			"color": "991177",
+			"stats": [{
+				"name": "damage",
+				"type": "modify",
+				"min_amount": 6,
+				"max_amount": 6
+			},
+			{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": -2,
+				"max_amount": -2
+			}]
+		},
+		"armor_spike": {
+			"title": "Armor Spike",
+			"description": "This spike attaches to your armor! Enemies take 1 damage when you get hit.",
+			"type": "item",
+			"color": "000099",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "thorns",
+							"type": "modify",
+							"min_amount": 1,
+							"max_amount": 1
+						}]
+					}
+					
+				}
 			] 
 		},
 		"perma_stat_increase_speed": {
-			"title": "[color=119911]Speed[/color] +1d4",
-			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 4, forever!",
+			"title": "Weak Potion of [color=119911]Speed[/color] +1",
+			"description": "Increase your [color=119911]Speed[/color] by 1",
 			"type": "consumable",
 			"color": "19911",
 			"stats": [{
 				"name": "speed",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 4
+				"max_amount": 1
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_strength": {
-			"title": "[color=994411]Strength[/color] +1d4",
-			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 4, forever!",
+			"title": "Weak Potion of [color=994411]Strength[/color] +1",
+			"description": "Increase your [color=994411]Strength[/color] by 1",
 			"type": "consumable",
 			"color": "994411",
 			"stats": [{
 				"name": "strength",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 4
+				"max_amount": 1
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_hp": {
+			"title": "Healing Potion [color=992211]HP[/color] +5",
+			"description": "Increase your [color=992211]HP[/color] by 5",
+			"type": "consumable",
+			"color": "992211",
+			"stats": [{
+				"name": "hp",
+				"type": "modify",
+				"min_amount": 5,
+				"max_amount": 5
+			}],
+			"special": ""
+		},
+		
+	},
+	"uncommon": {
+		"flippers": {
+			"title": "Flippers",
+			"description": "This lets you travel through water. (TODO make more interesting)",
+			"type": "item",
+			"color": "000099",
+			"stats": [],
+			"special": "flippers"
+		},
+		"climbing_gear": {
+			"title": "Climbing Gear",
+			"description": "This lets you travel across mountains. (TODO make more interesting)",
+			"type": "item",
+			"color": "705f1c",
+			"stats": [],
+			"special": "climbing_gear"
+		},
+		"perma_stat_increase_speed": {
+			"title": "Potion of [color=119911]Speed[/color]",
+			"description": "Increase your [color=119911]Speed[/color] by 1d3 but reduce your [color=#991177]Damage[/color] by 1d3.",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 3
+			},
+			{
+				"name": "damage",
+				"type": "modify",
+				"min_amount": -3,
+				"max_amount": -1
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "Potion of [color=994411]Strength[/color] +1d6.",
+			"description": "Increase your [color=994411]Strength[/color] by 1d6 but reduce your [color=119911]Speed[/color] by 1d3.",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 6
+			},
+			{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": -3,
+				"max_amount": -1
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_armor": {
-			"title": "[color=000099]Armor[/color] +1d3",
-			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 4, forever!",
+			"title": "Potion of [color=994411]Armor[/color] +1d6.",
+			"description": "Increase your [color=#000099]Armor[/color] by 1d6.",
 			"type": "consumable",
-			"color": "000099",
+			"color": "994411",
 			"stats": [{
 				"name": "armor",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 4
+				"max_amount": 6
 			}],
 			"special": ""
 		},
+		"great_sword": {
+			"title": "Great Sword",
+			"type": "item",
+			"description": "Increases damage by 12 and does bonus damage equal to your [color=#994411]Strength[/color], but lowers speed by 10.",
+			"color": "991177",
+			"stats": [{
+				"name": "damage",
+				"type": "modify",
+				"min_amount": 12,
+				"max_amount": 12
+			},
+			{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": -10,
+				"max_amount": -10
+			}],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "damage",
+							"type": "modify",
+							"use_other_stat": "strength",
+							"min_amount": 0,
+							"max_amount": 0
+						}]
+					}
+					
+				}
+			] 
+		},
+		"rapier": {
+			"title": "Rapier",
+			"type": "item",
+			"description": "Does bonus damage equal to your [color=#119911]Speed[/color], but lowers Strength by 10.",
+			"color": "991177",
+			"stats": [
+			{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": -10,
+				"max_amount": -10
+			}],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "damage",
+							"type": "modify",
+							"use_other_stat": "speed",
+							"min_amount": 0,
+							"max_amount": 0
+						}]
+					}
+				}
+			] 
+		},
+		
 	},
-	"legendary": {
+	"rare": {
+		"muleback_cords": {
+			"title": "Muleback Cords",
+			"description": "Increases your [color=994411]Strength[/color] by 8.",
+			"type": "item",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 8,
+				"max_amount": 8
+			}]
+		},
+		"healthy_mace": {
+			"title": "Healthy Mace",
+			"description": "This mace heals you 2 [color=#992211]HP[/color] per hit and increases your [color=#994411]Strength[/color] by 6.",
+			"type": "item",
+			"color": "FF0000",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "hp",
+							"type": "modify",
+							"min_amount": 2,
+							"max_amount": 2
+						},
+						{
+							"name": "strength",
+							"type": "modify",
+							"min_amount": 6,
+							"max_amount": 6
+						}]
+					}
+					
+				}
+			] 
+		},
 		"lole_random": {
 			"title": "Randomize all stats",
 			"type": "consumable",
@@ -261,98 +356,195 @@ var reward_options:Dictionary = {
 			}]
 		},
 		"perma_stat_increase_speed": {
-			"title": "[color=119911]Speed[/color] +1d6",
-			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 6, forever!",
+			"title": "Elixer of [color=119911]Speed[/color]",
+			"description": "Increase your [color=119911]Speed[/color] by 1d10 but reduce your [color=#991177]Damage[/color] by 1d3.",
 			"type": "consumable",
 			"color": "19911",
 			"stats": [{
 				"name": "speed",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 6
+				"max_amount": 10
+			},
+			{
+				"name": "damage",
+				"type": "modify",
+				"min_amount": -3,
+				"max_amount": -1
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_strength": {
-			"title": "[color=994411]Strength[/color] +1d6",
-			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 6, forever!",
+			"title": "Elixer of [color=994411]Strength[/color] +1d20.",
+			"description": "Increase your [color=994411]Strength[/color] by 1d20 but reduce your [color=119911]Speed[/color] by 1d3.",
 			"type": "consumable",
 			"color": "994411",
 			"stats": [{
 				"name": "strength",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 6
+				"max_amount": 20
+			},
+			{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": -3,
+				"max_amount": -1
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_armor": {
-			"title": "[color=000099]Armor[/color] +1d6",
-			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 6, forever!",
+			"title": "Elixer of [color=994411]Armor[/color] +1d20.",
+			"description": "Increase your [color=#000099]Armor[/color] by 1d20.",
 			"type": "consumable",
-			"color": "000099",
+			"color": "994411",
 			"stats": [{
 				"name": "armor",
 				"type": "modify",
 				"min_amount": 1,
-				"max_amount": 6
+				"max_amount": 20
+			}],
+			"special": ""
+		},
+	},
+	"legendary": {
+		"thorns_armor": {
+			"title": "Thorns Armor",
+			"description": "This armor is covered in thorns! Enemies take damage equal to your [color=#000099]Armor[/color] when you get hit.",
+			"type": "item",
+			"color": "000099",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "thorns",
+							"type": "modify",
+							"use_other_stat": "armor",
+							"min_amount": 0,
+							"max_amount": 0
+						}]
+					}
+					
+				}
+			] 
+		},
+		"ambush_dagger": {
+			"title": "Ambush Dagger",
+			"description": "Increase your [color=#119911]Speed[/color] by 6 and deal bonus damage equal to your speed.",
+			"type": "item",
+			"color": "997700",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "damage",
+							"type": "modify",
+							"use_other_stat": "speed",
+							"min_amount": 0,
+							"max_amount": 0
+						},
+						{
+							"name": "damage",
+							"type": "modify",
+							"min_amount": 6,
+							"max_amount": 6
+						}]
+					}
+				}
+			] 
+		},
+		"perma_stat_increase_speed": {
+			"title": "Large Elixer of [color=119911]Speed[/color]",
+			"description": "Increase your [color=119911]Speed[/color] by 1d12.",
+			"type": "consumable",
+			"color": "19911",
+			"stats": [{
+				"name": "speed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 12
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_strength": {
+			"title": "Elixer of [color=994411]Strength[/color] +1d20.",
+			"description": "Increase your [color=994411]Strength[/color] by 1d20.",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "strength",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 20
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_armor": {
+			"title": "Elixer of [color=994411]Armor[/color] +1d20.",
+			"description": "Increase your [color=#000099]Armor[/color] by 2d20.",
+			"type": "consumable",
+			"color": "994411",
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 2,
+				"max_amount": 40
 			}],
 			"special": ""
 		},
 	},
 	"unique": {
-		"flippers": {
-			"title": "Flippers",
-			"description": "This lets you travel through water. (TODO make more interesting)",
-			"type": "item",
-			"color": "000099",
-			"stats": [],
-			"special": "flippers"
-		},
-		"climbing_gear": {
-			"title": "Climbing Gear",
-			"description": "This lets you travel across mountains. (TODO make more interesting)",
-			"type": "item",
-			"color": "705f1c",
-			"stats": [],
-			"special": "climbing_gear"
-		},
 		"perma_stat_increase_speed": {
-			"title": "[color=119911]Speed[/color] +1d8",
-			"description": "Increase your [color=119911]Speed[/color] by a random amount between 1 and 8, forever!",
+			"title": "Ultimate Potion of [color=119911]Speed[/color] +20",
+			"description": "Increase your [color=119911]Speed[/color] by 20!",
 			"type": "consumable",
 			"color": "19911",
 			"stats": [{
 				"name": "speed",
 				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 8
+				"min_amount": 20,
+				"max_amount": 20
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_strength": {
-			"title": "[color=994411]Strength[/color] +1d8",
-			"description": "Increase your [color=994411]Strength[/color] by a random amount between 1 and 8, forever!",
+			"title": "Ultimate Potion of [color=994411]Strength[/color] +40",
+			"description": "Increase your [color=994411]Strength[/color] by 40!",
 			"type": "consumable",
 			"color": "994411",
 			"stats": [{
 				"name": "strength",
 				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 8
+				"min_amount": 40,
+				"max_amount": 40
 			}],
 			"special": ""
 		},
 		"perma_stat_increase_armor": {
-			"title": "[color=000099]Armor[/color] +1d8",
-			"description": "Increase your [color=000099]Armor[/color] by a random amount between 1 and 8, forever!",
+			"title": "Ultimate Potion of [color=000099]Armor[/color] +20",
+			"description": "Increase your [color=000099]Armor[/color] by 20!",
 			"type": "consumable",
 			"color": "000099",
 			"stats": [{
 				"name": "armor",
 				"type": "modify",
-				"min_amount": 1,
-				"max_amount": 8
+				"min_amount": 20,
+				"max_amount": 20
+			}],
+			"special": ""
+		},
+		"perma_stat_increase_hp": {
+			"title": "Ultimate Potion of [color=#992211]HP[/color] +25",
+			"description": "Increase your [color=#992211]HP[/color] by 25!",
+			"type": "consumable",
+			"color": "000099",
+			"stats": [{
+				"name": "health",
+				"type": "modify",
+				"min_amount": 25,
+				"max_amount": 25
 			}],
 			"special": ""
 		},
@@ -364,8 +556,17 @@ func generate_reward_options(rarity:String=""):
 	var randomly_select_rarity:bool = false
 	if rarity == "":
 		randomly_select_rarity = true
+	var rarities:Array[String] = ["common", "uncommon", "rare", "legendary", "unique"]
+	var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 0.5]
 	for reward_card in reward_cards:
 		if randomly_select_rarity:
-			var rarities:Array[String] = ["common", "common", "common", "common", "common", "uncommon", "uncommon", "uncommon", "uncommon", "rare", "rare", "rare", "legendary", "legendary", "unique"]
-			rarity = rarities[randi_range(0, rarities.size()-1)]
+			var i:int = 0
+			for prob in probabilities:
+				var random_chance:float = randf()
+				print(random_chance, " vs ", prob)
+				if random_chance <= prob:
+					rarity = rarities[i]
+					break
+				i += 1
+		print(rarity)
 		temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity), rarity, reward_options.get(rarity).size())

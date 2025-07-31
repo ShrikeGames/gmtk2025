@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://jbesfgssc7u0"]
+
+[ext_resource type="Script" uid="uid://dxwaduehcl42e" path="res://assets/scripts/CombatResults.gd" id="1_mi1aw"]
+[ext_resource type="Texture2D" uid="uid://jl1vfrof6tbq" path="res://assets/images/sprite_sheets/CombatResultsScreen.png" id="2_kgyxe"]
+
+[node name="CombatResults" type="Node2D" node_paths=PackedStringArray("results_test")]
+script = ExtResource("1_mi1aw")
+results_test = NodePath("ResultsText")
+
+[node name="CombatResultsScreen" type="Sprite2D" parent="."]
+position = Vector2(300, 200)
+texture = ExtResource("2_kgyxe")
+
+[node name="ResultsText" type="RichTextLabel" parent="."]
+offset_top = 116.0
+offset_right = 599.0
+offset_bottom = 376.0
+theme_override_font_sizes/normal_font_size = 34
+bbcode_enabled = true
+text = "[center]Victory!
+You Defeated The Enemy
+Press [Key] To Claim Your Rewards[/center]"

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bwc3b4pdslbaa" path="res://assets/scripts/RewardCard.gd" id="1_p7q50"]
 
 [node name="RewardCard" type="Node2D" node_paths=PackedStringArray("title_text", "description_text", "rarity_text")]
+position = Vector2(-1, 0)
 script = ExtResource("1_p7q50")
 title_text = NodePath("TitleText")
 description_text = NodePath("DescriptionText")
@@ -20,7 +21,7 @@ offset_right = 395.0
 offset_bottom = 200.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/normal_font_size = 60
+theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true
 text = "[center]THIS IS A LONG TITLE[/center]"
 
@@ -36,10 +37,10 @@ text = "this is a long description this is a long description this is a long des
 
 [node name="RarityText" type="RichTextLabel" parent="."]
 offset_left = 11.0
-offset_top = 549.0
+offset_top = 560.0
 offset_right = 395.0
-offset_bottom = 600.0
+offset_bottom = 611.0
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/normal_font_size = 36
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "Uncommon 99/99"

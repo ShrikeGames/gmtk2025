@@ -6,6 +6,7 @@ class_name CombatScreen
 @export var world_map:WorldMap
 @export var enemy_stats_text:RichTextLabel
 @export var combat_log_text:RichTextLabel
+@export var combat_results_screen:CombatResults
 
 var turn:int
 var enemy_stats:Dictionary
@@ -51,6 +52,8 @@ func next_turn(_delta:float) -> bool:
 									bonus_damage += side_bar.calculated_stats["hp"]
 								elif use_other_stat_name == "armor":
 									bonus_damage += side_bar.calculated_stats["armor"]
+								elif use_other_stat_name == "armor_regen":
+									bonus_damage += side_bar.calculated_stats["armor_regen"]
 								elif use_other_stat_name == "strength":
 									bonus_damage += side_bar.calculated_stats["strength"]
 								elif use_other_stat_name == "damage":
@@ -65,6 +68,8 @@ func next_turn(_delta:float) -> bool:
 									player_hp += side_bar.calculated_stats["hp"]
 								elif use_other_stat_name == "armor":
 									player_hp += side_bar.calculated_stats["armor"]
+								elif use_other_stat_name == "armor_regen":
+									player_hp += side_bar.calculated_stats["armor_regen"]
 								elif use_other_stat_name == "strength":
 									player_hp += side_bar.calculated_stats["strength"]
 								elif use_other_stat_name == "damage":
@@ -81,14 +86,14 @@ func next_turn(_delta:float) -> bool:
 			var armor_before:int = enemy_armor
 			enemy_armor = max(0, enemy_armor-total_damage)
 			total_damage = max(0, total_damage-armor_before)
-			
+		if total_damage <= 0:
+			total_damage = 1
 		
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			combat_log_text.text += "Player deals %d damage!\n"%[total_damage]
 			enemy_hp -= total_damage
-		else:
-			combat_log_text.text += "Player did no damage!\n"
+		
 		enemy_stats["hp"] = enemy_hp
 		enemy_stats["armor"] = enemy_armor
 		# reduce their speed
@@ -109,21 +114,56 @@ func next_turn(_delta:float) -> bool:
 			player_armor = max(0, player_armor-total_damage)
 			total_damage =  max(0, total_damage-armor_before)
 			world_map.armor = player_armor
+			
+		var thorns_damage:int = 0
+		for reward_config in world_map.rewards:
+			var combat_effects:Array = reward_config.get("combat_effects", [])
+			for combat_effect in combat_effects:
+				var damage_modifier:Dictionary = combat_effect.get("damage", {})
+				if not damage_modifier.is_empty():
+					var stats_modifiers:Array = damage_modifier.get("stats", [])
+					for stat_modifier in stats_modifiers:
+						var stat_modifier_name:String = stat_modifier.get("name", "")
+						var use_other_stat_name:String = stat_modifier.get("use_other_stat", "")
+						if stat_modifier_name == "thorns":
+							if use_other_stat_name != "":
+								if use_other_stat_name == "speed":
+									thorns_damage += side_bar.calculated_stats["speed"]
+								elif use_other_stat_name == "hp":
+									thorns_damage += side_bar.calculated_stats["hp"]
+								elif use_other_stat_name == "armor":
+									thorns_damage += side_bar.calculated_stats["armor"]
+								elif use_other_stat_name == "armor_regen":
+									thorns_damage += side_bar.calculated_stats["armor_regen"]
+								elif use_other_stat_name == "strength":
+									thorns_damage += side_bar.calculated_stats["strength"]
+								elif use_other_stat_name == "damage":
+									thorns_damage += side_bar.calculated_stats["damage"]
+							else:
+								thorns_damage += randi_range(stat_modifier["min_amount"], stat_modifier["max_amount"])
+						
 		
+		if total_damage <= 0:
+			total_damage = 1
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			player_hp -= total_damage
 			combat_log_text.text += "Enemy deals %d damage!\n"%[total_damage]
-		else:
-			combat_log_text.text += "Enemy did no damage!\n"
+		
+		if thorns_damage > 0:
+			enemy_hp -= thorns_damage
+			combat_log_text.text += "The Enemy takes %d thorn damage!\n"%[thorns_damage]
+			enemy_stats["hp"] = enemy_hp
 		world_map.hp = player_hp
 		
 		# reduce their speed
 		enemy_speed -= player_speed
 	
-	side_bar.update_stats(world_map.rewards, world_map.steps, world_map.max_steps, world_map.hp, world_map.armor, world_map.speed, world_map.strength, world_map.damage, world_map.sight_radius, world_map.loop)
+	side_bar.update_stats(world_map.rewards, world_map.steps, world_map.max_steps, world_map.hp, world_map.armor, world_map.armor_regen, world_map.speed, world_map.strength, world_map.damage, world_map.sight_radius, world_map.loop)
 	update_enemy_stats_text()
 	if is_combat_won() or is_combat_lost():
+		combat_results_screen.visible = true
+		world_map.armor += side_bar.calculated_stats["armor_regen"]
 		return true
 	
 	return false

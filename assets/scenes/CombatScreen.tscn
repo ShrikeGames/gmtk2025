@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://cwu53lei24rcc"]
+[gd_scene load_steps=6 format=3 uid="uid://cwu53lei24rcc"]
 
 [ext_resource type="Script" uid="uid://cr3daolm7owls" path="res://assets/scripts/CombatScreen.gd" id="1_hyrab"]
 [ext_resource type="Texture2D" uid="uid://w86580n0nh7d" path="res://assets/images/sprite_sheets/CombatScreen.png" id="1_sgd6i"]
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
 [ext_resource type="Texture2D" uid="uid://dksbjev2smivx" path="res://assets/images/sprite_sheets/Enemy.png" id="4_srylc"]
+[ext_resource type="PackedScene" uid="uid://jbesfgssc7u0" path="res://assets/scenes/CombatResults.tscn" id="5_srylc"]
 
-[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text")]
+[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text", "combat_results_screen")]
 script = ExtResource("1_hyrab")
 enemy_stats_text = NodePath("EnemyStatsText")
 combat_log_text = NodePath("CombatLogText")
+combat_results_screen = NodePath("CombatResults")
 
 [node name="CombatScreen" type="Sprite2D" parent="."]
 position = Vector2(800, 450)
@@ -53,3 +55,7 @@ dsgs
 sdgs
 "
 scroll_following = true
+
+[node name="CombatResults" parent="." instance=ExtResource("5_srylc")]
+visible = false
+position = Vector2(504, 199)
