@@ -12,11 +12,18 @@ var turn:int
 var enemy_stats:Dictionary
 var player_speed:int
 var enemy_speed: int 
+var player_speed_bonus_turns:int
+var enemy_speed_bonus_turns:int
+var max_speed_bonus_turns_allowed:int
 func start_combat(p_enemy_stats:Dictionary):
 	turn = 0
 	self.enemy_stats = p_enemy_stats
 	self.player_speed = side_bar.calculated_stats["speed"]
 	self.enemy_speed = enemy_stats["speed"]
+	self.player_speed_bonus_turns=0
+	self.enemy_speed_bonus_turns=0
+	self.max_speed_bonus_turns_allowed = side_bar.calculated_stats["max_speed_bonus_turns_allowed"]
+	
 	combat_log_text.text = ""
 	update_enemy_stats_text()
 	
@@ -26,8 +33,9 @@ func next_turn(_delta:float) -> bool:
 	var enemy_hp: int = enemy_stats["hp"]
 	# determine who is faster
 	var strength_damage_modifier:float = 0.5
-	
-	if player_speed >= enemy_speed:
+	if (player_speed >= enemy_speed or (player_speed< enemy_speed and enemy_speed_bonus_turns > max_speed_bonus_turns_allowed)) and player_speed_bonus_turns <= max_speed_bonus_turns_allowed:
+		player_speed_bonus_turns+=1
+		enemy_speed_bonus_turns=0
 		enemy_speed = enemy_stats["speed"]
 		# player goes
 		# calculate total damage
@@ -98,7 +106,9 @@ func next_turn(_delta:float) -> bool:
 		enemy_stats["armor"] = enemy_armor
 		# reduce their speed
 		player_speed -= enemy_speed
-	else:
+	elif enemy_speed_bonus_turns <= max_speed_bonus_turns_allowed:
+		enemy_speed_bonus_turns+=1
+		player_speed_bonus_turns=0
 		player_speed = side_bar.calculated_stats["speed"]
 		# enemy goes
 		var base_damage:int = enemy_stats["damage"]
@@ -159,7 +169,7 @@ func next_turn(_delta:float) -> bool:
 		# reduce their speed
 		enemy_speed -= player_speed
 	
-	side_bar.update_stats(world_map.rewards, world_map.steps, world_map.max_steps, world_map.hp, world_map.armor, world_map.armor_regen, world_map.speed, world_map.strength, world_map.damage, world_map.sight_radius, world_map.loop)
+	side_bar.update_stats(world_map)
 	update_enemy_stats_text()
 	if is_combat_won() or is_combat_lost():
 		combat_results_screen.visible = true

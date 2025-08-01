@@ -65,6 +65,7 @@ var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_
 
 var combat_timer:float
 var combat_auto_timer:float = 1
+var max_speed_bonus_turns_allowed:int = 2
 
 func _on_ready() -> void:
 	seed(rng_seed.hash())
@@ -259,7 +260,7 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
 	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
 	
-	side_bar.update_stats(rewards, steps, max_steps, hp, armor, armor_regen, speed, strength, damage, sight_radius, loop)
+	side_bar.update_stats(self)
 
 func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_position:Vector2i, p_sight_radius:int):
 	var distance:float = p_player_position.distance_to(p_tile_position)
@@ -404,7 +405,6 @@ func _process(delta: float) -> void:
 		reward_choice_screen.visible = false
 		
 	if reward_choice_screen.visible:
-		print(fighting_boss)
 		if Input.is_action_just_pressed("Option1"):
 			give_reward(0)
 			if fighting_boss:
@@ -461,7 +461,7 @@ func trigger_boss_fight():
 	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 50*(boss_kills+1))
 	combat_screen.start_combat(enemy_stats)
 	combat_screen.visible = true
-	var rarities:Array[String] = ["legendary", "legendary", "unique"]
+	var rarities:Array[String] = ["unique"]
 	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
 	reward_choice_screen.generate_reward_options(rarity)
 

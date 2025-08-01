@@ -3,11 +3,10 @@
 [ext_resource type="Script" uid="uid://dpvb3g6ub0jr6" path="res://assets/scripts/WorldMap.gd" id="1_eciam"]
 [ext_resource type="Texture2D" uid="uid://cejwbyri268kl" path="res://assets/images/sprite_sheets/MapTile9.png" id="2_th6by"]
 
-[node name="WorldMap" type="Node2D" node_paths=PackedStringArray("tiles_node", "player_image", "side_bar")]
+[node name="WorldMap" type="Node2D" node_paths=PackedStringArray("tiles_node", "player_image")]
 script = ExtResource("1_eciam")
 tiles_node = NodePath("Tiles")
 player_image = NodePath("Player")
-side_bar = NodePath("")
 
 [node name="Tiles" type="Node2D" parent="."]
 

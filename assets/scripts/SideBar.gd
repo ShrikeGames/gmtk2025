@@ -11,16 +11,17 @@ func add_inventory_item(inventory_item:InventoryItem):
 	inventory_item.position = Vector2(x,y)
 	inventory_items_node.add_child(inventory_item)
 
-func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:int, armor:int, armor_regen:int, speed:int, strength:int, damage:int, vision:int, loop:int):
-	var displayed_hp:int = hp
-	var displayed_armor:int = armor
-	var displayed_armor_regen:int = armor_regen
-	var displayed_speed:int = speed
-	var displayed_strength:int = strength
-	var displayed_damage:int = damage
-	var displayed_vision:int = vision
-	var displayed_max_steps:float = max_steps
-	for reward_config in rewards:
+func update_stats(world_map:WorldMap):
+	var displayed_hp:int = world_map.hp
+	var displayed_armor:int = world_map.armor
+	var displayed_armor_regen:int = world_map.armor_regen
+	var displayed_speed:int = world_map.speed
+	var displayed_strength:int = world_map.strength
+	var displayed_damage:int = world_map.damage
+	var displayed_vision:int = world_map.sight_radius
+	var displayed_max_steps:float = world_map.max_steps
+	var displayed_max_speed_bonus_turns_allowed:int = world_map.max_speed_bonus_turns_allowed
+	for reward_config in world_map.rewards:
 		var reward_type:String = reward_config.get("type", "consumable")
 		if reward_type != "item":
 			continue
@@ -50,9 +51,11 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 					elif stat_name == "damage":
 						displayed_damage = max(0, displayed_damage+amount)
 					elif stat_name == "steps":
-						steps = max(0, steps+amount)
+						world_map.steps = max(0, world_map.steps+amount)
 					elif stat_name == "max_steps":
 						displayed_max_steps = max(0, displayed_max_steps+amount)
+					elif stat_name == "max_speed_bonus_turns_allowed":
+						displayed_max_speed_bonus_turns_allowed = max(0, displayed_max_speed_bonus_turns_allowed+amount)
 				elif type == "set":
 					if stat_name == "vision":
 						displayed_vision = max(0, amount)
@@ -69,18 +72,20 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 					elif stat_name == "damage":
 						displayed_damage = max(0, amount)
 					elif stat_name == "steps":
-						steps = max(0, amount)
+						world_map.steps = max(0, amount)
 					elif stat_name == "max_steps":
 						displayed_max_steps = max(0, amount)
+					elif stat_name == "max_speed_bonus_turns_allowed":
+						displayed_max_speed_bonus_turns_allowed = max(0, amount)
 	
-	var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(steps), int(displayed_max_steps)]
+	var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(world_map.steps), int(displayed_max_steps)]
 	var hp_rich_text:String = "[color=#992211]HP: %d[/color]"%[displayed_hp]
 	var armor_rich_text:String = "[color=#000099]Armor: %d (%d)[/color]"%[displayed_armor, displayed_armor_regen]
 	var speed_rich_text:String = "[color=#119911]Speed: %d[/color]"%[displayed_speed]
 	var strength_rich_text:String = "[color=#994411]Strength: %d[/color]"%[displayed_strength]
 	var damage_rich_text:String = "[color=#991177]Damage: %d[/color]"%[displayed_damage]
 	var vision_rich_text:String = "[color=#997700]Vision: %d[/color]"%[displayed_vision]
-	var rich_text:String = "Loop: %s - %s\n%s - %s - %s - %s - %s - %s"%[loop, steps_rich_text, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
+	var rich_text:String = "Loop: %s - %s\n%s - %s - %s - %s - %s - %s"%[world_map.loop, steps_rich_text, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
 	
 	calculated_stats["hp"] = displayed_hp
 	calculated_stats["armor"] = displayed_armor
@@ -89,5 +94,6 @@ func update_stats(rewards:Array[Dictionary], steps:float, max_steps:float, hp:in
 	calculated_stats["damage"] = displayed_damage
 	calculated_stats["strength"] = displayed_strength
 	calculated_stats["vision"] = displayed_vision
+	calculated_stats["max_speed_bonus_turns_allowed"] = displayed_max_speed_bonus_turns_allowed
 	
 	stats_text.text = rich_text

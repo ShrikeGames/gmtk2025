@@ -454,6 +454,18 @@ var reward_options:Dictionary = {
 				}
 			] 
 		},
+		"rapid_quiver": {
+			"title": "Rapid Quiver",
+			"description": "Increase the maximum number of bonus attacks due to [color=#119911]Speed[/color] by 1.",
+			"type": "item",
+			"color": "997700",
+			"stats": [{
+				"name": "max_speed_bonus_turns_allowed",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			}],
+		},
 		"perma_stat_increase_speed": {
 			"title": "Large Elixer of [color=119911]Speed[/color]",
 			"description": "Increase your [color=119911]Speed[/color] by 1d12.",
