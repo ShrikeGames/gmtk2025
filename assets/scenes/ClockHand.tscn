@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5kmpknwhtt2d"]
+
+[ext_resource type="Texture2D" uid="uid://srjto56q3dlp" path="res://assets/images/sprite_sheets/ClockHand.png" id="1_j7kad"]
+
+[node name="ClockHand" type="Node2D"]
+
+[node name="ClockHand" type="Sprite2D" parent="."]
+position = Vector2(0, -19)
+texture = ExtResource("1_j7kad")

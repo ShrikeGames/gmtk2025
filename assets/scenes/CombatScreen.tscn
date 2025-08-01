@@ -3,34 +3,32 @@
 [ext_resource type="Script" uid="uid://cr3daolm7owls" path="res://assets/scripts/CombatScreen.gd" id="1_hyrab"]
 [ext_resource type="Texture2D" uid="uid://w86580n0nh7d" path="res://assets/images/sprite_sheets/CombatScreen.png" id="1_sgd6i"]
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
-[ext_resource type="Texture2D" uid="uid://dksbjev2smivx" path="res://assets/images/sprite_sheets/Enemy.png" id="4_srylc"]
+[ext_resource type="Texture2D" uid="uid://lc1yhfq53t2o" path="res://assets/images/sprite_sheets/Enemy0.png" id="5_d7v03"]
 [ext_resource type="PackedScene" uid="uid://jbesfgssc7u0" path="res://assets/scenes/CombatResults.tscn" id="5_srylc"]
 
-[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text", "combat_results_screen")]
+[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text", "combat_results_screen", "enemy_sprite")]
 script = ExtResource("1_hyrab")
 enemy_stats_text = NodePath("EnemyStatsText")
 combat_log_text = NodePath("CombatLogText")
 combat_results_screen = NodePath("CombatResults")
+enemy_sprite = NodePath("Enemy0")
 
 [node name="CombatScreen" type="Sprite2D" parent="."]
 position = Vector2(800, 450)
 texture = ExtResource("1_sgd6i")
 
 [node name="Player" type="Sprite2D" parent="."]
-position = Vector2(481, 393)
-scale = Vector2(0.5, 0.5)
+position = Vector2(434, 356)
+scale = Vector2(0.899, 0.899)
 texture = ExtResource("3_bogmt")
 
-[node name="Enemy" type="Sprite2D" parent="."]
-position = Vector2(1188, 408)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_srylc")
-
 [node name="EnemyStatsText" type="RichTextLabel" parent="."]
-offset_left = 1304.0
-offset_top = 260.0
-offset_right = 1576.0
-offset_bottom = 483.0
+offset_left = 797.0
+offset_top = 249.0
+offset_right = 1069.0
+offset_bottom = 472.0
+theme_override_colors/font_outline_color = Color(0.85098, 0.627451, 0.4, 1)
+theme_override_constants/outline_size = 10
 bbcode_enabled = true
 text = "[color=#992211]HP: 999[/color] 
 [color=#000099]Armor: 999[/color] 
@@ -39,10 +37,10 @@ text = "[color=#992211]HP: 999[/color]
 [color=#991177]Damage: 999[/color]"
 
 [node name="CombatLogText" type="RichTextLabel" parent="."]
-offset_left = 378.0
-offset_top = 565.0
-offset_right = 1286.0
-offset_bottom = 800.0
+offset_left = 6.0
+offset_top = 563.0
+offset_right = 914.0
+offset_bottom = 798.0
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
@@ -56,6 +54,9 @@ sdgs
 "
 scroll_following = true
 
+[node name="Enemy0" type="Sprite2D" parent="."]
+position = Vector2(1142, 380)
+texture = ExtResource("5_d7v03")
+
 [node name="CombatResults" parent="." instance=ExtResource("5_srylc")]
 visible = false
-position = Vector2(504, 199)

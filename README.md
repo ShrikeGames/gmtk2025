@@ -16,7 +16,7 @@ Day 1:
 - Our stats generally planned out
 - Line of sight implemented and working fully now
 
-Day 2 (Plan):
+Day 2:
 - Add combat
  - random encounters
  - boss fight itself (when we run out of steps)
@@ -77,3 +77,4 @@ Stretch goals:
 	EG: Enemies are invisible, you cannot see them so have to memorize their locations when you learn of them
 - Have items that can perma change the terrain or other effects
 - Dynamic enemy art by mashing together body part images based on their stats
+- Save/load progress

@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://de33ajm3uhgec"
+path="res://.godot/imported/ButtonClickMask.bmp-b123e293e04ba3978d960c8887746787.res"
+
+[deps]
+
+source_file="res://assets/images/sprite_sheets/ButtonClickMask.bmp"
+dest_files=["res://.godot/imported/ButtonClickMask.bmp-b123e293e04ba3978d960c8887746787.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

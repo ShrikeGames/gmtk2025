@@ -7,6 +7,19 @@ class_name RewardCard
 @export var rarity_text:RichTextLabel
 @export var reward_config:Dictionary
 
+func display_tile_rewards_choice(p_reward_config:Dictionary, rarity:String, rarity_count:int):
+	var title:String = p_reward_config.get("title", "NO TITLE FOUND")
+	var description:String = p_reward_config.get("description", "NO DESCRIPTION FOUND")
+	var color:String = p_reward_config.get("color", "NO COLOR FOUND")
+	var title_rich_text:String = "[center][color=%s]%s[/color][/center]"%[color, title]
+	var description_rich_text:String = "%s"%[description]
+	var rarity_rich_text:String = "%s (%s)"%[rarity, rarity_count]
+	title_text.text = title_rich_text
+	description_text.text = description_rich_text
+	rarity_text.text = rarity_rich_text
+	reward_config = p_reward_config
+	
+
 func display_random_choice(reward_options:Dictionary, rarity:String, rarity_count:int) -> Dictionary:
 	
 	var number_of_options:int = reward_options.size()

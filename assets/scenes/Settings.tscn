@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=3 uid="uid://bogh6xu634d6n"]
+
+[ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="1_invxw"]
+[ext_resource type="Script" uid="uid://5pcyh5hveglp" path="res://assets/scripts/AudioSlider.gd" id="2_sc4fx"]
+
+[node name="Settings" type="Node2D"]
+
+[node name="Tile" type="RichTextLabel" parent="."]
+offset_left = 14.0
+offset_right = 374.0
+offset_bottom = 78.0
+theme_override_fonts/normal_font = ExtResource("1_invxw")
+theme_override_font_sizes/normal_font_size = 42
+text = "Settings"
+
+[node name="AudoSliders" type="VBoxContainer" parent="." node_paths=PackedStringArray("slider_master", "slider_sfx", "slider_music", "slider_voice")]
+offset_left = 16.0
+offset_top = 71.0
+offset_right = 574.0
+offset_bottom = 275.0
+size_flags_horizontal = 3
+script = ExtResource("2_sc4fx")
+slider_master = NodePath("Slider")
+slider_sfx = NodePath("Slider2")
+slider_music = NodePath("Slider3")
+slider_voice = NodePath("Slider4")
+
+[node name="Label" type="Label" parent="AudoSliders"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "Master Volume"
+
+[node name="Slider" type="HSlider" parent="AudoSliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="Label2" type="Label" parent="AudoSliders"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "SFX Volume"
+
+[node name="Slider2" type="HSlider" parent="AudoSliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+
+[node name="Label3" type="Label" parent="AudoSliders"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "Music Volume"
+
+[node name="Slider3" type="HSlider" parent="AudoSliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+
+[node name="Label4" type="Label" parent="AudoSliders"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "Voice Volume"
+
+[node name="Slider4" type="HSlider" parent="AudoSliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+
+[connection signal="ready" from="AudoSliders" to="AudoSliders" method="_on_ready"]
+[connection signal="value_changed" from="AudoSliders/Slider" to="AudoSliders" method="_on_slider_value_changed_master"]
+[connection signal="value_changed" from="AudoSliders/Slider2" to="AudoSliders" method="_on_slider_value_changed_sfx"]
+[connection signal="value_changed" from="AudoSliders/Slider3" to="AudoSliders" method="_on_slider_value_changed_music"]
+[connection signal="value_changed" from="AudoSliders/Slider4" to="AudoSliders" method="_on_slider_value_changed_voice"]

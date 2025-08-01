@@ -562,22 +562,60 @@ var reward_options:Dictionary = {
 	}
 }
 
-func generate_reward_options(rarity:String=""):
+func generate_reward_options(current_map_tile:MapTile, rarity:String=""):
+	
 	var temp_reward_options:Dictionary = reward_options.duplicate(true)
 	var randomly_select_rarity:bool = false
 	if rarity == "":
 		randomly_select_rarity = true
 	var rarities:Array[String] = ["common", "uncommon", "rare", "legendary", "unique"]
 	var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 1]
-	for reward_card in reward_cards:
+	if current_map_tile.rewards:
+		var i:int = 0
+		for reward_card in reward_cards:
+			var reward:Dictionary = current_map_tile.rewards.get(i).get("reward")
+			var tile_reward_rarity:String = current_map_tile.rewards.get(i).get("rarity", rarity)
+			reward_card.display_tile_rewards_choice(reward, tile_reward_rarity, reward_options.get(tile_reward_rarity).size())
+			i += 1
+	else:
+		for reward_card in reward_cards:
+			if randomly_select_rarity:
+				var i:int = 0
+				for prob in probabilities:
+					var random_chance:float = randf()
+					if random_chance <= prob:
+						rarity = rarities[i]
+						break
+					i += 1
+			temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity), rarity, reward_options.get(rarity).size())
+	
+func generate_rewards_for_tile(rarity:String="") -> Array[Dictionary]:
+	var rewards:Array[Dictionary] = []
+	for reward_id in range(0, 3):
+		var temp_reward_options:Dictionary = reward_options.duplicate(true)
+		var randomly_select_rarity:bool = false
+		if rarity == "":
+			randomly_select_rarity = true
+		var rarities:Array[String] = ["common", "uncommon", "rare", "legendary", "unique"]
+		var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 1]
 		if randomly_select_rarity:
 			var i:int = 0
 			for prob in probabilities:
 				var random_chance:float = randf()
-				print(random_chance, " vs ", prob)
 				if random_chance <= prob:
 					rarity = rarities[i]
 					break
 				i += 1
-		print(rarity)
-		temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity), rarity, reward_options.get(rarity).size())
+		var number_of_options:int = reward_options.size()
+		var rarity_index:int = randi_range(0, number_of_options-1)
+		var random_option_key:String = reward_options.keys()[rarity_index]
+		var randomly_selected_reward_config:Dictionary = reward_options[random_option_key]
+		var reward_config:Dictionary = randomly_selected_reward_config
+		var num:int = reward_config.keys().size()
+		var random_index:int = randi_range(0, num-2)
+		var random_key:String = reward_config.keys()[random_index]
+		rewards.append({
+			"reward": reward_config[random_key],
+			"rarity": rarity
+		})
+	return rewards

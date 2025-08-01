@@ -7,6 +7,7 @@ class_name CombatScreen
 @export var enemy_stats_text:RichTextLabel
 @export var combat_log_text:RichTextLabel
 @export var combat_results_screen:CombatResults
+@export var enemy_sprite:Sprite2D
 
 var turn:int
 var enemy_stats:Dictionary
@@ -20,6 +21,8 @@ func start_combat(p_enemy_stats:Dictionary):
 	self.enemy_stats = p_enemy_stats
 	self.player_speed = side_bar.calculated_stats["speed"]
 	self.enemy_speed = enemy_stats["speed"]
+	var enemy_image:String = enemy_stats.get("image", "res://assets/images/sprite_sheets/Enemy0.png")
+	enemy_sprite.texture = load(enemy_image)
 	self.player_speed_bonus_turns=0
 	self.enemy_speed_bonus_turns=0
 	self.max_speed_bonus_turns_allowed = side_bar.calculated_stats["max_speed_bonus_turns_allowed"]

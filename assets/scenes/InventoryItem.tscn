@@ -9,6 +9,7 @@ icon = NodePath("Icon")
 title = NodePath("Title")
 
 [node name="Icon" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("2_ljxqt")
 
 [node name="Title" type="RichTextLabel" parent="."]

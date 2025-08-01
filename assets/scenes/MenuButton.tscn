@@ -1,0 +1,137 @@
+[gd_scene load_steps=13 format=3 uid="uid://ce2tboaic6n86"]
+
+[ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="1_6jsac"]
+[ext_resource type="Script" uid="uid://cdg057x1c2dtt" path="res://assets/scripts/MenuButton.gd" id="2_1ctor"]
+[ext_resource type="Texture2D" uid="uid://ky8e8r12ycma" path="res://assets/images/sprite_sheets/Button1Normal.png" id="2_rw8jg"]
+[ext_resource type="Texture2D" uid="uid://cxjfowop0f185" path="res://assets/images/sprite_sheets/Button1Pressed.png" id="3_y1jey"]
+[ext_resource type="Texture2D" uid="uid://bfvefpx58t4nb" path="res://assets/images/sprite_sheets/Button1Hover.png" id="4_7s8vw"]
+[ext_resource type="BitMap" uid="uid://de33ajm3uhgec" path="res://assets/images/sprite_sheets/ButtonClickMask.bmp" id="5_y1jey"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ctor"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7qwy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vaekg"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.223529, 0.223529, 0.223529, 0.443137)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rw8jg"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.101961, 0.101961, 0.101961, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1jey"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="Theme" id="Theme_7s8vw"]
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 10
+Button/font_sizes/font_size = 64
+Button/fonts/font = ExtResource("1_6jsac")
+Button/styles/disabled = SubResource("StyleBoxFlat_1ctor")
+Button/styles/focus = SubResource("StyleBoxFlat_c7qwy")
+Button/styles/hover = SubResource("StyleBoxFlat_vaekg")
+Button/styles/normal = SubResource("StyleBoxFlat_rw8jg")
+Button/styles/pressed = SubResource("StyleBoxFlat_y1jey")
+
+[node name="MenuButton" type="TextureButton" node_paths=PackedStringArray("text_label")]
+offset_right = 450.0
+offset_bottom = 200.0
+theme = SubResource("Theme_7s8vw")
+texture_normal = ExtResource("2_rw8jg")
+texture_pressed = ExtResource("3_y1jey")
+texture_hover = ExtResource("4_7s8vw")
+texture_click_mask = ExtResource("5_y1jey")
+script = ExtResource("2_1ctor")
+text_label = NodePath("Text")
+
+[node name="Text" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 19.0
+offset_right = 496.0
+offset_bottom = 143.0
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.962843, 0.96848, 0.943461, 1)
+theme_override_colors/font_outline_color = Color(0.208474, 0.12222, 0.0282985, 1)
+theme_override_constants/outline_size = 40
+theme_override_fonts/normal_font = ExtResource("1_6jsac")
+theme_override_fonts/bold_font = ExtResource("1_6jsac")
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "[center]BUTTON TEXT[/center]"
+scroll_active = false
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="ready" from="." to="." method="_on_ready"]

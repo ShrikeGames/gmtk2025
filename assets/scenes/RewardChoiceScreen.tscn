@@ -8,34 +8,37 @@ script = ExtResource("1_ig3qk")
 reward_cards = [NodePath("RewardCard"), NodePath("RewardCard2"), NodePath("RewardCard3")]
 
 [node name="RewardCard" parent="." instance=ExtResource("2_tosvh")]
-position = Vector2(100, 183)
+position = Vector2(140, 111)
 
 [node name="RewardCard2" parent="." instance=ExtResource("2_tosvh")]
-position = Vector2(550, 183)
+position = Vector2(590, 111)
 
 [node name="RewardCard3" parent="." instance=ExtResource("2_tosvh")]
-position = Vector2(1000, 183)
+position = Vector2(1040, 111)
 
 [node name="1" type="RichTextLabel" parent="."]
-offset_left = 106.0
-offset_top = 95.0
-offset_right = 495.0
-offset_bottom = 195.0
+offset_left = 146.0
+offset_top = 711.0
+offset_right = 535.0
+offset_bottom = 811.0
 theme_override_font_sizes/normal_font_size = 64
-text = "1"
+bbcode_enabled = true
+text = "[center]1[/center]"
 
 [node name="2" type="RichTextLabel" parent="."]
-offset_left = 554.0
-offset_top = 95.0
-offset_right = 943.0
-offset_bottom = 195.0
+offset_left = 594.0
+offset_top = 711.0
+offset_right = 983.0
+offset_bottom = 811.0
 theme_override_font_sizes/normal_font_size = 64
-text = "2"
+bbcode_enabled = true
+text = "[center]2[/center]"
 
 [node name="3" type="RichTextLabel" parent="."]
-offset_left = 1004.0
-offset_top = 95.0
-offset_right = 1393.0
-offset_bottom = 195.0
+offset_left = 1044.0
+offset_top = 711.0
+offset_right = 1433.0
+offset_bottom = 811.0
 theme_override_font_sizes/normal_font_size = 64
-text = "3"
+bbcode_enabled = true
+text = "[center]3[/center]"

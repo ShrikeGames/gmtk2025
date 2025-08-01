@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://b37icc30y4axi"]
+
+[ext_resource type="Texture2D" uid="uid://bvka7k7ej0sgp" path="res://assets/images/sprite_sheets/Clock.png" id="1_8iywr"]
+[ext_resource type="Script" uid="uid://ce4krhrd0lobn" path="res://assets/scripts/Clocks.gd" id="1_fkcfw"]
+[ext_resource type="PackedScene" uid="uid://b5kmpknwhtt2d" path="res://assets/scenes/ClockHand.tscn" id="3_1x4r0"]
+
+[node name="Clock" type="Node2D" node_paths=PackedStringArray("clock_hand")]
+script = ExtResource("1_fkcfw")
+clock_hand = NodePath("ClockHand")
+
+[node name="Clock" type="Sprite2D" parent="."]
+texture = ExtResource("1_8iywr")
+
+[node name="ClockHand" parent="." instance=ExtResource("3_1x4r0")]

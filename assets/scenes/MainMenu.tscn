@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=3 uid="uid://dg7fw1pgaowfx"]
+
+[ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_t6dbj"]
+[ext_resource type="PackedScene" uid="uid://ce2tboaic6n86" path="res://assets/scenes/MenuButton.tscn" id="1_vqap6"]
+[ext_resource type="Texture2D" uid="uid://c8e4ebvi74wqx" path="res://assets/images/sprite_sheets/Logo.png" id="3_u804d"]
+[ext_resource type="Texture2D" uid="uid://mr25pto4q0ms" path="res://assets/images/sprite_sheets/MiniMenuBackground.png" id="4_c1eu8"]
+[ext_resource type="AudioStream" uid="uid://k8ic8ah0kyj6" path="res://assets/audio/pop.wav" id="5_1l0v7"]
+[ext_resource type="PackedScene" uid="uid://bogh6xu634d6n" path="res://assets/scenes/Settings.tscn" id="6_nory3"]
+[ext_resource type="PackedScene" uid="uid://p3bgeeidpfcb" path="res://assets/scenes/Controls.tscn" id="7_7metd"]
+[ext_resource type="PackedScene" uid="uid://d0ndt3jsq8l2o" path="res://assets/scenes/Credits.tscn" id="7_kj6rs"]
+
+[node name="MainMenu" type="Node2D"]
+
+[node name="FogBackground" type="Sprite2D" parent="."]
+position = Vector2(800, 450)
+texture = ExtResource("1_t6dbj")
+
+[node name="MenuButton" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("1_vqap6")]
+offset_left = 31.0
+offset_top = 190.0
+offset_right = 531.0
+offset_bottom = 390.0
+button_text = "NEW GAME"
+scene_to_change_to = "res://assets/scenes/Main.tscn"
+audio_player = NodePath("../SFX")
+random_rotation_amount = 0.0
+
+[node name="MenuButton2" parent="." node_paths=PackedStringArray("audio_player", "toggle_visiblity_node", "submenu_node") instance=ExtResource("1_vqap6")]
+offset_left = 31.0
+offset_top = 349.0
+offset_right = 531.0
+offset_bottom = 549.0
+button_text = "SETTINGS"
+audio_player = NodePath("../SFX")
+random_rotation_amount = 0.0
+toggle_visiblity_node = NodePath("../SubMenus/Settings")
+submenu_node = NodePath("../SubMenus")
+
+[node name="MenuButton3" parent="." node_paths=PackedStringArray("audio_player", "toggle_visiblity_node", "submenu_node") instance=ExtResource("1_vqap6")]
+offset_left = 31.0
+offset_top = 507.0
+offset_right = 531.0
+offset_bottom = 707.0
+button_text = "CONTROLS"
+audio_player = NodePath("../SFX")
+random_rotation_amount = 0.0
+toggle_visiblity_node = NodePath("../SubMenus/Controls")
+submenu_node = NodePath("../SubMenus")
+
+[node name="MenuButton4" parent="." node_paths=PackedStringArray("audio_player", "toggle_visiblity_node", "submenu_node") instance=ExtResource("1_vqap6")]
+offset_left = 31.0
+offset_top = 666.0
+offset_right = 531.0
+offset_bottom = 866.0
+button_text = "CREDITS"
+audio_player = NodePath("../SFX")
+random_rotation_amount = 0.0
+toggle_visiblity_node = NodePath("../SubMenus/Credits")
+submenu_node = NodePath("../SubMenus")
+
+[node name="Logo" type="Sprite2D" parent="."]
+position = Vector2(331, 107)
+texture = ExtResource("3_u804d")
+
+[node name="MiniMenuBackground" type="Sprite2D" parent="."]
+position = Vector2(1105, 503)
+texture = ExtResource("4_c1eu8")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_1l0v7")
+bus = &"SFX"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+autoplay = true
+bus = &"Music"
+
+[node name="SubMenus" type="Node2D" parent="."]
+position = Vector2(655, 210)
+
+[node name="Settings" parent="SubMenus" instance=ExtResource("6_nory3")]
+visible = false
+
+[node name="Controls" parent="SubMenus" instance=ExtResource("7_7metd")]
+visible = false
+
+[node name="Credits" parent="SubMenus" instance=ExtResource("7_kj6rs")]
+visible = false

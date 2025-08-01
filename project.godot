@@ -11,10 +11,14 @@ config_version=5
 [application]
 
 config/name="GMTK 2025 LOOP"
-run/main_scene="uid://bt7imw50fxqnt"
+run/main_scene="uid://dg7fw1pgaowfx"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/image="uid://ctwvjs6spgk1r"
 config/icon="uid://c4hlp4fsmlmqy"
+
+[autoload]
+
+Global="*res://assets/scripts/Global.gd"
 
 [display]
 

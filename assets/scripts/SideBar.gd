@@ -4,6 +4,7 @@ class_name SideBar
 @export var stats_text:RichTextLabel
 @export var calculated_stats:Dictionary = {}
 @export var inventory_items_node:Node2D
+@export var clock:Clock
 
 func add_inventory_item(inventory_item:InventoryItem):
 	var x:int = 75 + (inventory_items_node.get_child_count() * 150)
@@ -78,14 +79,14 @@ func update_stats(world_map:WorldMap):
 					elif stat_name == "max_speed_bonus_turns_allowed":
 						displayed_max_speed_bonus_turns_allowed = max(0, amount)
 	
-	var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(world_map.steps), int(displayed_max_steps)]
+	#var steps_rich_text:String = "[color=#222222]Steps: %d/%d[/color]"%[int(world_map.steps), int(displayed_max_steps)]
 	var hp_rich_text:String = "[color=#992211]HP: %d[/color]"%[displayed_hp]
 	var armor_rich_text:String = "[color=#000099]Armor: %d (%d)[/color]"%[displayed_armor, displayed_armor_regen]
 	var speed_rich_text:String = "[color=#119911]Speed: %d[/color]"%[displayed_speed]
 	var strength_rich_text:String = "[color=#994411]Strength: %d[/color]"%[displayed_strength]
 	var damage_rich_text:String = "[color=#991177]Damage: %d[/color]"%[displayed_damage]
 	var vision_rich_text:String = "[color=#997700]Vision: %d[/color]"%[displayed_vision]
-	var rich_text:String = "Loop: %s - %s\n%s - %s - %s - %s - %s - %s"%[world_map.loop, steps_rich_text, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
+	var rich_text:String = "Loop: %s - %s - %s - %s - %s - %s - %s"%[world_map.loop, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
 	
 	calculated_stats["hp"] = displayed_hp
 	calculated_stats["armor"] = displayed_armor
@@ -97,3 +98,5 @@ func update_stats(world_map:WorldMap):
 	calculated_stats["max_speed_bonus_turns_allowed"] = displayed_max_speed_bonus_turns_allowed
 	
 	stats_text.text = rich_text
+	
+	clock.clock_hand.rotation_degrees = 360 - (360 * (world_map.steps / world_map.max_steps))

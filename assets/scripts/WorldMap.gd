@@ -82,13 +82,14 @@ func init_loop():
 		tile.queue_free()
 	for inventory_item in side_bar.inventory_items_node.get_children():
 		inventory_item.queue_free()
+	side_bar.update_stats(self)
 	# Create 2d array of tiles
 	# use rules to generate the different types of tiles
 	map_tiles = generate_map(tiles_node, map_width, map_height, tile_width, tile_height)
 	time_since_last_moved = 0
 	# set the player starting location
-	var starting_x:int = 2#randi_range(1, map_width-2)
-	var starting_y:int = 2#randi_range(1, map_height-2)
+	var starting_x:int = int(map_width*0.5)
+	var starting_y:int = int(map_height*0.5)
 	player_position = Vector2i(starting_x, starting_y)
 	if hp < 12:
 		hp = 12
@@ -98,7 +99,7 @@ func init_loop():
 	combat_screen.visible = false
 	combat_screen.combat_results_screen.visible = false
 	# draw the tiles to the screen around the player
-	update_screen(player_position, sight_radius)
+	update_screen(player_position, side_bar.calculated_stats["vision"])
 
 func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int) -> Array[Array]:
 	var new_map_tiles:Array[Array] = []
@@ -170,7 +171,21 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
 		road_tile_count += 1
 		road_y -= 1
+	
+	road_x = int(map_width*0.5)
+	road_y = int(map_height*0.5)
+	
+	while road_x < map_width-4:
+		if road_tile_count > 1 and road_tile_count%4 == 0:
+			road_y += randi_range(-1, 1)
+			road_x -= 1
+		road_x = wrapi(road_x, 0, map_width)
+		road_y = wrapi(road_y, 0, map_height)
+		generate_tile(new_map_tiles[road_y][road_x], road_x, road_y, p_tile_width, p_tile_height, TILE_ROAD, -1)
+		road_tile_count += 1
+		road_x += 1
 		
+	
 	# add random enemies to the map
 	for enemy_id in range(0, number_of_enemies):
 		# select a random tile to put the enemy on
@@ -180,11 +195,12 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		existing_tile.item_id = 1
 		# generate a random enemy
 		var base_enemy_stats:Dictionary = {
-			"hp": 1,
+			"hp": 3,
 			"armor": 0,
 			"speed": 1,
 			"damage": 1,
-			"strength": 1
+			"strength": 1,
+			"image": "res://assets/images/sprite_sheets/Enemy%d.png"%[randi_range(0, 2)]
 		}
 		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10*pow(boss_kills+1,2))
 		
@@ -197,7 +213,7 @@ func generate_enemy_stats(enemy_stats:Dictionary, points_to_spend:int=10) -> Dic
 	var max_points_to_spend:int = points_to_spend
 	while points_to_spend > 0:
 		# pick random stat
-		var random_stat_name: String = enemy_stats.keys()[randi_range(0, enemy_stats.size()-1)]
+		var random_stat_name: String = ["hp", "armor", "speed", "damage", "strength"][randi_range(0, 4)]
 		# pick a random amount of points to spend
 		var investment_points: int = randi_range(1, min(max_points_to_spend*0.25, points_to_spend))
 		enemy_stats[random_stat_name] += investment_points
@@ -248,9 +264,15 @@ func generate_tile(new_tile:MapTile, x:int, y:int, p_tile_width:int, p_tile_heig
 	var tile_position:Vector2 = Vector2((p_tile_width*0.5) + x * p_tile_width, (p_tile_height*0.5) + y * p_tile_height)
 	new_tile.init(x, y, tile_position, type, item_id, walkable, blocks_vision, step_cost)
 	new_tile.visible = false
+	if item_id >= 0:
+		new_tile.rewards = reward_choice_screen.generate_rewards_for_tile()
 	return new_tile
 
 func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
+	if p_player_position.x <= 3 and p_player_position.y <= 1:
+		side_bar.clock.visible = false
+	else:
+		side_bar.clock.visible = true
 	for y:int in range(0, map_height):
 		for x:int in range(0, map_width):
 			var map_tile:MapTile = map_tiles[y][x]
@@ -397,7 +419,7 @@ func _process(delta: float) -> void:
 				
 				if steps <= 0 or not has_valid_movements():
 					trigger_boss_fight()
-				update_screen(player_position, sight_radius)
+				update_screen(player_position, side_bar.calculated_stats["vision"])
 			
 	time_since_last_moved += delta
 	
@@ -438,7 +460,6 @@ func has_valid_movements():
 				if map_tile.walkable:
 					return true
 				else:
-					print(map_tile, " is walkable")
 					if map_tile.type == TILE_WATER and has_flippers:
 						return true
 					elif map_tile.type == TILE_WALL and has_climbing_gear:
@@ -456,14 +477,18 @@ func trigger_boss_fight():
 		"armor": 5,
 		"speed": 5,
 		"damage": 5,
-		"strength": 4
+		"strength": 4,
+		"image": "res://assets/images/sprite_sheets/Boss.png"
 	}
+	var rarities:Array[String] = ["unique"]
+	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
+	var current_map_tile:MapTile = map_tiles[player_position.y][player_position.x]
+	current_map_tile.rewards = reward_choice_screen.generate_rewards_for_tile(rarity)
+	
 	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 50*(boss_kills+1))
 	combat_screen.start_combat(enemy_stats)
 	combat_screen.visible = true
-	var rarities:Array[String] = ["unique"]
-	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
-	reward_choice_screen.generate_reward_options(rarity)
+	
 
 
 func give_reward(reward_id:int):
@@ -544,8 +569,8 @@ func give_reward(reward_id:int):
 func interact_with_item(current_map_tile:MapTile):
 	if current_map_tile.item_id == 0:
 		# chest
+		reward_choice_screen.generate_reward_options(current_map_tile)
 		# populate and show the options for items to get
-		reward_choice_screen.generate_reward_options()
 		show_reward_choice_screen()
 		
 		#sight_radius += 1
@@ -553,8 +578,9 @@ func interact_with_item(current_map_tile:MapTile):
 		current_map_tile.item_texture_path = ""
 		current_map_tile.item_sprite.visible = false
 	elif current_map_tile.item_id == 1:
+		reward_choice_screen.generate_reward_options(current_map_tile)
+		show_reward_choice_screen()
 		start_random_combat(current_map_tile)
-		reward_choice_screen.generate_reward_options()
 
 func start_random_combat(current_map_tile:MapTile):
 	# show the combat screen
@@ -567,6 +593,8 @@ func start_random_combat(current_map_tile:MapTile):
 	
 
 func show_reward_choice_screen():
+	var current_map_tile:MapTile = map_tiles[player_position.y][player_position.x]
+	reward_choice_screen.generate_reward_options(current_map_tile)
 	reward_choice_screen.visible = true
 
 func is_walkable(validated_target_position:Vector2i) -> bool:
