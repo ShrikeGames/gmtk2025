@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bt7imw50fxqnt"]
+[gd_scene load_steps=15 format=3 uid="uid://bt7imw50fxqnt"]
 
 [ext_resource type="PackedScene" uid="uid://d4ntvwt70klqe" path="res://assets/scenes/WorldMap.tscn" id="1_g3k4f"]
 [ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_jv468"]
@@ -12,6 +12,8 @@
 [ext_resource type="AudioStream" uid="uid://dywkhk2qngvfd" path="res://assets/audio/Boss Theme - Draft 1.wav" id="9_cb1w8"]
 [ext_resource type="AudioStream" uid="uid://dnq8th1mak3ll" path="res://assets/audio/758819__universfield__magical-twinkle.mp3" id="11_cfala"]
 [ext_resource type="AudioStream" uid="uid://ccoo1e23icc18" path="res://assets/audio/clock.wav" id="12_0tkjb"]
+[ext_resource type="AudioStream" uid="uid://c1ggcx4os7f4r" path="res://assets/audio/532155__soundmast123__mighty-dragon-roaring.wav" id="13_gub6j"]
+[ext_resource type="AudioStream" uid="uid://6pcd5rnd0nug" path="res://assets/audio/803935__cvltiv8r__creature-monster-alien-vocal-fx-part-2-051.wav" id="14_npyhb"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -19,7 +21,7 @@
 position = Vector2(800, 448)
 texture = ExtResource("1_jv468")
 
-[node name="WorldMap" parent="." node_paths=PackedStringArray("tutorial_scene", "reward_choice_screen", "combat_screen", "loop_splash_screen", "regular_music", "faster_music", "boss_music", "accept_reward_sfx", "clock_sfx", "side_bar") instance=ExtResource("1_g3k4f")]
+[node name="WorldMap" parent="." node_paths=PackedStringArray("tutorial_scene", "reward_choice_screen", "combat_screen", "loop_splash_screen", "regular_music", "faster_music", "boss_music", "accept_reward_sfx", "clock_sfx", "dragon_sfx", "alien_sfx", "side_bar") instance=ExtResource("1_g3k4f")]
 position = Vector2(0, 100)
 tutorial_scene = NodePath("../TutorialScene")
 reward_choice_screen = NodePath("../RewardChoiceScreen")
@@ -30,6 +32,8 @@ faster_music = NodePath("../FasterMusic")
 boss_music = NodePath("../BossMusic")
 accept_reward_sfx = NodePath("../AcceptRewardSFX")
 clock_sfx = NodePath("../ClockSFX")
+dragon_sfx = NodePath("../DragonSFX")
+alien_sfx = NodePath("../AlienSFX")
 side_bar = NodePath("../SideBar")
 
 [node name="RewardChoiceScreen" parent="." instance=ExtResource("2_npkpr")]
@@ -73,3 +77,10 @@ bus = &"SFX"
 [node name="ClockSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_0tkjb")
 bus = &"SFX"
+
+[node name="DragonSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_gub6j")
+bus = &"SFX"
+
+[node name="AlienSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_npyhb")

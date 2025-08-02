@@ -13,6 +13,8 @@ class_name WorldMap
 @export var boss_music:AudioStreamPlayer
 @export var accept_reward_sfx:AudioStreamPlayer
 @export var clock_sfx:AudioStreamPlayer
+@export var dragon_sfx:AudioStreamPlayer
+@export var alien_sfx:AudioStreamPlayer
 
 # map settings
 # TODO allow user to enter one of their own
@@ -139,6 +141,19 @@ func init_loop():
 		"strength": 4,
 		"image": "res://assets/images/sprite_sheets/Boss.png"
 	}
+	if Global.boss_kills > 0 and (Global.boss_kills +1) % 2 == 0:
+		base_boss_enemy_stats = {
+			"hp": 150,
+			"armor": 20,
+			"speed": 20,
+			"damage": 20,
+			"strength": 20,
+			"image": "res://assets/images/sprite_sheets/Boss1.png"
+		}
+		dragon_sfx.play()
+	elif not tutorial_scene.visible:
+		alien_sfx.play()
+	
 	boss_enemy_stats = generate_enemy_stats(base_boss_enemy_stats, 50*(Global.boss_kills+1))
 	loop_splash_screen.boss_image.texture = load(base_boss_enemy_stats["image"])
 	loop_splash_screen.enemy_stats_text.text = combat_screen.update_enemy_stats_text(boss_enemy_stats)
@@ -240,15 +255,38 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 		var existing_tile:MapTile = new_map_tiles[random_y][random_x]
 		existing_tile.item_id = 1
 		# generate a random enemy
+		var enemy_type:int = randi_range(0, 4)
 		var base_enemy_stats:Dictionary = {
 			"hp": 3,
 			"armor": 0,
 			"speed": 1,
 			"damage": 1,
 			"strength": 1,
-			"image": "res://assets/images/sprite_sheets/Enemy%d.png"%[randi_range(0, 2)]
+			"image": "res://assets/images/sprite_sheets/Enemy%d.png"%[enemy_type]
 		}
-		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10*pow(Global.boss_kills+1,2))
+		var base_scaling_factor:int = 10
+		if enemy_type == 1:
+			base_enemy_stats["hp"] = 6
+			base_enemy_stats["strength"] = 2
+			base_scaling_factor = 12
+		if enemy_type == 2:
+			base_enemy_stats["hp"] = 9
+			base_enemy_stats["strength"] = 3
+			base_scaling_factor = 15
+		if enemy_type == 3:
+			existing_tile.item_id = 3
+			base_enemy_stats["hp"] = 8
+			base_enemy_stats["armor"] = 8
+			base_enemy_stats["strength"] = 2
+			base_scaling_factor = 18
+		if enemy_type == 4:
+			existing_tile.item_id = 4
+			base_enemy_stats["hp"] = 6
+			base_enemy_stats["speed"] = 5
+			base_enemy_stats["damage"] = 5
+			base_scaling_factor = 16
+		
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, base_scaling_factor*pow(Global.boss_kills+1,2))
 		
 		existing_tile.enemy_stats = enemy_stats
 		existing_tile.update_texture()
@@ -709,7 +747,7 @@ func interact_with_item(current_map_tile:MapTile):
 		current_map_tile.item_id = -1
 		current_map_tile.item_texture_path = ""
 		current_map_tile.item_sprite.visible = false
-	elif current_map_tile.item_id == 1:
+	elif current_map_tile.item_id >= 1:
 		reward_choice_screen.generate_reward_options(current_map_tile)
 		show_reward_choice_screen()
 		start_random_combat(current_map_tile)

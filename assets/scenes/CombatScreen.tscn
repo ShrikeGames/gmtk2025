@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
 [ext_resource type="Material" uid="uid://b6matpqrnupp4" path="res://assets/materials/LineJitter.tres" id="3_d7v03"]
 [ext_resource type="Material" uid="uid://bxyvfumh2bogg" path="res://assets/materials/LineJitter2.tres" id="3_yup8o"]
-[ext_resource type="Texture2D" uid="uid://lc1yhfq53t2o" path="res://assets/images/sprite_sheets/Enemy0.png" id="5_d7v03"]
+[ext_resource type="Texture2D" uid="uid://lc1yhfq53t2o" path="res://assets/images/sprite_sheets/Enemy2.png" id="5_d7v03"]
 [ext_resource type="PackedScene" uid="uid://jbesfgssc7u0" path="res://assets/scenes/CombatResults.tscn" id="5_srylc"]
 [ext_resource type="AudioStream" uid="uid://dhqq71grbfgym" path="res://assets/audio/bonk.wav" id="7_a3elk"]
 

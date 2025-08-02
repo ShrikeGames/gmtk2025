@@ -77,9 +77,7 @@ Day 4(Plan):
  - Settings menu: Add option to skip tutorial
  - (Done) Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
  - (Done) Switch to the faster BGM for the last segement of the timer
- - Have boss react to player fighting them again after the player previously lost
- - Hills colours need to change
- - Add visible grass to the empty tiles
+ - (Done) Hills colours need to change
 - Upload to itch as an unlisted game (people watching the stream can play)
 
 Bug:
@@ -104,3 +102,4 @@ Stretch goals:
 - Intro cutscene
  - Voiced
  - Use animated sprite2d to have basic slides for it?
+ - Have boss react to player fighting them again after the player previously lost
