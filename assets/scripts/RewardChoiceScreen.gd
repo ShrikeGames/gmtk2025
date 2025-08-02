@@ -11,6 +11,7 @@ var reward_options:Dictionary = {
 			"description": "A simple wooden sword used for training. Increases your [color=991177]Damage[/color] by 1 and heals for 1 [color=#992211]hp[/color] per attack.",
 			"type": "item",
 			"color": "991177",
+			"icon_path": "res://assets/images/sprite_sheets/items/wooden_sword.png",
 			"stats": [{
 				"name": "damage",
 				"type": "modify",
@@ -65,6 +66,7 @@ var reward_options:Dictionary = {
 			"title": "Running Shoes",
 			"description": "Gotta go fast. Increases your [color=119911]Speed[/color] by 2.",
 			"type": "item",
+			"icon_path": "res://assets/images/sprite_sheets/items/running_shoes.png",
 			"color": "119911",
 			"stats": [{
 				"name": "speed",
@@ -89,6 +91,24 @@ var reward_options:Dictionary = {
 				"type": "modify",
 				"min_amount": -2,
 				"max_amount": -2
+			}]
+		},
+		"bone_charm": {
+			"title": "Bone Charm",
+			"description": "Increases your [color=991177]Damage[/color] by 1 and your max [color=#992211]HP[/color] by 5.",
+			"type": "item",
+			"color": "991177",
+			"stats": [{
+				"name": "damage",
+				"type": "modify",
+				"min_amount": 1,
+				"max_amount": 1
+			},
+			{
+				"name": "hp",
+				"type": "modify",
+				"min_amount": 5,
+				"max_amount": 5
 			}]
 		},
 		"armor_spike": {
@@ -223,7 +243,7 @@ var reward_options:Dictionary = {
 		"great_sword": {
 			"title": "Great Sword",
 			"type": "item",
-			"description": "Increases damage by 12 and does bonus damage equal to your [color=#994411]Strength[/color], but lowers speed by 10.",
+			"description": "Increases damage by 12 and does bonus damage equal to your [color=#994411]Strength[/color], but lowers [color=#119911]Speed[/color] by 10.",
 			"color": "991177",
 			"stats": [{
 				"name": "damage",
@@ -255,7 +275,7 @@ var reward_options:Dictionary = {
 		"rapier": {
 			"title": "Rapier",
 			"type": "item",
-			"description": "Does bonus damage equal to your [color=#119911]Speed[/color], but lowers Strength by 10.",
+			"description": "Does bonus damage equal to your [color=#119911]Speed[/color], but lowers [color=#994411]Strength[/color] by 10.",
 			"color": "991177",
 			"stats": [
 			{
@@ -278,7 +298,6 @@ var reward_options:Dictionary = {
 				}
 			] 
 		},
-		
 	},
 	"rare": {
 		"muleback_cords": {
@@ -293,6 +312,7 @@ var reward_options:Dictionary = {
 				"max_amount": 8
 			}]
 		},
+		
 		"healthy_mace": {
 			"title": "Healthy Mace",
 			"description": "This mace heals you 2 [color=#992211]HP[/color] per hit and increases your [color=#994411]Strength[/color] by 6.",
@@ -316,6 +336,56 @@ var reward_options:Dictionary = {
 						}]
 					}
 					
+				}
+			] 
+		},
+		"cursed_dagger": {
+			"title": "Cursed Dagger",
+			"description": "This dagger hurts you for 2 [color=#992211]HP[/color] per hit but increases your [color=#119911]Maximum Speed Bonus Attacks [/color] by 2",
+			"type": "item",
+			"color": "991177",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "hp",
+							"type": "modify",
+							"min_amount": -2,
+							"max_amount": -2
+						},
+						{
+							"name": "max_speed_bonus_turns_allowed",
+							"type": "modify",
+							"min_amount": 2,
+							"max_amount": 2
+						}]
+					}
+				}
+			] 
+		},
+		"cursed_longsword": {
+			"title": "Cursed Longsword",
+			"description": "This sword hurts you for 2 [color=#992211]HP[/color] per hit but deals 20 extra bonus [color=#991177]Damage[/color].",
+			"type": "item",
+			"color": "991177",
+			"stats": [],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "hp",
+							"type": "modify",
+							"min_amount": -2,
+							"max_amount": -2
+						},
+						{
+							"name": "damage",
+							"type": "modify",
+							"min_amount": 20,
+							"max_amount": 20
+						}]
+					}
 				}
 			] 
 		},
@@ -447,6 +517,31 @@ var reward_options:Dictionary = {
 							"name": "damage",
 							"type": "modify",
 							"use_other_stat": "speed",
+							"min_amount": 0,
+							"max_amount": 0
+						}]
+					}
+				}
+			] 
+		},
+		"strong_mage": {
+			"title": "Wizard Staff for Gym Rats",
+			"description": "Increase your [color=#997700]Vision[/color] by 3 and deal bonus damage equal to your [color=#992211]HP[/color].",
+			"type": "item",
+			"color": "997700",
+			"stats": [{
+				"name": "vision",
+				"type": "modify",
+				"min_amount": 3,
+				"max_amount": 3
+			}],
+			"combat_effects": [
+				{
+					"damage": {
+						"stats": [{
+							"name": "damage",
+							"type": "modify",
+							"use_other_stat": "hp",
 							"min_amount": 0,
 							"max_amount": 0
 						}]
@@ -592,7 +687,6 @@ func generate_reward_options(current_map_tile:MapTile, rarity:String=""):
 func generate_rewards_for_tile(rarity:String="") -> Array[Dictionary]:
 	var rewards:Array[Dictionary] = []
 	for reward_id in range(0, 3):
-		var temp_reward_options:Dictionary = reward_options.duplicate(true)
 		var randomly_select_rarity:bool = false
 		if rarity == "":
 			randomly_select_rarity = true

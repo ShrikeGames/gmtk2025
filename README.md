@@ -36,33 +36,29 @@ Day 2:
  - Vision also self expanitory
 - If you can't move with your remaining steps it needs to be treated as 0, or click a button to give up
 
-Day3 (Plan):
+Day3:
 - Make menus (including options)
 - Step counter: Make it a visual graphic of a clock or something with a dramatic boss face
-- Splash screen for the loop progressing
-- Intro cutscene
-- Tutorial???
-- Add random modifiers to the bosses
-- Give additional attacks due to increased speed AFTER the other character gets their turn (like in old FE)
-- Keep adding new items, enemies, loot, etc
-- Mouse controls for game
-- Make art for the actual game part
-- Upload to itch as an unlisted game (people watching the stream can play)
-- keep the last reward you got for killing the boss if it was a boss fight
-- Some way to see what your current items do after you have them in your rewards inventory
-- Have some other benefit to Strength because Speed is so good in comparison
+- Boss graphic
+- Bonus attacks due to outspeeding are now limited but items can increase it
+- Made art for the actual game part
+- Added new items, enemies, loot, etc
+- Added quit button to bottom right of game
+- Improved inventory system to be able to show icons if they exist in the config
+- Created splash screen for the loop progressing
+- You now keep the last reward when entering a new loop even if it was an item
 
-Item ideas:
-- Weapon that scales off of HP
-- 
-
-
- Day 4(Plan):
+Day 4(Plan):
 - Music
 - Sound effects
 - keep adding new items, enemies, loot, etc
+- Add random modifiers to the bosses
+- Have some other benefit to Strength because Speed is so good in comparison
 - Polish and test
  - Partical effects, animations, etc
+ - Intro cutscene
+ - Tutorial???
+- Upload to itch as an unlisted game (people watching the stream can play)
 
 Day 5(Plan):
 - Test and fix issues
@@ -78,3 +74,5 @@ Stretch goals:
 - Have items that can perma change the terrain or other effects
 - Dynamic enemy art by mashing together body part images based on their stats
 - Save/load progress
+- Mouse controls for game
+- Some way to see what your current items do after you have them in your rewards inventory

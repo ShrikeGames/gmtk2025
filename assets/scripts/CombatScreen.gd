@@ -181,12 +181,14 @@ func next_turn(_delta:float) -> bool:
 	
 	return false
 
-func update_enemy_stats_text():
-	var displayed_hp:int = enemy_stats["hp"]
-	var displayed_armor:int = enemy_stats["armor"]
-	var displayed_speed:int = enemy_stats["speed"]
-	var displayed_strength:int = enemy_stats["strength"]
-	var displayed_damage:int = enemy_stats["damage"]
+func update_enemy_stats_text(p_enemy_stats:Dictionary={}):
+	if p_enemy_stats.is_empty():
+		p_enemy_stats = enemy_stats
+	var displayed_hp:int = p_enemy_stats["hp"]
+	var displayed_armor:int = p_enemy_stats["armor"]
+	var displayed_speed:int = p_enemy_stats["speed"]
+	var displayed_strength:int = p_enemy_stats["strength"]
+	var displayed_damage:int = p_enemy_stats["damage"]
 	
 	var hp_rich_text:String = "[color=#992211]HP: %d[/color]"%[displayed_hp]
 	var armor_rich_text:String = "[color=#000099]Armor: %d[/color]"%[displayed_armor]
@@ -195,6 +197,7 @@ func update_enemy_stats_text():
 	var damage_rich_text:String = "[color=#991177]Damage: %d[/color]"%[displayed_damage]
 	var rich_text:String = "%s\n%s\n%s\n%s\n%s"%[hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text]
 	enemy_stats_text.text = rich_text
+	return rich_text
 
 func is_combat_won():
 	var player_hp: int = side_bar.calculated_stats["hp"]

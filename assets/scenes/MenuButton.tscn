@@ -103,8 +103,9 @@ Button/styles/normal = SubResource("StyleBoxFlat_rw8jg")
 Button/styles/pressed = SubResource("StyleBoxFlat_y1jey")
 
 [node name="MenuButton" type="TextureButton" node_paths=PackedStringArray("text_label")]
-offset_right = 450.0
+offset_right = 500.0
 offset_bottom = 200.0
+pivot_offset = Vector2(260, 70)
 theme = SubResource("Theme_7s8vw")
 texture_normal = ExtResource("2_rw8jg")
 texture_pressed = ExtResource("3_y1jey")
@@ -119,6 +120,7 @@ offset_left = 2.0
 offset_top = 19.0
 offset_right = 496.0
 offset_bottom = 143.0
+pivot_offset = Vector2(258, 52)
 mouse_filter = 2
 theme_override_colors/default_color = Color(0.962843, 0.96848, 0.943461, 1)
 theme_override_colors/font_outline_color = Color(0.208474, 0.12222, 0.0282985, 1)

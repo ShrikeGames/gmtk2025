@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://13vrkh5cje81"]
+[gd_scene load_steps=4 format=3 uid="uid://13vrkh5cje81"]
 
 [ext_resource type="Script" uid="uid://dlwbl5fscxd43" path="res://assets/scripts/InventoryItem.gd" id="1_fyl2v"]
 [ext_resource type="Texture2D" uid="uid://b8hybin0su2in" path="res://assets/images/sprite_sheets/Placeholder.png" id="2_ljxqt"]
+[ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="3_ljxqt"]
 
 [node name="InventoryItem" type="Node2D" node_paths=PackedStringArray("icon", "title")]
 script = ExtResource("1_fyl2v")
@@ -9,13 +10,15 @@ icon = NodePath("Icon")
 title = NodePath("Title")
 
 [node name="Icon" type="Sprite2D" parent="."]
-visible = false
 texture = ExtResource("2_ljxqt")
 
 [node name="Title" type="RichTextLabel" parent="."]
-offset_left = -78.0
-offset_top = 26.0
-offset_right = 78.0
-offset_bottom = 86.0
+offset_left = -80.0
+offset_top = -41.0
+offset_right = 81.0
+offset_bottom = 40.0
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("3_ljxqt")
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center]Item Name dsgsdghs[/center]"

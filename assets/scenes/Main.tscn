@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bt7imw50fxqnt"]
+[gd_scene load_steps=7 format=3 uid="uid://bt7imw50fxqnt"]
 
 [ext_resource type="PackedScene" uid="uid://d4ntvwt70klqe" path="res://assets/scenes/WorldMap.tscn" id="1_g3k4f"]
 [ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_jv468"]
 [ext_resource type="PackedScene" uid="uid://s1d3gge1l4g8" path="res://assets/scenes/RewardChoiceScreen.tscn" id="2_npkpr"]
 [ext_resource type="PackedScene" uid="uid://cwu53lei24rcc" path="res://assets/scenes/CombatScreen.tscn" id="3_xt100"]
 [ext_resource type="PackedScene" uid="uid://1bnlxp25oahm" path="res://assets/scenes/SideBar.tscn" id="4_eruk6"]
+[ext_resource type="PackedScene" uid="uid://8hnkag8su81g" path="res://assets/scenes/LoopSplashScreen.tscn" id="6_34wpn"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -12,10 +13,11 @@
 position = Vector2(800, 448)
 texture = ExtResource("1_jv468")
 
-[node name="WorldMap" parent="." node_paths=PackedStringArray("reward_choice_screen", "combat_screen", "side_bar") instance=ExtResource("1_g3k4f")]
+[node name="WorldMap" parent="." node_paths=PackedStringArray("reward_choice_screen", "combat_screen", "loop_splash_screen", "side_bar") instance=ExtResource("1_g3k4f")]
 position = Vector2(0, 100)
 reward_choice_screen = NodePath("../RewardChoiceScreen")
 combat_screen = NodePath("../CombatScreen")
+loop_splash_screen = NodePath("../LoopSplashScreen")
 side_bar = NodePath("../SideBar")
 
 [node name="RewardChoiceScreen" parent="." instance=ExtResource("2_npkpr")]
@@ -27,3 +29,7 @@ side_bar = NodePath("../SideBar")
 world_map = NodePath("../WorldMap")
 
 [node name="SideBar" parent="." instance=ExtResource("4_eruk6")]
+
+[node name="LoopSplashScreen" parent="." instance=ExtResource("6_34wpn")]
+visible = false
+position = Vector2(801, 434)

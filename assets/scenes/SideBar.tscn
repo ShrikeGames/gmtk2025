@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://1bnlxp25oahm"]
+[gd_scene load_steps=6 format=3 uid="uid://1bnlxp25oahm"]
 
 [ext_resource type="Texture2D" uid="uid://bw2ypwe0iq7ym" path="res://assets/images/sprite_sheets/SideBar.png" id="1_a0jhx"]
 [ext_resource type="Script" uid="uid://cxtp6mg1tppl1" path="res://assets/scripts/SideBar.gd" id="1_jfgi3"]
 [ext_resource type="PackedScene" uid="uid://b37icc30y4axi" path="res://assets/scenes/Clock.tscn" id="3_hi5hy"]
+[ext_resource type="PackedScene" uid="uid://bq8mptew7ituj" path="res://assets/scenes/SmallButton.tscn" id="4_y6iej"]
+[ext_resource type="AudioStream" uid="uid://k8ic8ah0kyj6" path="res://assets/audio/pop.wav" id="5_skn44"]
 
 [node name="SideBar" type="Node2D" node_paths=PackedStringArray("stats_text", "inventory_items_node", "clock")]
 script = ExtResource("1_jfgi3")
@@ -31,3 +33,16 @@ position = Vector2(0, 801)
 [node name="Clock" parent="." instance=ExtResource("3_hi5hy")]
 position = Vector2(102, 100)
 scale = Vector2(2, 2)
+
+[node name="Smallbutton" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("4_y6iej")]
+offset_left = 1500.0
+offset_top = 800.0
+offset_right = 1600.0
+offset_bottom = 901.0
+button_text = "QUIT"
+scene_to_change_to = "res://assets/scenes/MainMenu.tscn"
+audio_player = NodePath("../AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_skn44")
+bus = &"SFX"

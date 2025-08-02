@@ -6,6 +6,7 @@ class_name WorldMap
 @export var combat_screen:CombatScreen
 @export var tiles_node:Node2D
 @export var player_image:Sprite2D
+@export var loop_splash_screen:LoopSplashScreen
 
 # map settings
 # TODO allow user to enter one of their own
@@ -43,6 +44,8 @@ var player_position:Vector2i
 
 var fighting_boss:bool = false
 
+var boss_enemy_stats:Dictionary = {}
+
 var HAS_ITEM_CHANCE:float = 0.05
 
 var DIRECTION_NONE:int = 0
@@ -74,14 +77,24 @@ func _on_ready() -> void:
 func init_loop():
 	loop += 1
 	# TODO keep the last reward you got for killing the boss if it was a boss fight
+	var last_reward:Dictionary = {}
+	if rewards.size() > 0:
+		last_reward = rewards[rewards.size()-1]
 	rewards = []
+	
 	fighting_boss = false
 	has_flippers = false
 	has_climbing_gear = false
 	for tile in tiles_node.get_children():
 		tile.queue_free()
+	var inventory_id:int = 0
 	for inventory_item in side_bar.inventory_items_node.get_children():
-		inventory_item.queue_free()
+		if inventory_id == side_bar.inventory_items_node.get_child_count()-1:
+			inventory_item.position.x = 75
+		else:
+			inventory_item.queue_free()
+		inventory_id += 1
+	
 	side_bar.update_stats(self)
 	# Create 2d array of tiles
 	# use rules to generate the different types of tiles
@@ -98,8 +111,23 @@ func init_loop():
 	reward_choice_screen.visible = false
 	combat_screen.visible = false
 	combat_screen.combat_results_screen.visible = false
+	loop_splash_screen.visible=true
+	loop_splash_screen.title_text.text = "[center]Now Starting Loop %d![/center]"%[loop]
+	var base_boss_enemy_stats:Dictionary = {
+		"hp": 50,
+		"armor": 5,
+		"speed": 5,
+		"damage": 5,
+		"strength": 4,
+		"image": "res://assets/images/sprite_sheets/Boss.png"
+	}
+	boss_enemy_stats = generate_enemy_stats(base_boss_enemy_stats, 50*(boss_kills+1))
+	loop_splash_screen.boss_image.texture = load(base_boss_enemy_stats["image"])
+	loop_splash_screen.enemy_stats_text.text = combat_screen.update_enemy_stats_text(boss_enemy_stats)
+	
 	# draw the tiles to the screen around the player
 	update_screen(player_position, side_bar.calculated_stats["vision"])
+	
 
 func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int) -> Array[Array]:
 	var new_map_tiles:Array[Array] = []
@@ -332,6 +360,12 @@ func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_
 	return is_within_distance and is_tile_visible
 
 func _process(delta: float) -> void:
+	if loop_splash_screen.visible:
+		if Input.is_action_just_pressed("Interact"):
+			loop_splash_screen.visible = false
+		else:
+			return
+			
 	if combat_screen.visible:
 		if combat_screen.is_combat_lost():
 			combat_screen.combat_results_screen.results_test.text="[center]Defeat!\nYou were defeated in battle.\nPress the Interact key to restart the loop and try again.[/center]"
@@ -471,22 +505,12 @@ func has_valid_movements():
 func trigger_boss_fight():
 	fighting_boss = true
 	combat_timer = 0
-	# TODO implement
-	var base_enemy_stats:Dictionary = {
-		"hp": 50,
-		"armor": 5,
-		"speed": 5,
-		"damage": 5,
-		"strength": 4,
-		"image": "res://assets/images/sprite_sheets/Boss.png"
-	}
 	var rarities:Array[String] = ["unique"]
 	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
 	var current_map_tile:MapTile = map_tiles[player_position.y][player_position.x]
 	current_map_tile.rewards = reward_choice_screen.generate_rewards_for_tile(rarity)
 	
-	var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 50*(boss_kills+1))
-	combat_screen.start_combat(enemy_stats)
+	combat_screen.start_combat(boss_enemy_stats)
 	combat_screen.visible = true
 	
 
@@ -556,7 +580,7 @@ func give_reward(reward_id:int):
 	else:
 		var inventory_item:InventoryItem = inventory_item_resource.instantiate()
 		var item_name:String = reward_config.get("title", "No Title Found")
-		var icon_path:String = reward_config.get("icon_path", "res://assets/images/sprite_sheets/Placeholder.png")
+		var icon_path:String = reward_config.get("icon_path", "res://assets/images/sprite_sheets/items/default.png")
 		inventory_item.update(icon_path, item_name)
 		side_bar.add_inventory_item(inventory_item)
 	
@@ -564,7 +588,7 @@ func give_reward(reward_id:int):
 	
 	reward_choice_screen.visible = false
 	update_screen(player_position, side_bar.calculated_stats["vision"])
-
+	
 
 func interact_with_item(current_map_tile:MapTile):
 	if current_map_tile.item_id == 0:

@@ -23,7 +23,6 @@ offset_bottom = 390.0
 button_text = "NEW GAME"
 scene_to_change_to = "res://assets/scenes/Main.tscn"
 audio_player = NodePath("../SFX")
-random_rotation_amount = 0.0
 
 [node name="MenuButton2" parent="." node_paths=PackedStringArray("audio_player", "toggle_visiblity_node", "submenu_node") instance=ExtResource("1_vqap6")]
 offset_left = 31.0
@@ -32,7 +31,6 @@ offset_right = 531.0
 offset_bottom = 549.0
 button_text = "SETTINGS"
 audio_player = NodePath("../SFX")
-random_rotation_amount = 0.0
 toggle_visiblity_node = NodePath("../SubMenus/Settings")
 submenu_node = NodePath("../SubMenus")
 
@@ -43,7 +41,6 @@ offset_right = 531.0
 offset_bottom = 707.0
 button_text = "CONTROLS"
 audio_player = NodePath("../SFX")
-random_rotation_amount = 0.0
 toggle_visiblity_node = NodePath("../SubMenus/Controls")
 submenu_node = NodePath("../SubMenus")
 
@@ -54,7 +51,6 @@ offset_right = 531.0
 offset_bottom = 866.0
 button_text = "CREDITS"
 audio_player = NodePath("../SFX")
-random_rotation_amount = 0.0
 toggle_visiblity_node = NodePath("../SubMenus/Credits")
 submenu_node = NodePath("../SubMenus")
 

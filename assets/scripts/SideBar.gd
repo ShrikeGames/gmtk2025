@@ -8,7 +8,7 @@ class_name SideBar
 
 func add_inventory_item(inventory_item:InventoryItem):
 	var x:int = 75 + (inventory_items_node.get_child_count() * 150)
-	var y:int = 40
+	var y:int = 60
 	inventory_item.position = Vector2(x,y)
 	inventory_items_node.add_child(inventory_item)
 
