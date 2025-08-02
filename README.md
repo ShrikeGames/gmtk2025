@@ -51,12 +51,19 @@ Day3:
 Day 4(Plan):
 - Music
 - Sound effects
+- Game title: He Is Looping
+- Tutorial
+ - Show the player
+ - Show the controls
+ - Show the clock
+ - Show the stats
+ - Show the inventory
 - keep adding new items, enemies, loot, etc
 - Add random modifiers to the bosses
 - Have some other benefit to Strength because Speed is so good in comparison
 - Polish and test
- - Partical effects, animations, etc
- - Damage numbers in combat
+ - (Mostly done) Partical effects, animations, etc
+ - (Done) Damage numbers in combat
  - Shaders
   - (Done) https://godotshaders.com/shader/line-jitter-stroke-shake-effect/  In the combat scene
   - (Done) https://godotshaders.com/shader/random-displacement-animation-easy-ui-animation/  Enemies and player on world map
@@ -69,24 +76,17 @@ Day 4(Plan):
  - Intro cutscene
   - Voiced
   - Use animated sprite2d to have basic slides for it?
- - Tutorial
-  - Show the player
-  - Show the controls
-  - Show the clock
-  - Show the stats
-  - Show the inventory
- - Settings menu: Add input box for initial seed
+ - (Done) Settings menu: Add input box for initial seed
  - Settings menu: Add option to skip tutorial
- - Game title: He Is Looping
  - (Done) Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
- - Switch to the faster BGM for the last segement of the timer
+ - (Done) Switch to the faster BGM for the last segement of the timer
  - Have boss react to player fighting them again after the player previously lost
  - Hills colours need to change
  - Add visible grass to the empty tiles
 - Upload to itch as an unlisted game (people watching the stream can play)
 
 Bug:
-- Random damage indcator locations should be more confined to the middle
+- Duplicate rewards are possible
 
 Day 5(Plan):
 - Test and fix issues

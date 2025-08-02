@@ -13,15 +13,15 @@ func add_inventory_item(inventory_item:InventoryItem):
 	inventory_items_node.add_child(inventory_item)
 
 func update_stats(world_map:WorldMap):
-	var displayed_hp:int = world_map.hp
-	var displayed_armor:int = world_map.armor
-	var displayed_armor_regen:int = world_map.armor_regen
-	var displayed_speed:int = world_map.speed
-	var displayed_strength:int = world_map.strength
-	var displayed_damage:int = world_map.damage
-	var displayed_vision:int = world_map.sight_radius
-	var displayed_max_steps:float = world_map.max_steps
-	var displayed_max_speed_bonus_turns_allowed:int = world_map.max_speed_bonus_turns_allowed
+	var displayed_hp:int = Global.hp
+	var displayed_armor:int = Global.armor
+	var displayed_armor_regen:int = Global.armor_regen
+	var displayed_speed:int = Global.speed
+	var displayed_strength:int = Global.strength
+	var displayed_damage:int = Global.damage
+	var displayed_vision:int = Global.sight_radius
+	var displayed_max_steps:float = Global.max_steps
+	var displayed_max_speed_bonus_turns_allowed:int = Global.max_speed_bonus_turns_allowed
 	for reward_config in world_map.rewards:
 		var reward_type:String = reward_config.get("type", "consumable")
 		if reward_type != "item":
@@ -99,4 +99,4 @@ func update_stats(world_map:WorldMap):
 	
 	stats_text.text = rich_text
 	
-	clock.clock_hand.rotation_degrees = 360 - (360 * (world_map.steps / world_map.max_steps))
+	clock.clock_hand.rotation_degrees = 360 - (360 * (world_map.steps / Global.max_steps))

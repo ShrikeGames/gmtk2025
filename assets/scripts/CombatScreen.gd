@@ -87,7 +87,7 @@ func next_turn(_delta:float) -> bool:
 									player_hp += side_bar.calculated_stats["damage"]
 							else:
 								player_hp += randi_range(stat_modifier["min_amount"], stat_modifier["max_amount"])
-							world_map.hp = player_hp
+							Global.hp = player_hp
 							combat_log_text.text += "The player healed!\n"
 		var total_damage:int = 	base_damage + int(strength*strength_damage_modifier) + bonus_damage
 		# deal the damage first to armor
@@ -105,8 +105,8 @@ func next_turn(_delta:float) -> bool:
 			enemy_hp -= total_damage
 		
 		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
-		damage_indicator.position.x = randf_range(850, 1550)
-		damage_indicator.position.y = randf_range(300, 600)
+		damage_indicator.position.x = randf_range(850, 950)
+		damage_indicator.position.y = randf_range(400, 500)
 		damage_indicator.damage_text.text = "[center]-%s[/center]"%[total_damage]
 		add_child(damage_indicator)
 		
@@ -134,7 +134,7 @@ func next_turn(_delta:float) -> bool:
 			var armor_before:int = player_armor
 			player_armor = max(0, player_armor-total_damage)
 			total_damage =  max(0, total_damage-armor_before)
-			world_map.armor = player_armor
+			Global.armor = player_armor
 			
 		var thorns_damage:int = 0
 		for reward_config in world_map.rewards:
@@ -172,8 +172,8 @@ func next_turn(_delta:float) -> bool:
 			combat_log_text.text += "Enemy deals %d damage!\n"%[total_damage]
 		
 		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
-		damage_indicator.position.x = randf_range(50, 750)
-		damage_indicator.position.y = randf_range(300, 600)
+		damage_indicator.position.x = randf_range(650, 750)
+		damage_indicator.position.y = randf_range(400, 500)
 		damage_indicator.damage_text.text = "[center]-%s[/center]"%[total_damage]
 		add_child(damage_indicator)
 		
@@ -182,11 +182,11 @@ func next_turn(_delta:float) -> bool:
 			combat_log_text.text += "The Enemy takes %d thorn damage!\n"%[thorns_damage]
 			enemy_stats["hp"] = enemy_hp
 			var thorns_damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
-			thorns_damage_indicator.position.x = randf_range(850, 1550)
-			thorns_damage_indicator.position.y = randf_range(300, 600)
+			thorns_damage_indicator.position.x = randf_range(850, 950)
+			thorns_damage_indicator.position.y = randf_range(400, 500)
 			thorns_damage_indicator.damage_text.text = "[center]-%s[/center]"%[thorns_damage]
 			add_child(thorns_damage_indicator)
-		world_map.hp = player_hp
+		Global.hp = player_hp
 		
 		# reduce their speed
 		enemy_speed -= player_speed
@@ -195,7 +195,7 @@ func next_turn(_delta:float) -> bool:
 	update_enemy_stats_text()
 	if is_combat_won() or is_combat_lost():
 		combat_results_screen.visible = true
-		world_map.armor += side_bar.calculated_stats["armor_regen"]
+		Global.armor += side_bar.calculated_stats["armor_regen"]
 		return true
 	
 	return false

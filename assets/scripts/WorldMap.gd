@@ -20,18 +20,8 @@ var spread_range:int = 2
 var number_of_random_seed_points:int = 40
 # stats
 @export var side_bar:SideBar
-@export var hp:int = 12
-@export var armor:int = 0
-@export var armor_regen:int = 0
-@export var speed:int = 3
-@export var strength:int = 1
-@export var damage:int = 1
-@export var sight_radius:int = 4
-@export var max_steps:float = 99
 @export var steps:float = 99
 var play_faster_music:bool = false
-@export var has_flippers:bool = false
-@export var has_climbing_gear:bool = false
 
 @export var number_of_enemies:int = 10
 var last_selected_reward_id:int
@@ -68,7 +58,7 @@ var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_
 
 var combat_timer:float
 var combat_auto_timer:float = 1.5
-var max_speed_bonus_turns_allowed:int = 2
+
 var time_since_selected_reward:float
 var time_to_wait_before_closing_reward_screen:float = 1.5
 
@@ -83,14 +73,14 @@ func init_loop():
 		last_reward = rewards[rewards.size()-1]
 		var special:String = last_reward.get("special", "")
 		if special == "flippers":
-			has_flippers = true
+			Global.has_flippers = true
 		elif special == "climbing_gear":
-			has_climbing_gear = true
+			Global.has_climbing_gear = true
 	rewards = []
 	last_selected_reward_id = -1
 	fighting_boss = false
-	has_flippers = false
-	has_climbing_gear = false
+	Global.has_flippers = false
+	Global.has_climbing_gear = false
 	for tile in tiles_node.get_children():
 		tile.queue_free()
 	var inventory_id:int = 0
@@ -110,9 +100,9 @@ func init_loop():
 	var starting_x:int = int(map_width*0.5)
 	var starting_y:int = int(map_height*0.5)
 	player_position = Vector2i(starting_x, starting_y)
-	if hp < 12:
-		hp = 12
-	max_steps = 99
+	if Global.hp < 12:
+		Global.hp = 12
+	Global.max_steps = 99
 	steps = 99
 	if play_faster_music:
 		faster_music.stop()
@@ -344,7 +334,7 @@ func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_
 	var players_tile:MapTile = map_tiles[p_player_position.y][p_player_position.x]
 	if distance <2 and players_tile.type == TILE_FOREST:
 		return true
-	if distance <= sight_radius+2 and players_tile.type == TILE_WALL:
+	if distance <= Global.sight_radius+2 and players_tile.type == TILE_WALL:
 		return true
 	if distance <= 1:
 		return true
@@ -405,7 +395,7 @@ func _process(delta: float) -> void:
 			combat_screen.combat_results_screen.visible=true
 			combat_screen.combat_results_screen.combat_type = "Victory"
 			
-	if hp <= 0:
+	if Global.hp <= 0:
 		if combat_screen.visible and combat_screen.combat_results_screen.visible and combat_screen.is_combat_lost():
 			if Input.is_action_just_pressed("Interact"):
 				# TODO lost combat so restart the loop
@@ -441,7 +431,7 @@ func _process(delta: float) -> void:
 				combat_screen.visible = false
 				show_reward_choice_screen()
 		return
-	if steps >=0 and steps <= max_steps * 0.25 and not play_faster_music:
+	if steps >=0 and steps <= Global.max_steps * 0.25 and not play_faster_music:
 		regular_music.stop()
 		faster_music.play()
 		play_faster_music = true
@@ -518,6 +508,7 @@ func _process(delta: float) -> void:
 				randomize()
 				Global.rng_seed = "%d"%[randi()]
 				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 		elif Input.is_action_just_pressed("Option2"):
 			give_reward(1)
@@ -525,6 +516,7 @@ func _process(delta: float) -> void:
 				randomize()
 				Global.rng_seed = "%d"%[randi()]
 				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 		elif Input.is_action_just_pressed("Option3"):
 			give_reward(2)
@@ -532,6 +524,7 @@ func _process(delta: float) -> void:
 				randomize()
 				Global.rng_seed = "%d"%[randi()]
 				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 		elif Input.is_action_just_pressed("Undo"):
 			# if they don't take any of the rewards from the boss still have to restart loop
@@ -539,6 +532,7 @@ func _process(delta: float) -> void:
 				randomize()
 				Global.rng_seed = "%d"%[randi()]
 				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 	
 	if Input.is_action_just_pressed("Undo"):
@@ -560,9 +554,9 @@ func has_valid_movements():
 				if map_tile.walkable:
 					return true
 				else:
-					if map_tile.type == TILE_WATER and has_flippers:
+					if map_tile.type == TILE_WATER and Global.has_flippers:
 						return true
-					elif map_tile.type == TILE_WALL and has_climbing_gear:
+					elif map_tile.type == TILE_WALL and Global.has_climbing_gear:
 						return true
 						
 	
@@ -590,10 +584,10 @@ func give_reward(reward_id:int):
 	var reward_type:String = reward_config.get("type", "consumable")
 	var special:String = reward_config.get("special", "")
 	if special == "flippers":
-		has_flippers = true
+		Global.has_flippers = true
 		reward_choice_screen.reward_options.erase("flippers")
 	elif special == "climbing_gear":
-		has_climbing_gear = true
+		Global.has_climbing_gear = true
 		reward_choice_screen.reward_options.erase("climbing_gear")
 	if reward_type == "consumable":
 		var stats_affected:Array = reward_config.get("stats", [])
@@ -608,42 +602,42 @@ func give_reward(reward_id:int):
 			if stat_name != "":
 				if type == "modify":
 					if stat_name == "vision":
-						sight_radius = max(1, sight_radius+amount)
+						Global.sight_radius = max(1, Global.sight_radius+amount)
 					elif stat_name == "hp":
-						hp = max(1, hp+amount)
+						Global.hp = max(1, Global.hp+amount)
 					elif stat_name == "armor":
-						armor = max(0, armor+amount)
+						Global.armor = max(0, Global.armor+amount)
 					elif stat_name == "armor_regen":
-						armor_regen = max(0, armor_regen+amount)
+						Global.armor_regen = max(0, Global.armor_regen+amount)
 					elif stat_name == "speed":
-						speed = max(0, speed+amount)
+						Global.speed = max(0, Global.speed+amount)
 					elif stat_name == "strength":
-						strength = max(0, strength+amount)
+						Global.strength = max(0, Global.strength+amount)
 					elif stat_name == "damage":
-						damage = max(0, damage+amount)
+						Global.damage = max(0, Global.damage+amount)
 					elif stat_name == "steps":
 						steps = max(0, steps+amount)
 					elif stat_name == "max_steps":
-						max_steps = max(0, max_steps+amount)
+						Global.max_steps = max(0, Global.max_steps+amount)
 				elif type == "set":
 					if stat_name == "vision":
-						sight_radius = amount
+						Global.sight_radius = amount
 					elif stat_name == "hp":
-						hp = amount
+						Global.hp = amount
 					elif stat_name == "armor":
-						armor = amount
+						Global.armor = amount
 					elif stat_name == "armor_regen":
-						armor_regen = amount
+						Global.armor_regen = amount
 					elif stat_name == "speed":
-						speed = amount
+						Global.speed = amount
 					elif stat_name == "strength":
-						strength = amount
+						Global.strength = amount
 					elif stat_name == "damage":
-						damage = amount
+						Global.damage = amount
 					elif stat_name == "steps":
 						steps = amount
 					elif stat_name == "max_steps":
-						max_steps = amount
+						Global.max_steps = amount
 	else:
 		var inventory_item:InventoryItem = inventory_item_resource.instantiate()
 		var item_name:String = reward_config.get("title", "No Title Found")
@@ -694,9 +688,9 @@ func show_reward_choice_screen():
 
 func is_walkable(validated_target_position:Vector2i) -> bool:
 	var map_tile:MapTile = map_tiles[validated_target_position.y][validated_target_position.x]
-	if map_tile.type == TILE_WATER and has_flippers:
+	if map_tile.type == TILE_WATER and Global.has_flippers:
 		return true
-	if map_tile.type == TILE_WALL and has_climbing_gear:
+	if map_tile.type == TILE_WALL and Global.has_climbing_gear:
 		return true
 	return map_tile.walkable 
 
