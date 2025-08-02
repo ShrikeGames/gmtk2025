@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="2_rl7wx"]
 [ext_resource type="Material" uid="uid://b8ajys078ps6h" path="res://assets/materials/OrangeDotBackground.tres" id="3_6a8kj"]
 [ext_resource type="Texture2D" uid="uid://cdmt8xvi7m4rn" path="res://assets/images/sprite_sheets/Boss.png" id="3_n2e5i"]
-[ext_resource type="Material" uid="uid://b6matpqrnupp4" path="res://assets/materials/LineJitter.tres" id="4_n2e5i"]
+[ext_resource type="Material" uid="uid://bxyvfumh2bogg" path="res://assets/materials/LineJitter2.tres" id="5_6a8kj"]
 
 [node name="LoopSplashScreen" type="Node2D" node_paths=PackedStringArray("title_text", "boss_image", "enemy_stats_text")]
 script = ExtResource("1_rl7wx")
@@ -46,7 +46,7 @@ bbcode_enabled = true
 text = "[center]At the end of this loop you will face a fearsome foe. Prepare yourself![/center]"
 
 [node name="Boss" type="Sprite2D" parent="."]
-material = ExtResource("4_n2e5i")
+material = ExtResource("5_6a8kj")
 position = Vector2(150, 145)
 texture = ExtResource("3_n2e5i")
 
@@ -74,5 +74,5 @@ offset_bottom = 799.0
 theme_override_fonts/normal_font = ExtResource("2_rl7wx")
 theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true
-text = "[center]Press the interact key to continue![/center]
+text = "[center]Press the Interact key to continue![/center]
 "

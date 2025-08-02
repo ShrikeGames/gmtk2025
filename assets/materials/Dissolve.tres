@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://usiuuksioadc"]
+
+[ext_resource type="Shader" uid="uid://bdk685k72j0uq" path="res://assets/shaders/Dissolve.gdshader" id="1_xkink"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xkink")
+shader_parameter/progress = 0.0
+shader_parameter/texture_size = Vector2(500, 500)
+shader_parameter/float_dist = 50.0
+shader_parameter/progress_rand_range = 0.5

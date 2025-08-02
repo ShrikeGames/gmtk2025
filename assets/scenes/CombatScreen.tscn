@@ -1,25 +1,29 @@
-[gd_scene load_steps=7 format=3 uid="uid://cwu53lei24rcc"]
+[gd_scene load_steps=9 format=3 uid="uid://cwu53lei24rcc"]
 
 [ext_resource type="Script" uid="uid://cr3daolm7owls" path="res://assets/scripts/CombatScreen.gd" id="1_hyrab"]
 [ext_resource type="Texture2D" uid="uid://w86580n0nh7d" path="res://assets/images/sprite_sheets/CombatScreen.png" id="1_sgd6i"]
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
 [ext_resource type="Material" uid="uid://b6matpqrnupp4" path="res://assets/materials/LineJitter.tres" id="3_d7v03"]
+[ext_resource type="Material" uid="uid://bxyvfumh2bogg" path="res://assets/materials/LineJitter2.tres" id="3_yup8o"]
 [ext_resource type="Texture2D" uid="uid://lc1yhfq53t2o" path="res://assets/images/sprite_sheets/Enemy0.png" id="5_d7v03"]
 [ext_resource type="PackedScene" uid="uid://jbesfgssc7u0" path="res://assets/scenes/CombatResults.tscn" id="5_srylc"]
+[ext_resource type="AudioStream" uid="uid://dhqq71grbfgym" path="res://assets/audio/bonk.wav" id="7_a3elk"]
 
-[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text", "combat_results_screen", "enemy_sprite")]
+[node name="CombatScreen" type="Node2D" node_paths=PackedStringArray("enemy_stats_text", "combat_log_text", "combat_results_screen", "player_sprite", "enemy_sprite", "hit_sfx")]
 script = ExtResource("1_hyrab")
 enemy_stats_text = NodePath("EnemyStatsText")
 combat_log_text = NodePath("CombatLogText")
 combat_results_screen = NodePath("CombatResults")
+player_sprite = NodePath("Player")
 enemy_sprite = NodePath("Enemy0")
+hit_sfx = NodePath("hit_sfx")
 
 [node name="CombatScreen" type="Sprite2D" parent="."]
 position = Vector2(800, 450)
 texture = ExtResource("1_sgd6i")
 
 [node name="Player" type="Sprite2D" parent="."]
-material = ExtResource("3_d7v03")
+material = ExtResource("3_yup8o")
 position = Vector2(434, 356)
 scale = Vector2(0.899, 0.899)
 texture = ExtResource("3_bogmt")
@@ -63,3 +67,7 @@ texture = ExtResource("5_d7v03")
 
 [node name="CombatResults" parent="." instance=ExtResource("5_srylc")]
 visible = false
+
+[node name="hit_sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_a3elk")
+bus = &"SFX"

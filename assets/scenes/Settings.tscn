@@ -62,12 +62,14 @@ size_flags_horizontal = 3
 value = 50.0
 
 [node name="Label4" type="Label" parent="AudoSliders"]
+visible = false
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_invxw")
 theme_override_font_sizes/font_size = 32
 text = "Voice Volume"
 
 [node name="Slider4" type="HSlider" parent="AudoSliders"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 value = 50.0

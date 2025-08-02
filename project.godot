@@ -10,7 +10,9 @@ config_version=5
 
 [application]
 
-config/name="GMTK 2025 LOOP"
+config/name="HE IS LOOPING (GMTK2025)"
+config/description="A roguelite focused around exploring and building up your hero through RPG progression mechanics and then fighting a boss at the end of each loop."
+config/version="1.0"
 run/main_scene="uid://dg7fw1pgaowfx"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/image="uid://ctwvjs6spgk1r"

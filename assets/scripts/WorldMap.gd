@@ -2,6 +2,7 @@ extends Node2D
 
 class_name WorldMap
 
+@export var tutorial_scene:TutorialScene
 @export var reward_choice_screen:RewardChoiceScreen
 @export var combat_screen:CombatScreen
 @export var tiles_node:Node2D
@@ -9,6 +10,9 @@ class_name WorldMap
 @export var loop_splash_screen:LoopSplashScreen
 @export var regular_music:AudioStreamPlayer
 @export var faster_music:AudioStreamPlayer
+@export var boss_music:AudioStreamPlayer
+@export var accept_reward_sfx:AudioStreamPlayer
+@export var clock_sfx:AudioStreamPlayer
 
 # map settings
 # TODO allow user to enter one of their own
@@ -22,6 +26,7 @@ var number_of_random_seed_points:int = 40
 @export var side_bar:SideBar
 @export var steps:float = 99
 var play_faster_music:bool = false
+var play_boss_music:bool = false
 
 @export var number_of_enemies:int = 10
 var last_selected_reward_id:int
@@ -61,9 +66,17 @@ var combat_auto_timer:float = 1.5
 
 var time_since_selected_reward:float
 var time_to_wait_before_closing_reward_screen:float = 1.5
+var current_tutorial_index:int = 0
+
+var enemy_sprite_death_progress:float = 0.0
+
 
 func _on_ready() -> void:
 	seed(Global.rng_seed.hash())
+	if not Global.completed_tutorial:
+		tutorial_scene.tutorials[0].visible = true
+		tutorial_scene.visible = true
+	
 	init_loop()
 
 func init_loop():
@@ -104,11 +117,13 @@ func init_loop():
 		Global.hp = 12
 	Global.max_steps = 99
 	steps = 99
-	if play_faster_music:
+	if play_faster_music or play_boss_music:
 		faster_music.stop()
+		boss_music.stop()
 		regular_music.play()
 		
 	play_faster_music = false
+	play_boss_music = false
 	reward_choice_screen.visible = false
 	for reward_card in reward_choice_screen.reward_cards:
 		reward_card.reset()
@@ -378,12 +393,31 @@ func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_
 
 func _process(delta: float) -> void:
 	
+	if tutorial_scene.visible:
+		if Input.is_action_just_pressed("Interact"):
+			current_tutorial_index += 1
+			if current_tutorial_index >= tutorial_scene.tutorials.size():
+				tutorial_scene.visible = false
+				Global.completed_tutorial = true
+			else:
+				tutorial_scene.tutorials[current_tutorial_index-1].visible=false
+				tutorial_scene.tutorials[current_tutorial_index].visible=true
+				
+		return
+	
+	if fighting_boss and not play_boss_music:
+		regular_music.stop()
+		faster_music.stop()
+		boss_music.play()
+		play_faster_music = false
+		play_boss_music = true
+	
 	if loop_splash_screen.visible:
 		if Input.is_action_just_pressed("Interact"):
 			loop_splash_screen.visible = false
 		else:
 			return
-			
+	
 	if combat_screen.visible:
 		if combat_screen.is_combat_lost():
 			combat_screen.combat_results_screen.results_test.text="[center]Defeat!\nYou were defeated in battle.\nPress the Interact key to restart the loop and try again.[/center]"
@@ -394,6 +428,9 @@ func _process(delta: float) -> void:
 			combat_screen.combat_results_screen.results_test.text="[center]Victory!\nYou were victorious in battle.\nPress the Interact key to claim your reward.[/center]"
 			combat_screen.combat_results_screen.visible=true
 			combat_screen.combat_results_screen.combat_type = "Victory"
+			combat_screen.enemy_sprite.get_material().set_shader_parameter("shaking", false)
+			enemy_sprite_death_progress = min(enemy_sprite_death_progress+delta, 1.0)
+			combat_screen.enemy_sprite.get_material().set_shader_parameter("progress", enemy_sprite_death_progress)
 			
 	if Global.hp <= 0:
 		if combat_screen.visible and combat_screen.combat_results_screen.visible and combat_screen.is_combat_lost():
@@ -431,9 +468,11 @@ func _process(delta: float) -> void:
 				combat_screen.visible = false
 				show_reward_choice_screen()
 		return
-	if steps >=0 and steps <= Global.max_steps * 0.25 and not play_faster_music:
+	if steps >=0 and steps <= Global.max_steps * 0.25 and not play_faster_music and not play_boss_music:
 		regular_music.stop()
+		boss_music.stop()
 		faster_music.play()
+		play_boss_music = false
 		play_faster_music = true
 		
 	if not reward_choice_screen.visible and steps > 0:
@@ -471,6 +510,7 @@ func _process(delta: float) -> void:
 			var current_map_tile:MapTile = map_tiles[validated_target_position.y][validated_target_position.x]
 			if moved and steps >= current_map_tile.step_cost and is_walkable(validated_target_position):
 				steps -= current_map_tile.step_cost
+				clock_sfx.play()
 				player_position = validated_target_position
 				# check the tile we walked onto
 				# if it has an item, remove the item and gain effect based on the item
@@ -565,6 +605,8 @@ func has_valid_movements():
 func trigger_boss_fight():
 	fighting_boss = true
 	combat_timer = 0
+	enemy_sprite_death_progress = 0
+	combat_screen.enemy_sprite.get_material().set_shader_parameter("shaking", true)
 	var rarities:Array[String] = ["unique"]
 	var rarity:String = rarities[randi_range(0, rarities.size()-1)]
 	var current_map_tile:MapTile = map_tiles[player_position.y][player_position.x]
@@ -652,6 +694,7 @@ func give_reward(reward_id:int):
 			other_reward_card.burn(i)
 		i += 1
 	
+	accept_reward_sfx.play()
 	update_screen(player_position, side_bar.calculated_stats["vision"])
 	
 
@@ -674,6 +717,9 @@ func interact_with_item(current_map_tile:MapTile):
 func start_random_combat(current_map_tile:MapTile):
 	# show the combat screen
 	combat_timer = 0
+	enemy_sprite_death_progress = 0
+	combat_screen.enemy_sprite.get_material().set_shader_parameter("shaking", true)
+	
 	var enemy_stats:Dictionary = current_map_tile.enemy_stats
 	combat_screen.start_combat(enemy_stats)
 	current_map_tile.item_id = -1

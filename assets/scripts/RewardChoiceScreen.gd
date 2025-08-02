@@ -480,10 +480,15 @@ var reward_options:Dictionary = {
 	"legendary": {
 		"thorns_armor": {
 			"title": "Thorns Armor",
-			"description": "This armor is covered in thorns! Enemies take damage equal to your [color=#000099]Armor[/color] when you get hit.",
+			"description": "This armor is covered in thorns giving 5 [color=#000099]Armor[/color]! Enemies take damage equal to your [color=#000099]Armor[/color] when you get hit.",
 			"type": "item",
 			"color": "000099",
-			"stats": [],
+			"stats": [{
+				"name": "armor",
+				"type": "modify",
+				"min_amount": 5,
+				"max_amount": 5
+			}],
 			"combat_effects": [
 				{
 					"damage": {

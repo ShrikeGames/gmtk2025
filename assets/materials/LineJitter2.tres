@@ -1,10 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b6matpqrnupp4"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bxyvfumh2bogg"]
 
-[ext_resource type="Shader" uid="uid://cktrlm517x0a6" path="res://assets/shaders/LineJitter.gdshader" id="1_cu1d1"]
+[ext_resource type="Shader" uid="uid://dhih8ii5wt438" path="res://assets/shaders/LineJitter2.gdshader" id="1_qg5bm"]
 
 [resource]
 resource_local_to_scene = true
-shader = ExtResource("1_cu1d1")
+shader = ExtResource("1_qg5bm")
 shader_parameter/shaking = true
 shader_parameter/amplitude = 1.0
 shader_parameter/noise_scale = 20.0

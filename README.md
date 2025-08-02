@@ -50,11 +50,11 @@ Day3:
 
 Day 4(Plan):
 - Music
-- Sound effects
-- Game title: He Is Looping
-- Tutorial
+- (Done enough) Sound effects
+- (Done) Game title: He Is Looping
+- (Done well enough) Tutorial
  - Show the player
- - Show the controls
+ - (did not include) Show the controls
  - Show the clock
  - Show the stats
  - Show the inventory
@@ -70,12 +70,9 @@ Day 4(Plan):
   - https://godotshaders.com/shader/universal-transition-shader/ Switching between main menu and game
   - (Done) https://godotshaders.com/shader/moving-circles-effect-with-size-depending-on-a-gradient/ Background of reward screen and main menu?
   - (Done) https://godotshaders.com/shader/2dradial-shine-2/ When picking rewards
-  - https://godotshaders.com/shader/2d-vertical-pixel-dissolving-wave/ death animation in combat scene?
+  - (Done for enemies) https://godotshaders.com/shader/2d-vertical-pixel-dissolving-wave/ death animation in combat scene?
   - (Done) https://godotshaders.com/shader/2d-burn-dissolve-from-point-v-1-0/ burn the rewards not taken?
  - (Done) Line of Sight have previously discovered tiles just faded out not invisible
- - Intro cutscene
-  - Voiced
-  - Use animated sprite2d to have basic slides for it?
  - (Done) Settings menu: Add input box for initial seed
  - Settings menu: Add option to skip tutorial
  - (Done) Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
@@ -101,6 +98,9 @@ Stretch goals:
 	EG: Enemies are invisible, you cannot see them so have to memorize their locations when you learn of them
 - Have items that can perma change the terrain or other effects
 - Dynamic enemy art by mashing together body part images based on their stats
-- Save/load progress
+- (Done mostly) Save/load progress
 - Mouse controls for game
 - Some way to see what your current items do after you have them in your rewards inventory
+- Intro cutscene
+ - Voiced
+ - Use animated sprite2d to have basic slides for it?

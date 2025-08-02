@@ -1,0 +1,134 @@
+[gd_scene load_steps=14 format=3 uid="uid://c78pbuil24tla"]
+
+[ext_resource type="Script" uid="uid://db7glkuj51inj" path="res://assets/scripts/TutorialScene.gd" id="1_d55au"]
+[ext_resource type="Texture2D" uid="uid://c0i1lm7fn7hf4" path="res://assets/images/sprite_sheets/Tutorial0.png" id="1_tni1s"]
+[ext_resource type="Texture2D" uid="uid://cejwbyri268kl" path="res://assets/images/sprite_sheets/MapTile9.png" id="2_jwyw1"]
+[ext_resource type="Texture2D" uid="uid://cdmt8xvi7m4rn" path="res://assets/images/sprite_sheets/Boss.png" id="3_3hnf2"]
+[ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="3_16cc3"]
+[ext_resource type="Texture2D" uid="uid://dmhtsll8mjw3f" path="res://assets/images/sprite_sheets/Tutorial1.png" id="4_3hnf2"]
+[ext_resource type="Texture2D" uid="uid://btn1enkom5bem" path="res://assets/images/sprite_sheets/Item1.png" id="4_otebe"]
+[ext_resource type="Texture2D" uid="uid://cwnpkpp2q3xev" path="res://assets/images/sprite_sheets/Item0.png" id="5_7us37"]
+[ext_resource type="Texture2D" uid="uid://13818k87tcsr" path="res://assets/images/sprite_sheets/MapTile5.png" id="8_rgon2"]
+[ext_resource type="Texture2D" uid="uid://cuj5uso86shid" path="res://assets/images/sprite_sheets/MapTile3.png" id="9_d55au"]
+[ext_resource type="Texture2D" uid="uid://24dhf1pl8qrh" path="res://assets/images/sprite_sheets/MapTile4.png" id="10_6fth0"]
+[ext_resource type="Texture2D" uid="uid://c3f5l764vu5eo" path="res://assets/images/sprite_sheets/MapTile2.png" id="11_a3asb"]
+[ext_resource type="Texture2D" uid="uid://c6r68rha8wo5h" path="res://assets/images/sprite_sheets/MapTile1.png" id="12_pv6iv"]
+
+[node name="TutorialScene" type="Node2D" node_paths=PackedStringArray("tutorials")]
+script = ExtResource("1_d55au")
+tutorials = [NodePath("Tutorial0"), NodePath("Tutorial1"), NodePath("Tutorial2")]
+
+[node name="Tutorial0" type="Node2D" parent="."]
+visible = false
+
+[node name="Tutorial3" type="Sprite2D" parent="Tutorial0"]
+position = Vector2(800, 450)
+texture = ExtResource("1_tni1s")
+
+[node name="MapTile9" type="Sprite2D" parent="Tutorial0"]
+position = Vector2(831, 236)
+texture = ExtResource("2_jwyw1")
+
+[node name="Boss" type="Sprite2D" parent="Tutorial0"]
+position = Vector2(1053, 293.5)
+scale = Vector2(0.33, 0.33)
+texture = ExtResource("3_3hnf2")
+
+[node name="Item1" type="Sprite2D" parent="Tutorial0"]
+position = Vector2(692, 429.5)
+texture = ExtResource("4_otebe")
+
+[node name="Item0" type="Sprite2D" parent="Tutorial0"]
+position = Vector2(1059, 383.5)
+texture = ExtResource("5_7us37")
+
+[node name="TutorialText" type="RichTextLabel" parent="Tutorial0"]
+offset_left = 360.0
+offset_top = 157.0
+offset_right = 1261.0
+offset_bottom = 742.0
+scale = Vector2(0.978495, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("3_16cc3")
+theme_override_font_sizes/normal_font_size = 34
+bbcode_enabled = true
+text = "[center]Tutorial[/center]
+You are the Golden Knight:
+
+You must prepare yourself to defeat the boss by exploring the land and collecting chests        , defeating minions        of the boss, and powering yourself up.
+
+Potions are permanent, but all but 1 item will be lost upon death or victory against the boss.
+[center]Press the Interact key (E/Enter) to continue.[/center]"
+scroll_active = false
+
+[node name="Tutorial1" type="Node2D" parent="."]
+visible = false
+
+[node name="Tutorial1" type="Sprite2D" parent="Tutorial1"]
+position = Vector2(800, 450)
+texture = ExtResource("4_3hnf2")
+
+[node name="TutorialText" type="RichTextLabel" parent="Tutorial1"]
+offset_left = 360.0
+offset_top = 157.0
+offset_right = 1234.0
+offset_bottom = 742.0
+scale = Vector2(1.00261, 0.996211)
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("3_16cc3")
+theme_override_font_sizes/normal_font_size = 34
+bbcode_enabled = true
+text = "[center]Tutorial[/center]
+You have a variety of stats that represent your power level shown at the top of the screen.
+[color=#992211]HP[/color] is your health when they reach 0 you will die and repeat the loop again. 
+[color=#000099]Armor[/color] reduces the damage you take.
+[color=#119911]Speed[/color] determines who goes first, and if you sufficiently outspeed the enemy you will get bonus attacks.
+The rest you'll figure out for yourself.
+[center]Press the Interact key (E/Enter) to continue.[/center]"
+scroll_active = false
+
+[node name="Tutorial2" type="Node2D" parent="."]
+visible = false
+
+[node name="Tutorial3" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(800, 450)
+texture = ExtResource("1_tni1s")
+
+[node name="TutorialText" type="RichTextLabel" parent="Tutorial2"]
+offset_left = 360.0
+offset_top = 157.0
+offset_right = 1234.0
+offset_bottom = 742.0
+scale = Vector2(1.00261, 0.996211)
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("3_16cc3")
+theme_override_font_sizes/normal_font_size = 34
+bbcode_enabled = true
+text = "[center]Tutorial[/center]
+The top left shows the clock and how much time you have remaining until you are attacked by the Boss.
+
+Each step you take consumes some amount of time depending on the terrain.
+
+Roads         consume very little time, hills        and forests         consume more, and you cannot cross water        or mountains          without special items!
+[center]Press the Interact key (E/Enter) to begin![/center]"
+scroll_active = false
+
+[node name="MapTile5" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(505, 535)
+texture = ExtResource("8_rgon2")
+
+[node name="MapTile3" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(1049, 537)
+texture = ExtResource("9_d55au")
+
+[node name="MapTile4" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(506, 588)
+texture = ExtResource("10_6fth0")
+
+[node name="MapTile2" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(488, 641)
+texture = ExtResource("11_a3asb")
+
+[node name="MapTile1" type="Sprite2D" parent="Tutorial2"]
+position = Vector2(774, 636)
+texture = ExtResource("12_pv6iv")

@@ -20,6 +20,7 @@ var max_steps:float = 99
 var max_speed_bonus_turns_allowed:int = 2
 var has_flippers:bool = false
 var has_climbing_gear:bool = false
+var completed_tutorial:bool = false
 
 
 func read_json(path: String) -> Dictionary:
@@ -43,6 +44,7 @@ func load_settings():
 	rng_seed = config_json.get("rng_seed", rng_seed)
 	boss_kills = config_json.get("boss_kills", boss_kills)
 	loop = config_json.get("loop", loop)
+	completed_tutorial = config_json.get("completed_tutorial", completed_tutorial)
 	
 	hp = config_json.get("hp", hp)
 	armor = config_json.get("armor", armor)
@@ -56,6 +58,7 @@ func load_settings():
 	has_flippers = config_json.get("has_flippers", has_flippers)
 	has_climbing_gear = config_json.get("has_climbing_gear", has_climbing_gear)
 	
+	
 func save_settings():
 	var config_json: Dictionary = read_json(settings_config_location)
 	# audio sliders 0.0 - 100.0
@@ -67,6 +70,8 @@ func save_settings():
 	config_json["rng_seed"] = rng_seed
 	config_json["boss_kills"] = boss_kills
 	config_json["loop"] = loop
+	
+	config_json["completed_tutorial"] = completed_tutorial
 	
 	config_json["hp"] = hp
 	config_json["armor"] = armor

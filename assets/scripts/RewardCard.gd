@@ -48,6 +48,7 @@ func display_random_choice(reward_options:Dictionary, rarity:String, rarity_coun
 	title_text.text = title_rich_text
 	description_text.text = description_rich_text
 	rarity_text.text = rarity_rich_text
+	reset()
 	
 	# we have used it so remove from potential rewards of the other cards
 	reward_options.erase(random_option_key)

@@ -7,7 +7,10 @@ class_name CombatScreen
 @export var enemy_stats_text:RichTextLabel
 @export var combat_log_text:RichTextLabel
 @export var combat_results_screen:CombatResults
+@export var player_sprite:Sprite2D
 @export var enemy_sprite:Sprite2D
+@export var hit_sfx:AudioStreamPlayer
+
 var damage_indicator_resource:Resource = load("res://assets/scenes/DamageIndicator.tscn")
 var turn:int
 var enemy_stats:Dictionary
@@ -103,6 +106,7 @@ func next_turn(_delta:float) -> bool:
 		if total_damage > 0:
 			combat_log_text.text += "Player deals %d damage!\n"%[total_damage]
 			enemy_hp -= total_damage
+			hit_sfx.play()
 		
 		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
 		damage_indicator.position.x = randf_range(850, 950)
@@ -169,6 +173,7 @@ func next_turn(_delta:float) -> bool:
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			player_hp -= total_damage
+			hit_sfx.play()
 			combat_log_text.text += "Enemy deals %d damage!\n"%[total_damage]
 		
 		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
