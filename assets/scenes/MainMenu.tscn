@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dg7fw1pgaowfx"]
+[gd_scene load_steps=10 format=3 uid="uid://dg7fw1pgaowfx"]
 
 [ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_t6dbj"]
 [ext_resource type="PackedScene" uid="uid://ce2tboaic6n86" path="res://assets/scenes/MenuButton.tscn" id="1_vqap6"]
+[ext_resource type="Material" uid="uid://b8ajys078ps6h" path="res://assets/materials/OrangeDotBackground.tres" id="2_an4tj"]
 [ext_resource type="Texture2D" uid="uid://c8e4ebvi74wqx" path="res://assets/images/sprite_sheets/Logo.png" id="3_u804d"]
 [ext_resource type="Texture2D" uid="uid://mr25pto4q0ms" path="res://assets/images/sprite_sheets/MiniMenuBackground.png" id="4_c1eu8"]
 [ext_resource type="AudioStream" uid="uid://k8ic8ah0kyj6" path="res://assets/audio/pop.wav" id="5_1l0v7"]
@@ -14,6 +15,11 @@
 [node name="FogBackground" type="Sprite2D" parent="."]
 position = Vector2(800, 450)
 texture = ExtResource("1_t6dbj")
+
+[node name="Panel" type="Panel" parent="."]
+material = ExtResource("2_an4tj")
+offset_right = 1600.0
+offset_bottom = 900.0
 
 [node name="MenuButton" parent="." node_paths=PackedStringArray("audio_player") instance=ExtResource("1_vqap6")]
 offset_left = 31.0

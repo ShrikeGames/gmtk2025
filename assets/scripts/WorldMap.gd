@@ -76,7 +76,6 @@ func _on_ready() -> void:
 
 func init_loop():
 	loop += 1
-	# TODO keep the last reward you got for killing the boss if it was a boss fight
 	var last_reward:Dictionary = {}
 	if rewards.size() > 0:
 		last_reward = rewards[rewards.size()-1]
@@ -307,7 +306,21 @@ func update_screen(p_player_position:Vector2i, p_sight_radius:int) -> void:
 			# if the map tile is within sight of the player position then show it
 			# otherwise hide it
 			var map_position:Vector2i = Vector2i(x, y)
-			map_tile.visible = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
+			# TODO SHOW STREAM
+			var in_los:bool = is_visible_to_player(map_tile, map_position, p_player_position, p_sight_radius)
+			if in_los:
+				# if directly in LOS then fully visible
+				map_tile.visible = true
+				map_tile.discovered = true
+				map_tile.modulate.a = 1
+			else:
+				# should be partially shown if previously discovered
+				if map_tile.discovered:
+					map_tile.modulate.a = 0.25
+					map_tile.visible = true
+				else:
+					# otherwise not in LOS or previously discovered so hide it
+					map_tile.visible = false
 	player_image.position = Vector2i(int(tile_width*0.5) + p_player_position.x * tile_width, int(tile_height*0.5) + p_player_position.y * tile_height)
 	
 	side_bar.update_stats(self)

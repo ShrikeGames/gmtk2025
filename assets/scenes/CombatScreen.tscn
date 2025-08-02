@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwu53lei24rcc"]
+[gd_scene load_steps=7 format=3 uid="uid://cwu53lei24rcc"]
 
 [ext_resource type="Script" uid="uid://cr3daolm7owls" path="res://assets/scripts/CombatScreen.gd" id="1_hyrab"]
 [ext_resource type="Texture2D" uid="uid://w86580n0nh7d" path="res://assets/images/sprite_sheets/CombatScreen.png" id="1_sgd6i"]
 [ext_resource type="Texture2D" uid="uid://cqvrjwbilo8ju" path="res://assets/images/sprite_sheets/Player.png" id="3_bogmt"]
+[ext_resource type="Material" uid="uid://b6matpqrnupp4" path="res://assets/materials/LineJitter.tres" id="3_d7v03"]
 [ext_resource type="Texture2D" uid="uid://lc1yhfq53t2o" path="res://assets/images/sprite_sheets/Enemy0.png" id="5_d7v03"]
 [ext_resource type="PackedScene" uid="uid://jbesfgssc7u0" path="res://assets/scenes/CombatResults.tscn" id="5_srylc"]
 
@@ -18,6 +19,7 @@ position = Vector2(800, 450)
 texture = ExtResource("1_sgd6i")
 
 [node name="Player" type="Sprite2D" parent="."]
+material = ExtResource("3_d7v03")
 position = Vector2(434, 356)
 scale = Vector2(0.899, 0.899)
 texture = ExtResource("3_bogmt")
@@ -55,6 +57,7 @@ sdgs
 scroll_following = true
 
 [node name="Enemy0" type="Sprite2D" parent="."]
+material = ExtResource("3_d7v03")
 position = Vector2(1142, 380)
 texture = ExtResource("5_d7v03")
 

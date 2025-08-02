@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://d4ntvwt70klqe"]
+[gd_scene load_steps=4 format=3 uid="uid://d4ntvwt70klqe"]
 
 [ext_resource type="Script" uid="uid://dpvb3g6ub0jr6" path="res://assets/scripts/WorldMap.gd" id="1_eciam"]
+[ext_resource type="Material" uid="uid://dikqceoc1jkhx" path="res://assets/materials/WorldMapCharacter.tres" id="2_0v2dq"]
 [ext_resource type="Texture2D" uid="uid://cejwbyri268kl" path="res://assets/images/sprite_sheets/MapTile9.png" id="2_th6by"]
 
 [node name="WorldMap" type="Node2D" node_paths=PackedStringArray("tiles_node", "player_image")]
@@ -11,6 +12,7 @@ player_image = NodePath("Player")
 [node name="Tiles" type="Node2D" parent="."]
 
 [node name="Player" type="Sprite2D" parent="."]
+material = ExtResource("2_0v2dq")
 position = Vector2(608, 455)
 texture = ExtResource("2_th6by")
 

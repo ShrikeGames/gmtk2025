@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://8hnkag8su81g"]
+[gd_scene load_steps=7 format=3 uid="uid://8hnkag8su81g"]
 
 [ext_resource type="Texture2D" uid="uid://mr25pto4q0ms" path="res://assets/images/sprite_sheets/MiniMenuBackground.png" id="1_bwccu"]
 [ext_resource type="Script" uid="uid://5qrbh4fvvrrm" path="res://assets/scripts/LoopSplashScreen.gd" id="1_rl7wx"]
 [ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="2_rl7wx"]
+[ext_resource type="Material" uid="uid://b8ajys078ps6h" path="res://assets/materials/OrangeDotBackground.tres" id="3_6a8kj"]
 [ext_resource type="Texture2D" uid="uid://cdmt8xvi7m4rn" path="res://assets/images/sprite_sheets/Boss.png" id="3_n2e5i"]
+[ext_resource type="Material" uid="uid://b6matpqrnupp4" path="res://assets/materials/LineJitter.tres" id="4_n2e5i"]
 
 [node name="LoopSplashScreen" type="Node2D" node_paths=PackedStringArray("title_text", "boss_image", "enemy_stats_text")]
 script = ExtResource("1_rl7wx")
@@ -14,6 +16,13 @@ enemy_stats_text = NodePath("EnemyStatsText")
 [node name="MiniMenuBackground" type="Sprite2D" parent="."]
 position = Vector2(11, -10)
 texture = ExtResource("1_bwccu")
+
+[node name="Panel" type="Panel" parent="."]
+material = ExtResource("3_6a8kj")
+offset_left = -439.0
+offset_top = -303.0
+offset_right = 461.0
+offset_bottom = 281.0
 
 [node name="Tile" type="RichTextLabel" parent="."]
 offset_left = -447.0
@@ -37,6 +46,7 @@ bbcode_enabled = true
 text = "[center]At the end of this loop you will face a fearsome foe. Prepare yourself![/center]"
 
 [node name="Boss" type="Sprite2D" parent="."]
+material = ExtResource("4_n2e5i")
 position = Vector2(150, 145)
 texture = ExtResource("3_n2e5i")
 

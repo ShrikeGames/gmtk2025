@@ -57,14 +57,14 @@ Day 4(Plan):
 - Polish and test
  - Partical effects, animations, etc
  - Shaders
-  - https://godotshaders.com/shader/line-jitter-stroke-shake-effect/  In the combat scene
-  - https://godotshaders.com/shader/random-displacement-animation-easy-ui-animation/  Enemies and player on world map
+  - (Done) https://godotshaders.com/shader/line-jitter-stroke-shake-effect/  In the combat scene
+  - (Done) https://godotshaders.com/shader/random-displacement-animation-easy-ui-animation/  Enemies and player on world map
   - https://godotshaders.com/shader/universal-transition-shader/ Switching between main menu and game
-  - https://godotshaders.com/shader/moving-circles-effect-with-size-depending-on-a-gradient/ Background of reward screen and main menu?
-  - https://godotshaders.com/shader/2dradial-shine-2/ When picking rewards
+  - (Done) https://godotshaders.com/shader/moving-circles-effect-with-size-depending-on-a-gradient/ Background of reward screen and main menu?
+  - (Done) https://godotshaders.com/shader/2dradial-shine-2/ When picking rewards
   - https://godotshaders.com/shader/2d-vertical-pixel-dissolving-wave/ death animation in combat scene?
   - https://godotshaders.com/shader/2d-burn-dissolve-from-point-v-1-0/ burn the rewards not taken?
- - Line of Sight have previously discovered tiles just faded out not invisible
+ - (Done) Line of Sight have previously discovered tiles just faded out not invisible
  - Intro cutscene
   - Voiced
   - Use animated sprite2d to have basic slides for it?

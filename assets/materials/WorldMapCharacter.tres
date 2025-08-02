@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dikqceoc1jkhx"]
+
+[ext_resource type="Shader" uid="uid://cdtfy2bwuy0hx" path="res://assets/shaders/WorldMapCharacter.gdshader" id="1_q5fi0"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_q5fi0")
+shader_parameter/interval = 0.3
+shader_parameter/timeDelay = 0.0
+shader_parameter/intensityX = 1.0
+shader_parameter/intensityY = 1.0
+shader_parameter/seed = 9001.0

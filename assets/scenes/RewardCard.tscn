@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://ceykm0ecr1b4t"]
+[gd_scene load_steps=5 format=3 uid="uid://ceykm0ecr1b4t"]
 
 [ext_resource type="Texture2D" uid="uid://bt04in5klrbw3" path="res://assets/images/sprite_sheets/RewardCardBackground.png" id="1_c82u3"]
 [ext_resource type="Script" uid="uid://bwc3b4pdslbaa" path="res://assets/scripts/RewardCard.gd" id="1_p7q50"]
+[ext_resource type="Shader" uid="uid://jixukh56fl2u" path="res://assets/shaders/RadialShine.gdshader" id="3_r73d4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6ys2"]
+shader = ExtResource("3_r73d4")
+shader_parameter/amplitude = 903.0
+shader_parameter/frequency = 8.0
+shader_parameter/light_magnitude = 15.0
+shader_parameter/color_spread = 21.0
+shader_parameter/light_distance = 0.56
+shader_parameter/speed = 0.00997765
+shader_parameter/cut_angle = false
+shader_parameter/angle = 120.0
+shader_parameter/yshift = -1.0
 
 [node name="RewardCard" type="Node2D" node_paths=PackedStringArray("title_text", "description_text", "rarity_text")]
 script = ExtResource("1_p7q50")
@@ -12,6 +25,11 @@ rarity_text = NodePath("RarityText")
 [node name="RewardCardBackground" type="Sprite2D" parent="."]
 position = Vector2(201, 300)
 texture = ExtResource("1_c82u3")
+
+[node name="Panel2" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_w6ys2")
+offset_right = 401.0
+offset_bottom = 601.0
 
 [node name="TitleText" type="RichTextLabel" parent="."]
 offset_left = 54.0

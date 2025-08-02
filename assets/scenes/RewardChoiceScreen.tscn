@@ -1,11 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://s1d3gge1l4g8"]
+[gd_scene load_steps=4 format=3 uid="uid://s1d3gge1l4g8"]
 
 [ext_resource type="Script" uid="uid://ol8jwr23u2j2" path="res://assets/scripts/RewardChoiceScreen.gd" id="1_ig3qk"]
+[ext_resource type="Material" uid="uid://b8ajys078ps6h" path="res://assets/materials/OrangeDotBackground.tres" id="2_ryhb4"]
 [ext_resource type="PackedScene" uid="uid://ceykm0ecr1b4t" path="res://assets/scenes/RewardCard.tscn" id="2_tosvh"]
 
 [node name="RewardChoiceScreen" type="Node2D" node_paths=PackedStringArray("reward_cards")]
 script = ExtResource("1_ig3qk")
 reward_cards = [NodePath("RewardCard"), NodePath("RewardCard2"), NodePath("RewardCard3")]
+
+[node name="Panel" type="Panel" parent="."]
+material = ExtResource("2_ryhb4")
+offset_right = 1600.0
+offset_bottom = 900.0
 
 [node name="RewardCard" parent="." instance=ExtResource("2_tosvh")]
 position = Vector2(140, 111)
