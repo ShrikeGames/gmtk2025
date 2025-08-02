@@ -13,15 +13,15 @@ position = Vector2(800, 450)
 texture = ExtResource("2_pe4au")
 
 [node name="CombatResultsScreen" type="Sprite2D" parent="."]
-position = Vector2(1286, 674)
+position = Vector2(800, 450)
 scale = Vector2(1, 0.75)
 texture = ExtResource("2_kgyxe")
 
 [node name="ResultsText" type="RichTextLabel" parent="."]
-offset_left = 986.0
-offset_top = 590.0
-offset_right = 1585.0
-offset_bottom = 850.0
+offset_left = 501.0
+offset_top = 320.0
+offset_right = 1100.0
+offset_bottom = 580.0
 theme_override_font_sizes/normal_font_size = 34
 bbcode_enabled = true
 text = "[center]Victory!

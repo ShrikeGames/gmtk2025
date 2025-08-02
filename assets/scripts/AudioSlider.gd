@@ -5,7 +5,7 @@ class_name AudioSlider
 @export var slider_sfx:Slider
 @export var slider_music:Slider
 @export var slider_voice:Slider
-
+@export var music:AudioStreamPlayer
 
 func _on_ready() -> void:
 	Global.load_settings()
@@ -14,6 +14,8 @@ func _on_ready() -> void:
 	slider_music.value = Global.volume_music
 	slider_voice.value = Global.volume_voice
 	update_all_volumes()
+	music.play()
+	
 
 func update_all_volumes():
 	update_volume(AudioServer.get_bus_index("Master"), Global.volume_master)
@@ -33,15 +35,19 @@ func _on_slider_value_changed_master(value: float) -> void:
 
 func _on_slider_value_changed_sfx(value: float) -> void:
 	Global.volume_sfx = value
-	var audio_bus_index:int = AudioServer.get_bus_index("Master")
+	var audio_bus_index:int = AudioServer.get_bus_index("SFX")
 	update_volume(audio_bus_index, value)
 
 func _on_slider_value_changed_music(value: float) -> void:
 	Global.volume_music = value
-	var audio_bus_index:int = AudioServer.get_bus_index("Master")
+	var audio_bus_index:int = AudioServer.get_bus_index("Music")
 	update_volume(audio_bus_index, value)
 	
 func _on_slider_value_changed_voice(value: float) -> void:
 	Global.volume_voice = value
-	var audio_bus_index:int = AudioServer.get_bus_index("Master")
+	var audio_bus_index:int = AudioServer.get_bus_index("Voice")
 	update_volume(audio_bus_index, value)
+
+
+func _on_v_box_container_ready() -> void:
+	pass # Replace with function body.

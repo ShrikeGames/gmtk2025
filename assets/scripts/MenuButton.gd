@@ -31,6 +31,7 @@ func _on_button_up():
 
 func do_action():
 	if scene_to_change_to != null and not scene_to_change_to.is_empty():
+		Global.save_settings()
 		get_tree().change_scene_to_file(scene_to_change_to)
 	elif submenu_node != null and toggle_visiblity_node != null:
 		for child in submenu_node.get_children():

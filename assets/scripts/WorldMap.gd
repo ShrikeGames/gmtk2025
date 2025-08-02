@@ -7,10 +7,11 @@ class_name WorldMap
 @export var tiles_node:Node2D
 @export var player_image:Sprite2D
 @export var loop_splash_screen:LoopSplashScreen
+@export var regular_music:AudioStreamPlayer
+@export var faster_music:AudioStreamPlayer
 
 # map settings
 # TODO allow user to enter one of their own
-@export var rng_seed:String = "GMTK2025"
 @export var map_width:int = 32
 @export var map_height:int = 14
 @export var tile_width:int = 50
@@ -28,13 +29,12 @@ var number_of_random_seed_points:int = 40
 @export var sight_radius:int = 4
 @export var max_steps:float = 99
 @export var steps:float = 99
-@export var loop:float = 0
-@export var boss_kills:float = 0
-
+var play_faster_music:bool = false
 @export var has_flippers:bool = false
 @export var has_climbing_gear:bool = false
 
 @export var number_of_enemies:int = 10
+var last_selected_reward_id:int
 var rewards:Array[Dictionary]
 
 var map_tiles:Array[Array]
@@ -67,20 +67,27 @@ var TILE_PLAYER:int = 9
 var ROOM_WALL_TILE_TYPES:Array[int] = [TILE_WALL, TILE_WATER, TILE_FOREST, TILE_HILLS]
 
 var combat_timer:float
-var combat_auto_timer:float = 1
+var combat_auto_timer:float = 1.5
 var max_speed_bonus_turns_allowed:int = 2
+var time_since_selected_reward:float
+var time_to_wait_before_closing_reward_screen:float = 1.5
 
 func _on_ready() -> void:
-	seed(rng_seed.hash())
+	seed(Global.rng_seed.hash())
 	init_loop()
 
 func init_loop():
-	loop += 1
+	time_since_selected_reward = 0
 	var last_reward:Dictionary = {}
 	if rewards.size() > 0:
 		last_reward = rewards[rewards.size()-1]
+		var special:String = last_reward.get("special", "")
+		if special == "flippers":
+			has_flippers = true
+		elif special == "climbing_gear":
+			has_climbing_gear = true
 	rewards = []
-	
+	last_selected_reward_id = -1
 	fighting_boss = false
 	has_flippers = false
 	has_climbing_gear = false
@@ -107,11 +114,18 @@ func init_loop():
 		hp = 12
 	max_steps = 99
 	steps = 99
+	if play_faster_music:
+		faster_music.stop()
+		regular_music.play()
+		
+	play_faster_music = false
 	reward_choice_screen.visible = false
+	for reward_card in reward_choice_screen.reward_cards:
+		reward_card.reset()
 	combat_screen.visible = false
 	combat_screen.combat_results_screen.visible = false
 	loop_splash_screen.visible=true
-	loop_splash_screen.title_text.text = "[center]Now Starting Loop %d![/center]"%[loop]
+	loop_splash_screen.title_text.text = "[center]Now Starting Loop %d![/center]"%[Global.loop]
 	var base_boss_enemy_stats:Dictionary = {
 		"hp": 50,
 		"armor": 5,
@@ -120,13 +134,13 @@ func init_loop():
 		"strength": 4,
 		"image": "res://assets/images/sprite_sheets/Boss.png"
 	}
-	boss_enemy_stats = generate_enemy_stats(base_boss_enemy_stats, 50*(boss_kills+1))
+	boss_enemy_stats = generate_enemy_stats(base_boss_enemy_stats, 50*(Global.boss_kills+1))
 	loop_splash_screen.boss_image.texture = load(base_boss_enemy_stats["image"])
 	loop_splash_screen.enemy_stats_text.text = combat_screen.update_enemy_stats_text(boss_enemy_stats)
 	
 	# draw the tiles to the screen around the player
 	update_screen(player_position, side_bar.calculated_stats["vision"])
-	
+	Global.save_settings()
 
 func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile_width:int, p_tile_height:int) -> Array[Array]:
 	var new_map_tiles:Array[Array] = []
@@ -229,7 +243,7 @@ func generate_map(p_tiles_node:Node2D, p_map_width:int, p_map_height:int, p_tile
 			"strength": 1,
 			"image": "res://assets/images/sprite_sheets/Enemy%d.png"%[randi_range(0, 2)]
 		}
-		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10*pow(boss_kills+1,2))
+		var enemy_stats:Dictionary = generate_enemy_stats(base_enemy_stats, 10*pow(Global.boss_kills+1,2))
 		
 		existing_tile.enemy_stats = enemy_stats
 		existing_tile.update_texture()
@@ -373,6 +387,7 @@ func is_visible_to_player(_map_tile:MapTile, p_tile_position:Vector2i, p_player_
 	return is_within_distance and is_tile_visible
 
 func _process(delta: float) -> void:
+	
 	if loop_splash_screen.visible:
 		if Input.is_action_just_pressed("Interact"):
 			loop_splash_screen.visible = false
@@ -396,7 +411,8 @@ func _process(delta: float) -> void:
 				# TODO lost combat so restart the loop
 				print("restart loop")
 				combat_screen.visible = false
-				seed(rng_seed.hash())
+				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 		return
 	
@@ -413,16 +429,23 @@ func _process(delta: float) -> void:
 				# TODO lost combat so restart the loop
 				print("restart loop")
 				combat_screen.visible = false
-				seed(rng_seed.hash())
+				seed(Global.rng_seed.hash())
+				Global.loop += 1
 				init_loop()
 			elif combat_screen.is_combat_won():
 				if fighting_boss:
 					print("Beat the boss")
-					boss_kills+=1
+					Global.boss_kills+=1
+					Global.loop += 1
 				combat_screen.combat_results_screen.visible = false
 				combat_screen.visible = false
 				show_reward_choice_screen()
 		return
+	if steps >=0 and steps <= max_steps * 0.25 and not play_faster_music:
+		regular_music.stop()
+		faster_music.play()
+		play_faster_music = true
+		
 	if not reward_choice_screen.visible and steps > 0:
 		if Input.is_action_pressed("MoveUp"):
 			move_direction = DIRECTION_UP
@@ -471,35 +494,58 @@ func _process(delta: float) -> void:
 	time_since_last_moved += delta
 	
 	if reward_choice_screen.visible:
+		if last_selected_reward_id >= 0 and time_since_selected_reward < time_to_wait_before_closing_reward_screen:
+			time_since_selected_reward += delta
+			reward_choice_screen.reward_cards[last_selected_reward_id].position.y += 50 * delta
+			reward_choice_screen.reward_cards[last_selected_reward_id].modulate.a -= delta
+			var i:int = 0
+			for reward_card in reward_choice_screen.reward_cards:
+				if i != last_selected_reward_id:
+					reward_choice_screen.reward_cards[i].position.y -= 25 * delta
+					reward_choice_screen.reward_cards[i].modulate.a -= delta
+				i += 1
+		
+		if last_selected_reward_id >=0 and time_since_selected_reward >= time_to_wait_before_closing_reward_screen:
+			time_since_selected_reward = 0
+			reward_choice_screen.visible = false
+			for reward_card in reward_choice_screen.reward_cards:
+				reward_card.reset()
+			last_selected_reward_id = -1
+		
 		if Input.is_action_just_pressed("Option1"):
 			give_reward(0)
 			if fighting_boss:
 				randomize()
-				seed(randi())
+				Global.rng_seed = "%d"%[randi()]
+				seed(Global.rng_seed.hash())
 				init_loop()
 		elif Input.is_action_just_pressed("Option2"):
 			give_reward(1)
 			if fighting_boss:
 				randomize()
-				seed(randi())
+				Global.rng_seed = "%d"%[randi()]
+				seed(Global.rng_seed.hash())
 				init_loop()
 		elif Input.is_action_just_pressed("Option3"):
 			give_reward(2)
 			if fighting_boss:
 				randomize()
-				seed(randi())
+				Global.rng_seed = "%d"%[randi()]
+				seed(Global.rng_seed.hash())
 				init_loop()
 		elif Input.is_action_just_pressed("Undo"):
 			# if they don't take any of the rewards from the boss still have to restart loop
 			if fighting_boss:
 				randomize()
-				seed(randi())
+				Global.rng_seed = "%d"%[randi()]
+				seed(Global.rng_seed.hash())
 				init_loop()
 	
 	if Input.is_action_just_pressed("Undo"):
 		reward_choice_screen.visible = false
-		
-		
+		for reward_card in reward_choice_screen.reward_cards:
+			reward_card.reset()
+
 
 func has_valid_movements():
 	if steps <= 0:
@@ -536,6 +582,7 @@ func trigger_boss_fight():
 
 
 func give_reward(reward_id:int):
+	last_selected_reward_id = reward_id
 	var reward_card:RewardCard = reward_choice_screen.reward_cards[reward_id]
 	#
 	var reward_config:Dictionary =  reward_card.reward_config
@@ -605,8 +652,12 @@ func give_reward(reward_id:int):
 		side_bar.add_inventory_item(inventory_item)
 	
 	rewards.append(reward_config)
+	var i:int = 0
+	for other_reward_card in reward_choice_screen.reward_cards:
+		if i != reward_id:
+			other_reward_card.burn(i)
+		i += 1
 	
-	reward_choice_screen.visible = false
 	update_screen(player_position, side_bar.calculated_stats["vision"])
 	
 

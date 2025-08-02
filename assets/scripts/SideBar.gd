@@ -86,7 +86,7 @@ func update_stats(world_map:WorldMap):
 	var strength_rich_text:String = "[color=#994411]Strength: %d[/color]"%[displayed_strength]
 	var damage_rich_text:String = "[color=#991177]Damage: %d[/color]"%[displayed_damage]
 	var vision_rich_text:String = "[color=#997700]Vision: %d[/color]"%[displayed_vision]
-	var rich_text:String = "Loop: %s - %s - %s - %s - %s - %s - %s"%[world_map.loop, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
+	var rich_text:String = "Loop: %s - %s - %s - %s - %s - %s - %s"%[Global.loop, hp_rich_text, armor_rich_text, speed_rich_text, strength_rich_text, damage_rich_text, vision_rich_text]
 	
 	calculated_stats["hp"] = displayed_hp
 	calculated_stats["armor"] = displayed_armor

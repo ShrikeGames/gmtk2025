@@ -8,7 +8,7 @@ class_name CombatScreen
 @export var combat_log_text:RichTextLabel
 @export var combat_results_screen:CombatResults
 @export var enemy_sprite:Sprite2D
-
+var damage_indicator_resource:Resource = load("res://assets/scenes/DamageIndicator.tscn")
 var turn:int
 var enemy_stats:Dictionary
 var player_speed:int
@@ -93,17 +93,25 @@ func next_turn(_delta:float) -> bool:
 		# deal the damage first to armor
 		var enemy_armor: int = enemy_stats["armor"]
 		if enemy_armor > 0:
-			combat_log_text.text += "The enemy armor blocks some damage!\n"
 			var armor_before:int = enemy_armor
 			enemy_armor = max(0, enemy_armor-total_damage)
 			total_damage = max(0, total_damage-armor_before)
-		if total_damage <= 0:
+		if total_damage <= 0 and enemy_armor < total_damage:
 			total_damage = 1
 		
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			combat_log_text.text += "Player deals %d damage!\n"%[total_damage]
 			enemy_hp -= total_damage
+		
+		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
+		damage_indicator.position.x = randf_range(850, 1550)
+		damage_indicator.position.y = randf_range(300, 600)
+		damage_indicator.damage_text.text = "[center]-%s[/center]"%[total_damage]
+		add_child(damage_indicator)
+		
+		if enemy_armor > 0:
+			combat_log_text.text += "The enemy armor blocks some damage!\n"
 		
 		enemy_stats["hp"] = enemy_hp
 		enemy_stats["armor"] = enemy_armor
@@ -156,17 +164,28 @@ func next_turn(_delta:float) -> bool:
 								thorns_damage += randi_range(stat_modifier["min_amount"], stat_modifier["max_amount"])
 						
 		
-		if total_damage <= 0:
+		if total_damage <= 0 and player_armor < total_damage:
 			total_damage = 1
 		# deal remainder of damage to hp
 		if total_damage > 0:
 			player_hp -= total_damage
 			combat_log_text.text += "Enemy deals %d damage!\n"%[total_damage]
 		
+		var damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
+		damage_indicator.position.x = randf_range(50, 750)
+		damage_indicator.position.y = randf_range(300, 600)
+		damage_indicator.damage_text.text = "[center]-%s[/center]"%[total_damage]
+		add_child(damage_indicator)
+		
 		if thorns_damage > 0:
 			enemy_hp -= thorns_damage
 			combat_log_text.text += "The Enemy takes %d thorn damage!\n"%[thorns_damage]
 			enemy_stats["hp"] = enemy_hp
+			var thorns_damage_indicator:DamageIndicator = damage_indicator_resource.instantiate()
+			thorns_damage_indicator.position.x = randf_range(850, 1550)
+			thorns_damage_indicator.position.y = randf_range(300, 600)
+			thorns_damage_indicator.damage_text.text = "[center]-%s[/center]"%[thorns_damage]
+			add_child(thorns_damage_indicator)
 		world_map.hp = player_hp
 		
 		# reduce their speed

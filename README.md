@@ -64,7 +64,7 @@ Day 4(Plan):
   - (Done) https://godotshaders.com/shader/moving-circles-effect-with-size-depending-on-a-gradient/ Background of reward screen and main menu?
   - (Done) https://godotshaders.com/shader/2dradial-shine-2/ When picking rewards
   - https://godotshaders.com/shader/2d-vertical-pixel-dissolving-wave/ death animation in combat scene?
-  - https://godotshaders.com/shader/2d-burn-dissolve-from-point-v-1-0/ burn the rewards not taken?
+  - (Done) https://godotshaders.com/shader/2d-burn-dissolve-from-point-v-1-0/ burn the rewards not taken?
  - (Done) Line of Sight have previously discovered tiles just faded out not invisible
  - Intro cutscene
   - Voiced
@@ -78,14 +78,15 @@ Day 4(Plan):
  - Settings menu: Add input box for initial seed
  - Settings menu: Add option to skip tutorial
  - Game title: He Is Looping
- - Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
+ - (Done) Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
  - Switch to the faster BGM for the last segement of the timer
  - Have boss react to player fighting them again after the player previously lost
  - Hills colours need to change
  - Add visible grass to the empty tiles
 - Upload to itch as an unlisted game (people watching the stream can play)
 
-
+Bug:
+- Random damage indcator locations should be more confined to the middle
 
 Day 5(Plan):
 - Test and fix issues

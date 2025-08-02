@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bt7imw50fxqnt"]
+[gd_scene load_steps=9 format=3 uid="uid://bt7imw50fxqnt"]
 
 [ext_resource type="PackedScene" uid="uid://d4ntvwt70klqe" path="res://assets/scenes/WorldMap.tscn" id="1_g3k4f"]
 [ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_jv468"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cwu53lei24rcc" path="res://assets/scenes/CombatScreen.tscn" id="3_xt100"]
 [ext_resource type="PackedScene" uid="uid://1bnlxp25oahm" path="res://assets/scenes/SideBar.tscn" id="4_eruk6"]
 [ext_resource type="PackedScene" uid="uid://8hnkag8su81g" path="res://assets/scenes/LoopSplashScreen.tscn" id="6_34wpn"]
+[ext_resource type="AudioStream" uid="uid://c0tqn6nwhppcq" path="res://assets/audio/Retro Draft 1 95 BPM by Knowledge of Barbarossa.wav" id="7_3qypx"]
+[ext_resource type="AudioStream" uid="uid://bpkty7u3gl24" path="res://assets/audio/Retro Draft 1 150 BPM by Knowledge of Barbarossa.wav" id="8_ajan2"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -13,11 +15,13 @@
 position = Vector2(800, 448)
 texture = ExtResource("1_jv468")
 
-[node name="WorldMap" parent="." node_paths=PackedStringArray("reward_choice_screen", "combat_screen", "loop_splash_screen", "side_bar") instance=ExtResource("1_g3k4f")]
+[node name="WorldMap" parent="." node_paths=PackedStringArray("reward_choice_screen", "combat_screen", "loop_splash_screen", "regular_music", "faster_music", "side_bar") instance=ExtResource("1_g3k4f")]
 position = Vector2(0, 100)
 reward_choice_screen = NodePath("../RewardChoiceScreen")
 combat_screen = NodePath("../CombatScreen")
 loop_splash_screen = NodePath("../LoopSplashScreen")
+regular_music = NodePath("../RegularMusic")
+faster_music = NodePath("../FasterMusic")
 side_bar = NodePath("../SideBar")
 
 [node name="RewardChoiceScreen" parent="." instance=ExtResource("2_npkpr")]
@@ -33,3 +37,14 @@ world_map = NodePath("../WorldMap")
 [node name="LoopSplashScreen" parent="." instance=ExtResource("6_34wpn")]
 visible = false
 position = Vector2(801, 434)
+
+[node name="RegularMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_3qypx")
+volume_db = -16.0
+autoplay = true
+bus = &"Music"
+
+[node name="FasterMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ajan2")
+volume_db = -16.0
+bus = &"Music"

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cpsa8psxh38r0"
+path="res://.godot/imported/Draft 2 - Casual by Knowledge of Barbarossa.wav-60e534e35f0e0ad0af18fc389b0f334f.sample"
+
+[deps]
+
+source_file="res://assets/audio/Draft 2 - Casual by Knowledge of Barbarossa.wav"
+dest_files=["res://.godot/imported/Draft 2 - Casual by Knowledge of Barbarossa.wav-60e534e35f0e0ad0af18fc389b0f334f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

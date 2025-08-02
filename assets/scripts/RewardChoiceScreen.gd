@@ -684,12 +684,13 @@ func generate_reward_options(current_map_tile:MapTile, rarity:String=""):
 					i += 1
 			temp_reward_options[rarity] = reward_card.display_random_choice(temp_reward_options.get(rarity), rarity, reward_options.get(rarity).size())
 	
-func generate_rewards_for_tile(rarity:String="") -> Array[Dictionary]:
+func generate_rewards_for_tile(p_rarity:String="") -> Array[Dictionary]:
 	var rewards:Array[Dictionary] = []
+	var randomly_select_rarity:bool = false
+	if p_rarity == "":
+		randomly_select_rarity = true
+	var rarity:String = p_rarity
 	for reward_id in range(0, 3):
-		var randomly_select_rarity:bool = false
-		if rarity == "":
-			randomly_select_rarity = true
 		var rarities:Array[String] = ["common", "uncommon", "rare", "legendary", "unique"]
 		var probabilities:Array[float] = [0.5, 0.5, 0.5, 0.5, 1]
 		if randomly_select_rarity:
@@ -700,10 +701,8 @@ func generate_rewards_for_tile(rarity:String="") -> Array[Dictionary]:
 					rarity = rarities[i]
 					break
 				i += 1
-		var number_of_options:int = reward_options.size()
-		var rarity_index:int = randi_range(0, number_of_options-1)
-		var random_option_key:String = reward_options.keys()[rarity_index]
-		var randomly_selected_reward_config:Dictionary = reward_options[random_option_key]
+		print(rarity)
+		var randomly_selected_reward_config:Dictionary = reward_options[rarity]
 		var reward_config:Dictionary = randomly_selected_reward_config
 		var num:int = reward_config.keys().size()
 		var random_index:int = randi_range(0, num-2)

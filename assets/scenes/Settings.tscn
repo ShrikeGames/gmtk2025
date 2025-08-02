@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bogh6xu634d6n"]
+[gd_scene load_steps=5 format=3 uid="uid://bogh6xu634d6n"]
 
 [ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="1_invxw"]
 [ext_resource type="Script" uid="uid://5pcyh5hveglp" path="res://assets/scripts/AudioSlider.gd" id="2_sc4fx"]
+[ext_resource type="AudioStream" uid="uid://cpsa8psxh38r0" path="res://assets/audio/Draft 2 - Casual by Knowledge of Barbarossa.wav" id="3_i28qc"]
+[ext_resource type="Script" uid="uid://bb5ircg8sm13o" path="res://assets/scripts/OtherSettings.gd" id="3_vkq1v"]
 
 [node name="Settings" type="Node2D"]
 
@@ -13,7 +15,7 @@ theme_override_fonts/normal_font = ExtResource("1_invxw")
 theme_override_font_sizes/normal_font_size = 42
 text = "Settings"
 
-[node name="AudoSliders" type="VBoxContainer" parent="." node_paths=PackedStringArray("slider_master", "slider_sfx", "slider_music", "slider_voice")]
+[node name="AudoSliders" type="VBoxContainer" parent="." node_paths=PackedStringArray("slider_master", "slider_sfx", "slider_music", "slider_voice", "music")]
 offset_left = 16.0
 offset_top = 71.0
 offset_right = 574.0
@@ -24,6 +26,7 @@ slider_master = NodePath("Slider")
 slider_sfx = NodePath("Slider2")
 slider_music = NodePath("Slider3")
 slider_voice = NodePath("Slider4")
+music = NodePath("../Music")
 
 [node name="Label" type="Label" parent="AudoSliders"]
 layout_mode = 2
@@ -69,8 +72,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 value = 50.0
 
+[node name="VBoxContainer" type="VBoxContainer" parent="." node_paths=PackedStringArray("seed_text")]
+offset_left = 16.0
+offset_top = 370.0
+offset_right = 612.0
+offset_bottom = 636.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_vkq1v")
+seed_text = NodePath("seed")
+
+[node name="StartingSeedLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "Starting RNG Seed"
+
+[node name="seed" type="TextEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "enter any string you want"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_i28qc")
+bus = &"Music"
+
 [connection signal="ready" from="AudoSliders" to="AudoSliders" method="_on_ready"]
 [connection signal="value_changed" from="AudoSliders/Slider" to="AudoSliders" method="_on_slider_value_changed_master"]
 [connection signal="value_changed" from="AudoSliders/Slider2" to="AudoSliders" method="_on_slider_value_changed_sfx"]
 [connection signal="value_changed" from="AudoSliders/Slider3" to="AudoSliders" method="_on_slider_value_changed_music"]
 [connection signal="value_changed" from="AudoSliders/Slider4" to="AudoSliders" method="_on_slider_value_changed_voice"]
+[connection signal="ready" from="VBoxContainer" to="VBoxContainer" method="_on_ready"]
+[connection signal="text_changed" from="VBoxContainer/seed" to="VBoxContainer" method="_on_seed_text_changed"]

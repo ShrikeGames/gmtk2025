@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://da08wv3qhycge"]
+
+[ext_resource type="Shader" uid="uid://csmn66168chbs" path="res://assets/shaders/Burn.gdshader" id="1_ks4tr"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ks4tr"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_ks4tr")
+shader_parameter/position = Vector2(0, 0)
+shader_parameter/radius = 0.0
+shader_parameter/borderWidth = 0.02
+shader_parameter/burnMult = 0.135
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_ks4tr")
+shader_parameter/burnColor = Color(0.804844, 0.160222, 0.135851, 1)
