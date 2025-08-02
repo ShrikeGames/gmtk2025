@@ -470,9 +470,6 @@ func _process(delta: float) -> void:
 			
 	time_since_last_moved += delta
 	
-	if Input.is_action_just_pressed("Undo"):
-		reward_choice_screen.visible = false
-		
 	if reward_choice_screen.visible:
 		if Input.is_action_just_pressed("Option1"):
 			give_reward(0)
@@ -492,6 +489,16 @@ func _process(delta: float) -> void:
 				randomize()
 				seed(randi())
 				init_loop()
+		elif Input.is_action_just_pressed("Undo"):
+			# if they don't take any of the rewards from the boss still have to restart loop
+			if fighting_boss:
+				randomize()
+				seed(randi())
+				init_loop()
+	
+	if Input.is_action_just_pressed("Undo"):
+		reward_choice_screen.visible = false
+		
 		
 
 func has_valid_movements():

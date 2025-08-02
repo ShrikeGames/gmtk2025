@@ -56,6 +56,7 @@ Day 4(Plan):
 - Have some other benefit to Strength because Speed is so good in comparison
 - Polish and test
  - Partical effects, animations, etc
+ - Damage numbers in combat
  - Shaders
   - (Done) https://godotshaders.com/shader/line-jitter-stroke-shake-effect/  In the combat scene
   - (Done) https://godotshaders.com/shader/random-displacement-animation-easy-ui-animation/  Enemies and player on world map
@@ -79,6 +80,9 @@ Day 4(Plan):
  - Game title: He Is Looping
  - Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
  - Switch to the faster BGM for the last segement of the timer
+ - Have boss react to player fighting them again after the player previously lost
+ - Hills colours need to change
+ - Add visible grass to the empty tiles
 - Upload to itch as an unlisted game (people watching the stream can play)
 
 
