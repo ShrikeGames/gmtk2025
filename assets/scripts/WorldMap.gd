@@ -15,6 +15,7 @@ class_name WorldMap
 @export var clock_sfx:AudioStreamPlayer
 @export var dragon_sfx:AudioStreamPlayer
 @export var alien_sfx:AudioStreamPlayer
+@export var crab_sfx:AudioStreamPlayer
 
 # map settings
 # TODO allow user to enter one of their own
@@ -141,7 +142,7 @@ func init_loop():
 		"strength": 4,
 		"image": "res://assets/images/sprite_sheets/Boss.png"
 	}
-	if Global.boss_kills > 0 and (Global.boss_kills +1) % 2 == 0:
+	if Global.boss_kills == 1 or (Global.boss_kills > 2 and randf_range(0, 1)<=0.5):
 		base_boss_enemy_stats = {
 			"hp": 150,
 			"armor": 20,
@@ -151,6 +152,16 @@ func init_loop():
 			"image": "res://assets/images/sprite_sheets/Boss1.png"
 		}
 		dragon_sfx.play()
+	elif Global.boss_kills == 2 or (Global.boss_kills > 2 and randf_range(0, 1)<=0.5):
+		base_boss_enemy_stats = {
+			"hp": 100,
+			"armor": 40,
+			"speed": 2,
+			"damage": 10,
+			"strength": 40,
+			"image": "res://assets/images/sprite_sheets/Boss2.png"
+		}
+		crab_sfx.play()
 	elif not tutorial_scene.visible:
 		alien_sfx.play()
 	

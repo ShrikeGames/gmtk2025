@@ -80,9 +80,6 @@ Day 4(Plan):
  - (Done) Hills colours need to change
 - Upload to itch as an unlisted game (people watching the stream can play)
 
-Bug:
-- Duplicate rewards are possible
-
 Day 5(Plan):
 - Test and fix issues
 - Setup the itch.io page
