@@ -72,7 +72,7 @@ func reset_run():
 	Global.has_flippers = false
 	Global.has_climbing_gear = false
 	Global.completed_tutorial = false
-	Global.boss_kills = 1
+	Global.boss_kills = 0
 	save_settings()
 
 func save_settings():
