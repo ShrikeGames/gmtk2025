@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bogh6xu634d6n"]
+[gd_scene load_steps=6 format=3 uid="uid://bogh6xu634d6n"]
 
 [ext_resource type="FontFile" uid="uid://c72rlyfmveqhn" path="res://assets/fonts/ShipporiAntiqueB1-Regular.ttf" id="1_invxw"]
 [ext_resource type="Script" uid="uid://5pcyh5hveglp" path="res://assets/scripts/AudioSlider.gd" id="2_sc4fx"]
 [ext_resource type="AudioStream" uid="uid://cpsa8psxh38r0" path="res://assets/audio/Draft 2 - Casual by Knowledge of Barbarossa.wav" id="3_i28qc"]
 [ext_resource type="Script" uid="uid://bb5ircg8sm13o" path="res://assets/scripts/OtherSettings.gd" id="3_vkq1v"]
+[ext_resource type="PackedScene" uid="uid://dc3wugrrjtj2i" path="res://assets/scenes/DeleteSaveButton.tscn" id="5_fdrsu"]
 
 [node name="Settings" type="Node2D"]
 
@@ -76,9 +77,9 @@ value = 50.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." node_paths=PackedStringArray("seed_text")]
 offset_left = 16.0
-offset_top = 370.0
+offset_top = 286.0
 offset_right = 612.0
-offset_bottom = 636.0
+offset_bottom = 579.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3_vkq1v")
@@ -95,6 +96,16 @@ layout_mode = 2
 placeholder_text = "enter any string you want"
 scroll_fit_content_height = true
 scroll_fit_content_width = true
+
+[node name="RestartRunLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_invxw")
+theme_override_font_sizes/font_size = 32
+text = "Restart from Loop 1 with starting stats"
+
+[node name="RestartButton" parent="VBoxContainer" instance=ExtResource("5_fdrsu")]
+layout_mode = 2
+button_text_action_completed = "[color=FF0000]Loop Reset[/color]"
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_i28qc")

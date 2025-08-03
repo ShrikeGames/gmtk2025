@@ -392,36 +392,36 @@ var reward_options:Dictionary = {
 		"lole_random": {
 			"title": "Randomize all stats",
 			"type": "consumable",
-			"description": "Randomize all of your core stats to be between 3 and 18.",
+			"description": "Randomly increase or decrease all of your core stats by 3d6.",
 			"color": "ffffff",
 			"stats": [{
 				"name": "damage",
-				"type": "set",
-				"min_amount": 3,
+				"type": "modify",
+				"min_amount": -18,
 				"max_amount": 18
 			},
 			{
 				"name": "speed",
-				"type": "set",
-				"min_amount": 3,
+				"type": "modify",
+				"min_amount": -18,
 				"max_amount": 18
 			},
 			{
 				"name": "hp",
-				"type": "set",
-				"min_amount": 3,
+				"type": "modify",
+				"min_amount": -18,
 				"max_amount": 18
 			},
 			{
 				"name": "armor",
-				"type": "set",
-				"min_amount": 3,
+				"type": "modify",
+				"min_amount": -18,
 				"max_amount": 18
 			},
 			{
 				"name": "strength",
-				"type": "set",
-				"min_amount": 3,
+				"type": "modify",
+				"min_amount": -18,
 				"max_amount": 18
 			}]
 		},

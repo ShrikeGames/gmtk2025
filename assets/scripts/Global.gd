@@ -58,7 +58,23 @@ func load_settings():
 	has_flippers = config_json.get("has_flippers", has_flippers)
 	has_climbing_gear = config_json.get("has_climbing_gear", has_climbing_gear)
 	
-	
+func reset_run():
+	Global.loop = 1
+	Global.hp = 12
+	Global.armor = 0
+	Global.armor_regen = 0
+	Global.speed = 3
+	Global.strength = 1
+	Global.damage = 1
+	Global.sight_radius = 4
+	Global.max_steps = 99
+	Global.max_speed_bonus_turns_allowed = 2
+	Global.has_flippers = false
+	Global.has_climbing_gear = false
+	Global.completed_tutorial = false
+	Global.boss_kills = 1
+	save_settings()
+
 func save_settings():
 	var config_json: Dictionary = read_json(settings_config_location)
 	# audio sliders 0.0 - 100.0
