@@ -196,6 +196,9 @@ func next_turn(_delta:float) -> bool:
 		# reduce their speed
 		enemy_speed -= player_speed
 	
+	if Global.hp <= 1:
+		Global.hp = 0
+	
 	side_bar.update_stats(world_map)
 	update_enemy_stats_text()
 	if is_combat_won() or is_combat_lost():
@@ -224,10 +227,10 @@ func update_enemy_stats_text(p_enemy_stats:Dictionary={}):
 	return rich_text
 
 func is_combat_won():
-	var player_hp: int = side_bar.calculated_stats["hp"]
+	var player_hp: int = Global.hp
 	var enemy_hp: int = enemy_stats["hp"]
 	return player_hp > 0 and enemy_hp <= 0
 	
 func is_combat_lost():
-	var player_hp: int = side_bar.calculated_stats["hp"]
+	var player_hp: int = Global.hp
 	return player_hp <= 0

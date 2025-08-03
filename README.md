@@ -48,8 +48,8 @@ Day3:
 - Created splash screen for the loop progressing
 - You now keep the last reward when entering a new loop even if it was an item
 
-Day 4(Plan):
-- Music
+Day 4:
+- (Done) Music
 - (Done enough) Sound effects
 - (Done) Game title: He Is Looping
 - (Done well enough) Tutorial
@@ -78,11 +78,10 @@ Day 4(Plan):
  - (Done) Handle case where if you Reject the reward for the boss kill you get softlocked? (I think you would anyways)
  - (Done) Switch to the faster BGM for the last segement of the timer
  - (Done) Hills colours need to change
-- Upload to itch as an unlisted game (people watching the stream can play)
+- Setup the itch.io page
 
 Day 5(Plan):
 - Test and fix issues
-- Setup the itch.io page
 
 Stretch goals:
 - Trapped items
