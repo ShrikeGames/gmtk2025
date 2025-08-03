@@ -78,7 +78,7 @@ var reward_options:Dictionary = {
 		"big_stick": {
 			"title": "Big Stick",
 			"type": "item",
-			"description": "Increases [color=991177]Speed[/color] by 6 but lower [color=119911]Speed[/color] by 2.",
+			"description": "Increases [color=991177]Damage[/color] by 6 but lower [color=119911]Speed[/color] by 2.",
 			"color": "991177",
 			"stats": [{
 				"name": "damage",

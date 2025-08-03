@@ -53,7 +53,7 @@ var DIRECTION_DOWN:int = 3
 var DIRECTION_LEFT:int = 4
 var move_direction:int = DIRECTION_NONE
 var time_since_last_moved:float
-var movement_delay_time_sec:float = 0.1
+var movement_delay_time_sec:float = 0.3
 
 var TILE_EMPTY:int = 0
 var TILE_WALL:int = 1
