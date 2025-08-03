@@ -84,19 +84,24 @@ func _on_ready() -> void:
 
 func init_loop():
 	time_since_selected_reward = 0
+	Global.has_flippers = false
+	Global.has_climbing_gear = false
 	var last_reward:Dictionary = {}
 	if rewards.size() > 0:
-		last_reward = rewards[rewards.size()-1]
+		for reward in rewards:
+			if reward.get("type", "") == "item":
+				last_reward = reward
 		var special:String = last_reward.get("special", "")
 		if special == "flippers":
 			Global.has_flippers = true
 		elif special == "climbing_gear":
 			Global.has_climbing_gear = true
 	rewards = []
+	if not last_reward.is_empty():
+		rewards.append(last_reward)
 	last_selected_reward_id = -1
 	fighting_boss = false
-	Global.has_flippers = false
-	Global.has_climbing_gear = false
+	
 	for tile in tiles_node.get_children():
 		tile.queue_free()
 	var inventory_id:int = 0
@@ -523,7 +528,10 @@ func _process(delta: float) -> void:
 		faster_music.play()
 		play_boss_music = false
 		play_faster_music = true
-		
+	
+	if not has_valid_movements() and not fighting_boss and not combat_screen.visible and not reward_choice_screen.visible:
+		trigger_boss_fight()
+	
 	if not reward_choice_screen.visible and steps > 0:
 		if Input.is_action_pressed("MoveUp"):
 			move_direction = DIRECTION_UP
@@ -643,9 +651,9 @@ func has_valid_movements():
 				if map_tile.walkable:
 					return true
 				else:
-					if map_tile.type == TILE_WATER and Global.has_flippers:
+					if map_tile.type == TILE_WATER and Global.has_flippers and steps >=2:
 						return true
-					elif map_tile.type == TILE_WALL and Global.has_climbing_gear:
+					elif map_tile.type == TILE_WALL and Global.has_climbing_gear and steps >=3:
 						return true
 						
 	

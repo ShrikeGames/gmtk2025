@@ -24,7 +24,7 @@ void fragment() {
 	float q = smoothstep(p - v * 2.0, p, UV.y);
 	// Map another pixel's UV to this one based on q (shift by up to v pixels)
 	float mapped_uv_y = UV.y + v - v * q * step(q, 1.0);
-	
+
 	COLOR = texture(TEXTURE, vec2(UV.x, mapped_uv_y));
 	// Increase transparency as particles begin to float away
 	COLOR.a -= 1.0 - q;

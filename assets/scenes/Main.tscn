@@ -82,6 +82,7 @@ bus = &"SFX"
 
 [node name="DragonSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_gub6j")
+volume_db = -16.0
 bus = &"SFX"
 
 [node name="AlienSFX" type="AudioStreamPlayer" parent="."]
