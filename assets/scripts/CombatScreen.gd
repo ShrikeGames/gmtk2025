@@ -39,7 +39,7 @@ func next_turn(_delta:float) -> bool:
 	var enemy_hp: int = enemy_stats["hp"]
 	# determine who is faster
 	var strength_damage_modifier:float = 0.5
-	if (player_speed >= enemy_speed or (player_speed< enemy_speed and enemy_speed_bonus_turns > max_speed_bonus_turns_allowed)) and player_speed_bonus_turns <= max_speed_bonus_turns_allowed:
+	if (player_speed >= enemy_speed or (player_speed< enemy_speed and enemy_speed_bonus_turns >= max_speed_bonus_turns_allowed)) and player_speed_bonus_turns <= max_speed_bonus_turns_allowed:
 		player_speed_bonus_turns+=1
 		enemy_speed_bonus_turns=0
 		enemy_speed = enemy_stats["speed"]
@@ -121,7 +121,7 @@ func next_turn(_delta:float) -> bool:
 		enemy_stats["armor"] = enemy_armor
 		# reduce their speed
 		player_speed -= enemy_speed
-	elif enemy_speed_bonus_turns <= max_speed_bonus_turns_allowed:
+	else:
 		enemy_speed_bonus_turns+=1
 		player_speed_bonus_turns=0
 		player_speed = side_bar.calculated_stats["speed"]

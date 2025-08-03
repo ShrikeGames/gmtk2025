@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dg7fw1pgaowfx"]
+[gd_scene load_steps=11 format=3 uid="uid://dg7fw1pgaowfx"]
 
 [ext_resource type="Texture2D" uid="uid://cerbiovrhgxds" path="res://assets/images/sprite_sheets/FogBackground.png" id="1_t6dbj"]
 [ext_resource type="PackedScene" uid="uid://ce2tboaic6n86" path="res://assets/scenes/MenuButton.tscn" id="1_vqap6"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bogh6xu634d6n" path="res://assets/scenes/Settings.tscn" id="6_nory3"]
 [ext_resource type="PackedScene" uid="uid://p3bgeeidpfcb" path="res://assets/scenes/Controls.tscn" id="7_7metd"]
 [ext_resource type="PackedScene" uid="uid://d0ndt3jsq8l2o" path="res://assets/scenes/Credits.tscn" id="7_kj6rs"]
+[ext_resource type="Texture2D" uid="uid://bsw8yyoh366mi" path="res://assets/images/global/Shrike_878x878.png" id="10_ka3ux"]
 
 [node name="MainMenu" type="Node2D"]
 
@@ -68,6 +69,11 @@ texture = ExtResource("3_u804d")
 position = Vector2(1105, 503)
 texture = ExtResource("4_c1eu8")
 
+[node name="Shrike878x878" type="Sprite2D" parent="."]
+position = Vector2(1116, 504)
+scale = Vector2(0.637813, 0.637813)
+texture = ExtResource("10_ka3ux")
+
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_1l0v7")
 bus = &"SFX"
@@ -82,4 +88,3 @@ visible = false
 visible = false
 
 [node name="Credits" parent="SubMenus" instance=ExtResource("7_kj6rs")]
-visible = false

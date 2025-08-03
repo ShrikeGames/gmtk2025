@@ -175,7 +175,7 @@ var reward_options:Dictionary = {
 	"uncommon": {
 		"flippers": {
 			"title": "Flippers",
-			"description": "This lets you travel through water. (TODO make more interesting)",
+			"description": "This lets you travel through water.",
 			"type": "item",
 			"color": "000099",
 			"stats": [],
@@ -183,7 +183,7 @@ var reward_options:Dictionary = {
 		},
 		"climbing_gear": {
 			"title": "Climbing Gear",
-			"description": "This lets you travel across mountains. (TODO make more interesting)",
+			"description": "This lets you travel across mountains.",
 			"type": "item",
 			"color": "705f1c",
 			"stats": [],
@@ -392,7 +392,7 @@ var reward_options:Dictionary = {
 		"lole_random": {
 			"title": "Randomize all stats",
 			"type": "consumable",
-			"description": "Randomize all of your core stats to be between 3 and 18. (TODO make more interesting)",
+			"description": "Randomize all of your core stats to be between 3 and 18.",
 			"color": "ffffff",
 			"stats": [{
 				"name": "damage",
